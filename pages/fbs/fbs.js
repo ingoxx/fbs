@@ -123,7 +123,7 @@ setNavigatInfo() {
   onLoad(options) {
     this.setNavigatInfo();
     this.getBasketSquareData();
-    this.getUserLocation();
+    // this.getUserLocation();
   },
 
   /**

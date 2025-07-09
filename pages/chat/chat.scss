@@ -6,14 +6,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #7354af;
+    background: #675094;
     // border-radius: 10rpx;
     .addr-content {
       color: #ffffff;
       font-size: 27rpx;
     }
   }
-  .time {
+  .open-time {
     height: 60rpx;
     line-height: 60rpx;
     padding-left: 15rpx;
@@ -21,27 +21,19 @@
     color: #ffffff;
     font-size: 24rpx;
   }
-  .chat {
-    
-    
+  .chat-group {
+    display: flex;
+    flex-direction: column;
+    padding: 20rpx;
     .chat-content {
       color: #ffffff;
       font-size: 27rpx;
       background: #374151;
-      margin: 64rpx 0;
+      margin: 42rpx 0;
       border-radius: 10rpx;
       max-width: 300rpx;
       margin-left: 50rpx;
       padding: 20rpx;
-    }
-    .chat-content-my {
-      justify-content: right;
-      color: #ffffff;
-      background: #ff976a;
-      border-radius: 10rpx;
-      padding: 20rpx;
-      max-width: 300rpx;
-      margin-left: 50rpx;
     }
   }
   .send {

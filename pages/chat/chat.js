@@ -5,14 +5,26 @@ Page({
    * 页面的初始数据
    */
   data: {
-    chatData: [],
+    chatData: [
+      {'id': 1, 'content': '大哥大哥大哥大哥', 'userType': 1, 'time': '2025-07-09 19:22:20', 'name': 'me'},
+      {'id': 1, 'content': '大哥2', 'userType': 2, 'time': '2025-07-09 19:22:20', 'name': 'james'},
+      {'id': 1, 'content': '大哥1', 'userType': 2, 'time': '2025-07-09 19:22:20', 'name': 'kim'},
+    ],
   },
-
+  setNavigatInfo() {
+    wx.setNavigationBarColor({
+      frontColor: "#ffffff",
+      backgroundColor: "#7354af",
+    });
+    wx.setNavigationBarTitle({
+      title: '🏀 篮球群',
+    });
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-
+    this.setNavigatInfo();
   },
 
   /**

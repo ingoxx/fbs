@@ -9,7 +9,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #7354af;
+  background: #675094;
 }
 
 .box .addr .addr-content {
@@ -17,7 +17,7 @@
   font-size: 27rpx;
 }
 
-.box .time {
+.box .open-time {
   height: 60rpx;
   line-height: 60rpx;
   padding-left: 15rpx;
@@ -26,25 +26,21 @@
   font-size: 24rpx;
 }
 
-.box .chat .chat-content {
-  color: #ffffff;
-  font-size: 27rpx;
-  background: #374151;
-  margin: 64rpx 0;
-  border-radius: 10rpx;
-  max-width: 300rpx;
-  margin-left: 50rpx;
+.box .chat-group {
+  display: flex;
+  flex-direction: column;
   padding: 20rpx;
 }
 
-.box .chat .chat-content-my {
-  justify-content: right;
+.box .chat-group .chat-content {
   color: #ffffff;
-  background: #ff976a;
+  font-size: 27rpx;
+  background: #374151;
+  margin: 42rpx 0;
   border-radius: 10rpx;
-  padding: 20rpx;
   max-width: 300rpx;
   margin-left: 50rpx;
+  padding: 20rpx;
 }
 
 .box .send {

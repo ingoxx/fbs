@@ -1,6 +1,6 @@
 {
   "compileType": "miniprogram",
-  "libVersion": "trial",
+  "libVersion": "3.8.10",
   "packOptions": {
     "ignore": [],
     "include": []

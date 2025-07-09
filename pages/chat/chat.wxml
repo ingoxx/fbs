@@ -3,13 +3,15 @@
   <view class="addr">
     <text class="addr-content">📍 深圳市观澜田背一村</text>
   </view>
-  <view class="time">
+  <view class="open-time">
     <van-tag round color="#1f2937"> <van-icon custom-class="van-icon-c" name="clock-o" /> 07:00-21:00</van-tag>
   </view>
-  <view class="chat">
-    <view class="chat-content">大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥</view>
-    <view class="chat-content">大哥</view>
-    <view class="chat-content-my">大哥</view>
+  <view class="chat-group">
+    <view class="chat-content" wx:for="{{chatData}}" wx:key="index" wx:for-item="item">
+      <view class="user">{{ item.name }}</view>
+      <view class="r-content">{{ item.content }}</view>
+      <view class="chat-time">{{ item.time }}</view>
+    </view>
   </view>
   <view class="send">
     <view class="content">
