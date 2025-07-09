@@ -1,0 +1,44 @@
+<!--pages/fbs/fbs.wxml-->
+<!-- <text>pages/fbs/fbs.wxml</text> -->
+<view class="box">
+  <view class="container-c">
+    <view class="location">
+      <text class="coordinate">📍 {{ city }}</text>
+    </view>
+    <view class="search">
+      <view class="s-p">
+        <input class="s-p-1" placeholder="输入内容搜索"/>
+      </view>
+      <view class="s-b">
+        <van-row gutter="16">
+          <van-col span="8" custom-class="van-c" wx:for="{{ basketSquareFilter }}" wx:key="index" wx:for-item="item">
+            <van-button round size="small" custom-style="width:170rpx" data-id="{{item.id}}" custom-class="{{ currentSquareSelected === item.id ? 'van-b-isactive' : '' }}" bind:click="onSelected">
+              <van-icon name="{{ item.icon }}" /> {{ item.name }}
+            </van-button>
+          </van-col>
+        </van-row>
+      </view>
+    </view>
+    <view class="card-1">
+      <view class="card-1-1" wx:for="{{ basketSquareFilterData }}" wx:key="index" wx:for-item="item" bindtap="chatRoot">
+        <view class="img">
+          <van-image round fit="cover" width="150" height="150" src="{{ item.img }}" />
+        </view>
+        <view class="addr">
+          <text class="t-f">{{ item.addr }}</text>
+        </view>
+        <view class="distance">
+          <text class="t-f">📍 {{ item.distance }}米</text>
+        </view>
+        <view class="online">
+          <van-tag round type="success"><van-icon name="friends" /> {{ item.online }}人在线</van-tag>
+        </view>
+        <view class="tags">
+          <van-tag type="primary" custom-class="van-tag-c" wx:for="{{ item.tags }}" wx:key="index" wx:for-item="item2">
+            {{ item2 }}
+          </van-tag>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

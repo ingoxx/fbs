@@ -1,0 +1,22 @@
+<!--pages/chat/chat.wxml-->
+<view class="box">
+  <view class="addr">
+    <text class="addr-content">📍 深圳市观澜田背一村</text>
+  </view>
+  <view class="time">
+    <van-tag round color="#1f2937"> <van-icon custom-class="van-icon-c" name="clock-o" /> 07:00-21:00</van-tag>
+  </view>
+  <view class="chat">
+    <view class="chat-content">大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥大哥</view>
+    <view class="chat-content">大哥</view>
+    <view class="chat-content-my">大哥</view>
+  </view>
+  <view class="send">
+    <view class="content">
+      <input class="send-input" type="text" placeholder="输入内容发送" />
+    </view>
+    <view class="submit">
+      <van-button round size="small" type="warning" custom-style="width:170rpx">发送</van-button>
+    </view>
+  </view>
+</view>
