@@ -14,6 +14,7 @@
     "van-notify": "/miniprogram_npm/@vant/weapp/notify/index",
     "van-tag": "/miniprogram_npm/@vant/weapp/tag/index",
     "van-progress": "/miniprogram_npm/@vant/weapp/progress/index",
-    "van-image": "/miniprogram_npm/@vant/weapp/image/index"
+    "van-image": "/miniprogram_npm/@vant/weapp/image/index",
+    "van-notice-bar": "/miniprogram_npm/@vant/weapp/notice-bar"
   }
 }

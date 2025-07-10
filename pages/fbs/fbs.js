@@ -49,10 +49,9 @@ Page({
   },
   // 自定义逻辑
   chatRoot(e) {
-    const id = e.currentTarget.dataset;
-    console.log(id);
+    const id = e.currentTarget.dataset.item;
     wx.navigateTo({
-      url: '/pages/chat/chat?id=',
+      url: `/pages/chat/chat?id=${id.id}&addr=${id.addr}`,
     });
   },
   getBasketSquareData() {

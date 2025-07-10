@@ -1,6 +1,14 @@
+$primary: #1f2937;
+$orange: #ff976a;
+$friendBg: #374151;
 .box {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding-bottom: 220rpx; /* send 的高度（或比它稍大） */
+  box-sizing: border-box;
   min-height: 100vh;
-  background: #111827;
+  background: $primary;
   .addr {
     height: 130rpx;
     display: flex;
@@ -17,23 +25,44 @@
     height: 60rpx;
     line-height: 60rpx;
     padding-left: 15rpx;
-    background: #1f2937;
+    background: #2b3748;
     color: #ffffff;
     font-size: 24rpx;
   }
-  .chat-group {
+  .chat {
     display: flex;
+    flex: 1;
     flex-direction: column;
-    padding: 20rpx;
+    // height: 100vh;
+    background: $primary;
     .chat-content {
       color: #ffffff;
       font-size: 27rpx;
       background: #374151;
-      margin: 42rpx 0;
+      margin: 33rpx 0;
       border-radius: 10rpx;
       max-width: 300rpx;
       margin-left: 50rpx;
       padding: 20rpx;
+      .user, .time {
+        color: #a5a5a5;
+        font-size: 25rpx;
+        padding: 14rpx 0;
+      }
+      &.left {
+        align-self: flex-start;
+      }
+      &.right {
+        align-self: flex-end;
+        margin-right: 50rpx;
+      }
+      &.friend {
+        background: $friendBg;
+      }
+      &.my {
+        background: $orange;
+        color: #ffffff;
+      }
     }
   }
   .send {
@@ -45,7 +74,7 @@
     padding: 30rpx;
     bottom: 0rpx;
     width: 100%;
-    background: #1f2937;
+    background: #2b3748;
     box-sizing: border-box;
     .content {
       flex: 1;  /* 关键！占据剩余空间 */

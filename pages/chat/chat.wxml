@@ -1,24 +1,34 @@
 <!--pages/chat/chat.wxml-->
 <view class="box">
+  <view class="notice">
+    <van-notice-bar
+      scrollable 
+      left-icon="volume-o"
+      text="{{ notice }}"
+    />
+  </view>
   <view class="addr">
-    <text class="addr-content">📍 深圳市观澜田背一村</text>
+    <text class="addr-content">📍 {{ addr }}</text>
   </view>
   <view class="open-time">
-    <van-tag round color="#1f2937"> <van-icon custom-class="van-icon-c" name="clock-o" /> 07:00-21:00</van-tag>
+    <van-tag round color="#2b3748"> <van-icon custom-class="van-icon-c" name="clock-o" /> 07:00-21:00</van-tag>
   </view>
-  <view class="chat-group">
-    <view class="chat-content" wx:for="{{chatData}}" wx:key="index" wx:for-item="item">
-      <view class="user">{{ item.name }}</view>
-      <view class="r-content">{{ item.content }}</view>
-      <view class="chat-time">{{ item.time }}</view>
-    </view>
+  <view class="chat">
+    <block wx:for="{{chatData}}" wx:key="index" wx:for-item="item">
+      <view class="chat-content {{ item.user_id == user_id ? 'right my' : '' }}">
+        <view class="user">{{ item.user_id }}</view>
+        <view class="content">{{ item.content }}</view>
+        <view class="time">{{ item.time }}</view>
+      </view>
+    </block>
   </view>
   <view class="send">
     <view class="content">
-      <input class="send-input" type="text" placeholder="输入内容发送" />
+      <input class="send-input" type="text" value="{{ inputValue }}" bindinput="getVal" placeholder="输入内容发送"/>
     </view>
     <view class="submit">
-      <van-button round size="small" type="warning" custom-style="width:170rpx">发送</van-button>
+      <van-button round size="small" type="warning" custom-style="width:170rpx" bind:click="sendMsg">发送</van-button>
     </view>
   </view>
+  <van-notify id="van-notify" />
 </view>

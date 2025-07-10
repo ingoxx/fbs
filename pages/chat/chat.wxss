@@ -1,7 +1,13 @@
 @charset "UTF-8";
 .box {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding-bottom: 220rpx;
+  /* send 的高度（或比它稍大） */
+  box-sizing: border-box;
   min-height: 100vh;
-  background: #111827;
+  background: #1f2937;
 }
 
 .box .addr {
@@ -21,26 +27,51 @@
   height: 60rpx;
   line-height: 60rpx;
   padding-left: 15rpx;
-  background: #1f2937;
+  background: #2b3748;
   color: #ffffff;
   font-size: 24rpx;
 }
 
-.box .chat-group {
+.box .chat {
   display: flex;
+  flex: 1;
   flex-direction: column;
-  padding: 20rpx;
+  background: #1f2937;
 }
 
-.box .chat-group .chat-content {
+.box .chat .chat-content {
   color: #ffffff;
   font-size: 27rpx;
   background: #374151;
-  margin: 42rpx 0;
+  margin: 33rpx 0;
   border-radius: 10rpx;
   max-width: 300rpx;
   margin-left: 50rpx;
   padding: 20rpx;
+}
+
+.box .chat .chat-content .user, .box .chat .chat-content .time {
+  color: #a5a5a5;
+  font-size: 25rpx;
+  padding: 14rpx 0;
+}
+
+.box .chat .chat-content.left {
+  align-self: flex-start;
+}
+
+.box .chat .chat-content.right {
+  align-self: flex-end;
+  margin-right: 50rpx;
+}
+
+.box .chat .chat-content.friend {
+  background: #374151;
+}
+
+.box .chat .chat-content.my {
+  background: #ff976a;
+  color: #ffffff;
 }
 
 .box .send {
@@ -52,7 +83,7 @@
   padding: 30rpx;
   bottom: 0rpx;
   width: 100%;
-  background: #1f2937;
+  background: #2b3748;
   box-sizing: border-box;
 }
 
