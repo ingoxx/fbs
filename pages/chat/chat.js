@@ -32,13 +32,17 @@ Page({
   },
   // 初始化websocket
   initWss() {
+    wx.showLoading({
+      title: '连接中...',
+    });
     const socket = wx.connectSocket({
       url: 'wss://api.anythingai.online/basket-group/ws',
       timeout: 10000,
     })
     this.data.socket = socket;
     socket.onOpen(() => {
-      console.log('连接成功') 
+      console.log('连接成功');
+      wx.hideLoading();
     })
     socket.onClose(() => {
       console.log('WebSocket 已关闭')
@@ -100,7 +104,7 @@ Page({
               reject(err);
             },
             complete: function (params) {
-              wx.hideLoading();
+              
             }
           })
         },
@@ -128,9 +132,9 @@ Page({
     })
   },
   async getOpenid() {
-    wx.showLoading({
-      title: '加载数据中',
-    });
+    // wx.showLoading({
+    //   title: '加载数据中',
+    // });
     const resp  = await this.login();
     if (resp.data && resp.data.openid != "") {
       console.log("resp >>> ", resp.data.openid);
