@@ -84,7 +84,9 @@ Page({
       key: 'YSRBZ-GSVY3-3P23L-RNWCE-OQB3V-T6BXG'
     })
     wx.getLocation({
-      type: 'wgs84',
+      type: 'gcj02',
+      isHighAccuracy: true,
+      altitude: true,
       success: res => {
         console.log('当前位置坐标：', res)
         qqmapsdk.reverseGeocoder({
