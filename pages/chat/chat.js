@@ -38,11 +38,19 @@ Page({
     const socket = wx.connectSocket({
       url: 'wss://api.anythingai.online/basket-group/ws',
       timeout: 10000,
-    })
+    });
     this.data.socket = socket;
+    let that = this;
     socket.onOpen(() => {
       console.log('连接成功');
       wx.hideLoading();
+      const initMsg = {
+        group_id: that.data.group_id,
+        content: '',
+        time: that.getCurrentTime(),
+        user_id: that.data.user_id,
+      };
+      socket.send({ data: JSON.stringify(initMsg)});
     })
     socket.onClose(() => {
       console.log('WebSocket 已关闭')
@@ -54,24 +62,26 @@ Page({
     socket.onMessage((res) => {
       const msg = JSON.parse(res.data);
       console.log(msg);
-      // msg.isMe = msg.user_id === this.data.userID;
       this.setData({
         chatData: [...this.data.chatData, msg],
       })
     });
   },
   // 发送信息
-  sendMsg() {
+  getCurrentTime() {
     const now = new Date()
     const time = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`
+    return time
+  },
+  sendMsg() {
     const content = this.data.inputValue;
     const initMsg = {
       group_id: this.data.group_id,
       content: content,
-      time: time,
+      time: this.getCurrentTime(),
       user_id: this.data.user_id,
-    }
-    this.data.socket.send({ data: JSON.stringify(initMsg)})
+    };
+    this.data.socket.send({ data: JSON.stringify(initMsg)});
   },
   setNavigatInfo() {
     wx.setNavigationBarColor({

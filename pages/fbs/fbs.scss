@@ -45,13 +45,18 @@
     .card-1 {
       // display: flex;
       // justify-content: center;
+      display: flex;
+      justify-content: center;
+      justify-items: center;
+      flex-wrap: wrap;
       .card-1-1 {
-        width: 290rpx;
+        // width: 290rpx;
         margin: 17rpx 17rpx;
-        padding: 10px;
+        // padding: 10px;
         background: #ffff;
         border-radius: 10rpx;
         display: inline-grid;
+        padding: 10rpx;
         .img,.addr,.distance,.tags, .online {
           display: flex;
           justify-content: center;

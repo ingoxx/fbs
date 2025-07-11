@@ -56,13 +56,19 @@
   padding-bottom: 10rpx;
 }
 
+.box .container-c .card-1 {
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+  flex-wrap: wrap;
+}
+
 .box .container-c .card-1 .card-1-1 {
-  width: 290rpx;
   margin: 17rpx 17rpx;
-  padding: 10px;
   background: #ffff;
   border-radius: 10rpx;
   display: inline-grid;
+  padding: 10rpx;
 }
 
 .box .container-c .card-1 .card-1-1 .img, .box .container-c .card-1 .card-1-1 .addr, .box .container-c .card-1 .card-1-1 .distance, .box .container-c .card-1 .card-1-1 .tags, .box .container-c .card-1 .card-1-1 .online {
