@@ -64,11 +64,19 @@
 }
 
 .box .container-c .card-1 .card-1-1 {
-  margin: 17rpx 17rpx;
+  width: 310rpx;
+  margin: 14rpx 14rpx;
   background: #ffff;
   border-radius: 10rpx;
   display: inline-grid;
   padding: 10rpx;
+}
+
+.box .container-c .card-1 .card-1-1 .online-status {
+  position: relative;
+  bottom: 14rpx;
+  width: 20rpx;
+  height: 20rpx;
 }
 
 .box .container-c .card-1 .card-1-1 .img, .box .container-c .card-1 .card-1-1 .addr, .box .container-c .card-1 .card-1-1 .distance, .box .container-c .card-1 .card-1-1 .tags, .box .container-c .card-1 .card-1-1 .online {
@@ -106,4 +114,10 @@
 
 .van-tag-c {
   margin: 30rpx, 30rpx !important;
+}
+
+.c-van-tag-online-status {
+  width: 20rpx !important;
+  height: 20rpx !important;
+  background: #ffffff;
 }
