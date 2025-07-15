@@ -329,7 +329,7 @@ Page({
   onLoad(options) {
     this.setNavigatInfo();
     // this.getBasketSquareData();
-    // this.getAddrDistance();
+    this.getAddrDistance();
   },
 
   /**
