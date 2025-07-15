@@ -21,11 +21,7 @@
   <view class="chat">
     <block wx:for="{{chatData}}" wx:key="index" wx:for-item="item">
       <view class="chat-content {{ item.user_id == user_id ? 'right my' : '' }}">
-        <view class="user chat-format">
-          <text class="user-name" user-select="true">
-          {{ item.user_id }}
-          </text>
-        </view>
+        <view class="user chat-format"><text class="user-name" user-select="true">{{ item.user_id }}</text></view>
         <!-- <view class="user">{{ item.user_id }}</view> -->
         <view class="content chat-format">{{ item.content }}</view>
         <view class="time chat-format">{{ item.time }}</view>

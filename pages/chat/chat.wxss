@@ -57,7 +57,7 @@
 
 .box .chat .chat-content .chat-format {
   position: relative;
-  bottom: 22rpx;
+  bottom: 5rpx;
 }
 
 .box .chat .chat-content .user, .box .chat .chat-content .time {
