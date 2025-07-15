@@ -1,4 +1,6 @@
 {
+  "enableReachBottom": true,
+  "enablePullDownRefresh": true,
   "usingComponents": {
     "van-button": "/miniprogram_npm/@vant/weapp/button/index",
     "van-row": "/miniprogram_npm/@vant/weapp/row/index",
@@ -14,6 +16,8 @@
     "van-notify": "/miniprogram_npm/@vant/weapp/notify/index",
     "van-tag": "/miniprogram_npm/@vant/weapp/tag/index",
     "van-progress": "/miniprogram_npm/@vant/weapp/progress/index",
-    "van-image": "/miniprogram_npm/@vant/weapp/image/index"
+    "van-image": "/miniprogram_npm/@vant/weapp/image/index",
+    "van-field": "/miniprogram_npm/@vant/weapp/field/index",
+    "van-cell-group": "/miniprogram_npm/@vant/weapp/cell-group/index"
   }
 }

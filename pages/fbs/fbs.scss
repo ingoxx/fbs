@@ -25,15 +25,19 @@
         padding: 0 0;
       }
       .s-p {
+        // display: flex;
         width: 80%;
         margin: 16rpx auto;
-        text-align: center;
+        // text-align: center;
         padding-top: 20rpx;
         .s-p-1 {
+          // flex: 1;
           height: 70rpx;
           border: 1rpx #d2d2d2 solid;
           border-radius: 9rpx;
           font-size: 25rpx;
+          padding-left: 21rpx;
+          padding-right: 60rpx;
         }
       }
       .s-b {
@@ -104,4 +108,16 @@
   height: 20rpx!important;
   background: #ffffff;
 }
-
+.custom-selector-load {
+  width: auto!important;
+}
+.van-icon-c-2 {
+  // top: 17rpx;
+  // right: 50rpx;
+}
+.van-transition-c {
+  float: right!important;
+  position: relative!important;
+  bottom: 58rpx!important;
+  right: 19rpx!important;
+}

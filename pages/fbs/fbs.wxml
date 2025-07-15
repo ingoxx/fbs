@@ -7,12 +7,17 @@
     </view>
     <view class="search">
       <view class="s-p">
-        <input class="s-p-1" value="{{ inputValue }}" bindinput="getVal" placeholder="输入村名搜索"/>
+        <input class="s-p-1" value="{{ inputValue }}" bindinput="getVal" placeholder="输入村名/公园搜索"/>
+        <block>
+          <van-transition show="{{ showCloseBtn }}" custom-class="van-transition-c" name="fade-left">
+            <van-icon custom-class="van-icon-c-2" name="clear" data-value="{{ inputValue }}" bindtap="onClearInput" />
+          </van-transition>
+        </block>
       </view>
       <view class="s-b">
         <van-row gutter="16">
           <van-col span="8" custom-class="van-c" wx:for="{{ basketSquareFilter }}" wx:key="index" wx:for-item="item">
-            <van-button round size="small" custom-style="width:170rpx" data-id="{{item.id}}" custom-class="{{ currentSquareSelected === item.id ? 'van-b-isactive' : '' }}" bind:click="onSelected">
+            <van-button round size="small" custom-style="{{ item.customize == 1 ? 'width:210rpx' : 'width:170rpx'  }}" data-id="{{item.id}}" custom-class="{{ currentSquareSelected === item.id ? 'van-b-isactive' : '' }}" bind:click="onSelected">
               <van-icon name="{{ item.icon }}" /> {{ item.name }}
             </van-button>
           </van-col>
@@ -23,7 +28,7 @@
       <block wx:for="{{ basketSquareFilterData }}" wx:key="index" wx:for-item="item">
         <view class="card-1-1" data-item="{{ item }}" bindtap="chatRoot">
           <view class="online-status">
-            <van-icon color="#4caf50" name="friends" />
+            <van-icon color="{{ item.online > 0 ? '#4caf50': '#909090' }}" name="friends" />
           </view>
           <view class="img">
             <van-image round fit="cover" width="150" height="150" src="{{ item.img }}" />
@@ -45,5 +50,33 @@
         </view>
       </block>
     </view>
+  </view>
+  <view>
+    <van-dialog
+      use-slot
+      title="添加村/公园"
+      show="{{ addVillage }}"
+      show-cancel-button
+      confirm-button-open-type="getUserInfo"
+      bind:close="onClose"
+      bind:confirm="onConfirm"
+    >
+    <van-cell-group>
+      <van-field
+        value="{{ villageInfo }}"
+        required
+        clearable
+        autosize
+        type="textarea"
+        label="地址"
+        placeholder="请输入详细的村/公园地址"
+        border="{{ false }}"
+        confirm-type="done"
+        bind:change="onChange"
+      />
+    </van-cell-group>
+    </van-dialog>
+    <van-notify id="van-notify" />
+    <van-toast id="van-toast" />
   </view>
 </view>

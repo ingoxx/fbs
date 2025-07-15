@@ -10,25 +10,38 @@ Page({
     notice: "请文明发言，否则将被禁言",
     openid_key: 'openid',
     socket: null,
+    showSendBtn: false,
+    showCloseBtn: false,
     group_id: 0,
     user_id: '',
+    online: 0,
     addr: '',
     inputValue: '',
-    chatData: [
-      // {'id': 1, 'content': '大哥大哥大哥大哥', 'user_type': 1, 'time': '2025-07-09 19:22:20', 'name': 'me'},
-      // {'id': 2, 'content': '大哥2大哥大哥大哥大哥大哥大哥大哥大哥', 'user_type': 2, 'time': '2025-07-09 19:22:20', 'name': 'james'},
-      // {'id': 3, 'content': '大哥1', 'user_type': 2, 'time': '2025-07-09 19:22:20', 'name': 'kim'},
-      // {'id': 4, 'content': '大哥2', 'user_type': 2, 'time': '2025-07-09 19:22:20', 'name': 'kim1'},
-      // {'id': 5, 'content': '大哥3', 'user_type': 2, 'time': '2025-07-09 19:22:20', 'name': 'kim2'},
-      // {'id': 6, 'content': '大哥4', 'user_type': 2, 'time': '2025-07-09 19:22:20', 'name': 'kim3'},
-      // {'id': 7, 'content': '大哥5', 'user_type': 2, 'time': '2025-07-09 19:22:20', 'name': 'kim4'},
-    ],
+    chatData: [],
   },
   // 获取input值
+  onClearInput(e) {
+    if (e.currentTarget.dataset.value != "") {
+      const data = {detail: {value: ""}};
+      
+      this.getVal(data);
+    }
+  },
   getVal(e) {
-    this.setData({
-      inputValue: e.detail.value,
-    });
+    console.log(e);
+    if (e.detail.value!="") {
+      this.setData({ 
+        showSendBtn: true,
+        showCloseBtn: true,
+        inputValue: e.detail.value,
+      })
+    } else {
+      this.setData({ 
+        showSendBtn: false,
+        showCloseBtn: false,
+        inputValue: e.detail.value,
+      })
+    }
   },
   // 初始化websocket
   initWss() {
@@ -36,7 +49,7 @@ Page({
       title: '连接中...',
     });
     const socket = wx.connectSocket({
-      url: 'wss://api.anythingai.online/basket-group/ws',
+      url: 'wss://ai.anythingai.online/basket-group/ws',
       timeout: 10000,
     });
     this.data.socket = socket;
@@ -57,14 +70,21 @@ Page({
     });
     socket.onError((err) => {
       console.error('WebSocket 错误:', err)
-      Notify('服务器无法连接');
+      Notify({ type: 'danger', message: '服务器无法连接', duration: 0 })
+      wx.hideLoading();
     });
     socket.onMessage((res) => {
       const msg = JSON.parse(res.data);
       console.log(msg);
-      this.setData({
-        chatData: [...this.data.chatData, msg],
-      })
+      if (msg.content == "") {
+        this.setData({
+          online: msg.user_count,
+        })
+      } else {
+        this.setData({
+          chatData: [...this.data.chatData, msg],
+        })
+      }
     });
   },
   getCurrentTime() {
@@ -194,7 +214,10 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload() {
-
+    if (this.data.socket) {
+      this.data.socket.close();
+      console.log('已关闭连接');
+    }
   },
 
   /**

@@ -4,7 +4,7 @@ $friendBg: #374151;
 .box {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: 100vh;
   padding-bottom: 220rpx; /* send 的高度（或比它稍大） */
   box-sizing: border-box;
   min-height: 100vh;
@@ -14,6 +14,7 @@ $friendBg: #374151;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     background: #675094;
     // border-radius: 10rpx;
     .addr-content {
@@ -33,8 +34,11 @@ $friendBg: #374151;
     display: flex;
     flex: 1;
     flex-direction: column;
-    // height: 100vh;
     background: $primary;
+     /* 关键！当内容超出时，出现垂直滚动条 */
+     overflow-y: auto;        
+     /* 兼容性修复：防止flex item在某些情况下无法正确计算尺寸 */
+     min-height: 0;
     .chat-content {
       color: #ffffff;
       font-size: 27rpx;
@@ -44,11 +48,20 @@ $friendBg: #374151;
       max-width: 300rpx;
       margin-left: 50rpx;
       padding: 20rpx;
+      .chat-format {
+        position: relative;
+        bottom: 17rpx;
+      }
       .user, .time {
         color: #a5a5a5;
         font-size: 25rpx;
         padding: 14rpx 0;
         overflow-wrap: break-word;
+      }
+      .user {
+        .user-name {
+          word-break: break-all;
+        }
       }
       &.left {
         align-self: flex-start;
@@ -70,7 +83,7 @@ $friendBg: #374151;
     display: flex;
     justify-items: center;
     align-items: center;
-    height: 190rpx;
+    height: 193rpx;
     position:fixed;
     padding: 30rpx;
     bottom: 0rpx;
@@ -78,17 +91,25 @@ $friendBg: #374151;
     background: #2b3748;
     box-sizing: border-box;
     .content {
-      flex: 1;  /* 关键！占据剩余空间 */
-      height: 60rpx;
-      line-height: 60rpx;
+      display: flex;      /* 重点：flex 容器 */
+      align-items: center; /* 垂直居中 */
+      height: 80rpx;
+      line-height: 80rpx;
       border: 1rpx #d2d2d2 solid;
       border-radius: 9rpx;
       font-size: 25rpx;
       color: #ffffff;
-      padding: 0 20rpx; /* 给输入框留点内边距 */
-      margin-bottom: 38rpx;
+      padding: 0 20rpx;
+      margin-bottom: 43rpx;
+      width: 100%;
       .send-input {
-        padding-top: 7rpx;
+        height: 100%;
+        padding-top: 0rpx;
+        padding-right: 3rpx;
+        flex: 1;
+        background: transparent;
+        border: none;
+        color: #fff;
       }
     }
     .submit {
@@ -100,7 +121,7 @@ $friendBg: #374151;
       // border-radius: 9rpx;
       padding-left: 15rpx;
       color: #fff;
-      margin-bottom: 38rpx;
+      margin-bottom: 43rpx;
     }
   }
 }
@@ -108,4 +129,12 @@ $friendBg: #374151;
   position: relative!important;
   right: 9rpx!important;
   top: 3rpx!important;
+}
+.van-icon-c-1 {
+  top: 5rpx!important;
+}
+.van-icon-c-2 {
+  margin-left: 20rpx; /* 和输入框留点距离 */
+  font-size: 30rpx;
+  color: #fff;
 }

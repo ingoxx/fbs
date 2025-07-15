@@ -1,6 +1,7 @@
 // pages/fbs/fbs.js
 // import QQMapWX from '../../libs/qqmap-wx-jssdk.js'
 var QQMapWX = require('../../lib/qqmap-wx-jssdk.js');
+import Toast from '@vant/weapp/toast/toast';
 var qqmapsdk;
 Page({
 
@@ -9,15 +10,19 @@ Page({
    */
   data: {
     city: '未知',
+    addVillage: false,
+    showCloseBtn: false,
+    villageInfo: '',
     lat: 0,
     lng: 0,
     inputValue: "",
     currentSquareSelected: 1,
     basketSquareFilter: [
-      {'id': 1, 'icon': 'map-marked','name': '所有'},
-      {'id': 2, 'icon': 'location','name': '距离最近'},
-      {'id': 3, 'icon': 'wap-home','name': '城中村'},
-      {'id': 4, 'icon': 'fire','name': '公园'},
+      {'id': 1, 'icon': 'map-marked','name': '所有', 'customize': 2},
+      {'id': 2, 'icon': 'location','name': '距离最近', 'customize': 2},
+      {'id': 3, 'icon': 'wap-home','name': '城中村', 'customize': 2},
+      {'id': 4, 'icon': 'fire','name': '公园', 'customize': 2},
+      {'id': 5, 'icon': 'add-square','name': '添加村/公园', 'customize': 1},
     ],
     basketSquareFilterData: [],
     basketSquareData: [
@@ -26,7 +31,7 @@ Page({
         'addr': '深圳市观澜田背一村',
         'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/bk2.svg', 
         'distance': 0, 
-        'online': 8, 
+        'online': 0, 
         'basketType': '城中村',
         'tags': ['城中村','室外','有棚顶']
       },
@@ -35,7 +40,7 @@ Page({
         'addr': '深圳市观澜大水坑村',
         'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/bk3.svg', 
         'distance': 0, 
-        'online': 16, 
+        'online': 0, 
         'basketType': '城中村',
         'tags': ['城中村','室外']
       },
@@ -44,7 +49,7 @@ Page({
         'addr': '深圳市福田香蜜湖篮球公园',
         'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/bk3.svg', 
         'distance': 0, 
-        'online': 100, 
+        'online': 10, 
         'basketType': '公园',
         'tags': ['公园','室外']
       },
@@ -53,18 +58,58 @@ Page({
         'addr': '深圳市龙华区竹村',
         'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/bk3.svg', 
         'distance': 0, 
-        'online': 100, 
+        'online': 0, 
         'basketType': '城中村',
         'tags': ['城中村','室外']
       },
     ]
   },
   // 自定义逻辑
+  onChange(e) {
+    const value = e.detail;
+    this.setData({villageInfo: value});
+  },
+  onConfirm() {
+    console.log('提交的值:', this.data.villageInfo);
+    // 在这里写你的提交逻辑
+    const val = this.data.villageInfo;
+    if (val == "") {
+      Toast.fail("不能输入空值");
+      return;
+    }
+    
+    Toast.success({
+      type: 'success',
+      message: "后台审核后会更新到页面上",
+      duration: 6000,
+    });
+  },
+  getUserInfo(event) {
+    console.log(event.detail);
+  },
+  onClose() {
+    this.setData({ addVillage: false });
+  },
+  onClearInput(e) {
+    if (e.currentTarget.dataset.value != "") {
+      const data = {detail: {value: ""}};
+      this.getVal(data);
+    }
+  },
   // 获取input值
   getVal(e) {
-    this.setData({
-      inputValue: e.detail.value,
-    });
+    if (e.detail.value == "") {
+      this.setData({
+        inputValue: e.detail.value,
+        showCloseBtn: false,
+      });
+    } else {
+      this.setData({
+        inputValue: e.detail.value,
+        showCloseBtn: true,
+      });
+    }
+    
     var fd = this.data.basketSquareData.filter(item => item.addr.includes(e.detail.value));
     this.setData({
       basketSquareFilterData: fd,
@@ -106,6 +151,9 @@ Page({
       this.setData({
         basketSquareFilterData: newList,
       });
+      return;
+    } else if (name.customize == 1) {
+      this.setData({ addVillage: true})
       return;
     }
     var fd = this.data.basketSquareData.filter(item => item.tags.includes(name.name));
@@ -265,23 +313,23 @@ Page({
     s = s * 1000;   // 米
     return Math.floor(s);
   },
-// 设置当前页的标题
-setNavigatInfo() {
-  wx.setNavigationBarColor({
-    frontColor: "#ffffff",
-    backgroundColor: "#6a72d9",
-  });
-  wx.setNavigationBarTitle({
-    title: '🏀 球行者',
-  });
-},
+  // 设置当前页的标题
+  setNavigatInfo() {
+    wx.setNavigationBarColor({
+      frontColor: "#ffffff",
+      backgroundColor: "#6a72d9",
+    });
+    wx.setNavigationBarTitle({
+      title: '🏀 球行者',
+    });
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
     this.setNavigatInfo();
     // this.getBasketSquareData();
-    this.getAddrDistance();
+    // this.getAddrDistance();
   },
 
   /**
@@ -316,14 +364,28 @@ setNavigatInfo() {
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh() {
-
+    console.log('下拉了');
+    wx.stopPullDownRefresh();
+    Toast.loading({
+      message: '重新定位中...',
+      forbidClick: true,
+      duration: 3000,
+    });
+    // setTimeout(() => {
+    //   wx.stopPullDownRefresh();
+    // }, 3000)
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
   onReachBottom() {
-
+    console.log('触底了');
+    Toast.loading({
+      message: '拉取数据中...',
+      forbidClick: true,
+      duration: 3000,
+    });
   },
 
   /**

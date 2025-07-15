@@ -39,7 +39,6 @@
 .box .container-c .search .s-p {
   width: 80%;
   margin: 16rpx auto;
-  text-align: center;
   padding-top: 20rpx;
 }
 
@@ -48,6 +47,8 @@
   border: 1rpx #d2d2d2 solid;
   border-radius: 9rpx;
   font-size: 25rpx;
+  padding-left: 21rpx;
+  padding-right: 60rpx;
 }
 
 .box .container-c .search .s-b {
@@ -120,4 +121,15 @@
   width: 20rpx !important;
   height: 20rpx !important;
   background: #ffffff;
+}
+
+.custom-selector-load {
+  width: auto !important;
+}
+
+.van-transition-c {
+  float: right !important;
+  position: relative !important;
+  bottom: 58rpx !important;
+  right: 19rpx !important;
 }
