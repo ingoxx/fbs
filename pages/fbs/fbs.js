@@ -9,27 +9,38 @@ Page({
    * 页面的初始数据
    */
   data: {
+    showCheckList: false,
     city: '未知',
     addVillage: false,
     showCloseBtn: false,
     villageInfo: '',
+    notice: "可添加您所在城中村或者公园，可点击离您最近的城中村/公园发消息一起约球，点击屏幕下拉即可刷新定位跟页面数据",
     lat: 0,
     lng: 0,
     inputValue: "",
-    currentSquareSelected: 1,
+    currentSquareSelected: 2,
     basketSquareFilter: [
       {'id': 1, 'icon': 'map-marked','name': '所有', 'customize': 2},
       {'id': 2, 'icon': 'location','name': '距离最近', 'customize': 2},
       {'id': 3, 'icon': 'wap-home','name': '城中村', 'customize': 2},
       {'id': 4, 'icon': 'fire','name': '公园', 'customize': 2},
-      {'id': 5, 'icon': 'add-square','name': '添加村/公园', 'customize': 1},
+      {'id': 5, 'icon': 'thumb-circle','name': '审核', 'customize': 3},
+      {'id': 6, 'icon': 'add-square','name': '添加村/公园', 'customize': 1},
+    ],
+    checkListData: [
+      {'id': 1, 'addr': '深圳市福田区上沙村'},
+      {'id': 2, 'addr': '深圳市福田区下沙村'},
+      {'id': 3, 'addr': '深圳市南头古村'},
+      {'id': 4, 'addr': '深圳市南头古村'},
+      {'id': 5, 'addr': '深圳市南头古村'},
+      {'id': 6, 'addr': '深圳市南头古村'},
     ],
     basketSquareFilterData: [],
     basketSquareData: [
       {
         'id': 1, 
         'addr': '深圳市观澜田背一村',
-        'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/bk2.svg', 
+        'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/bk3.svg', 
         'distance': 0, 
         'online': 0, 
         'basketType': '城中村',
@@ -49,7 +60,7 @@ Page({
         'addr': '深圳市福田香蜜湖篮球公园',
         'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/bk3.svg', 
         'distance': 0, 
-        'online': 10, 
+        'online': 0, 
         'basketType': '公园',
         'tags': ['公园','室外']
       },
@@ -62,9 +73,36 @@ Page({
         'basketType': '城中村',
         'tags': ['城中村','室外']
       },
+      {
+        'id': 5, 
+        'addr': '深圳市观澜茜坑村',
+        'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/bk3.svg', 
+        'distance': 0, 
+        'online': 0, 
+        'basketType': '城中村',
+        'tags': ['城中村','室外','有棚顶']
+      },
     ]
   },
-  // 自定义逻辑
+  // 获取每个群组的在线人数
+  async getGroupUserCount(gid) {
+    const resp = await this.getGroupUserCountApi(gid);
+    return resp;
+  },
+  getGroupUserCountApi(gid) {
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: `https://ai.anythingai.online/basket-group/get-online?gid=${gid}`,
+        success: res => {
+          if (res.data.code !== 1000) {
+            console.log(res.data.msg);
+          }
+          resolve(res.data.data);
+        },
+        fail: reject
+      });
+    });
+  },
   onChange(e) {
     const value = e.detail;
     this.setData({villageInfo: value});
@@ -88,7 +126,7 @@ Page({
     console.log(event.detail);
   },
   onClose() {
-    this.setData({ addVillage: false });
+    this.setData({ addVillage: false, showCheckList: false, });
   },
   onClearInput(e) {
     if (e.currentTarget.dataset.value != "") {
@@ -152,47 +190,19 @@ Page({
         basketSquareFilterData: newList,
       });
       return;
-    } else if (name.customize == 1) {
+    } else if (name.name == "添加村/公园") {
       this.setData({ addVillage: true})
       return;
+    } else if (name.name == "审核") {
+      this.setData({
+        showCheckList: true,
+      })
+      return;
     }
-    var fd = this.data.basketSquareData.filter(item => item.tags.includes(name.name));
+    const fd = this.data.basketSquareData.filter(item => item.tags.includes(name.name));
     this.setData({
       basketSquareFilterData: fd,
     });
-  },
-  nogetUserLocation() {
-    const qqmapsdk = new QQMapWX({
-      key: 'YSRBZ-GSVY3-3P23L-RNWCE-OQB3V-T6BXG'
-    })
-    wx.getLocation({
-      type: 'gcj02',
-      isHighAccuracy: true,
-      altitude: true,
-      success: res => {
-        console.log('当前位置坐标：', res)
-        this.setData({
-          lat: res.latitude,
-          lng: res.longitude,
-        });
-        qqmapsdk.reverseGeocoder({
-          location: {
-            latitude: res.latitude,
-            longitude: res.longitude
-          },
-          success: res => {
-            console.log('逆地址解析结果：', res)
-            const city = res.result.address;
-            this.setData({
-              city: city
-            })
-          },
-          fail: err => {
-            console.log('逆地址解析失败：', err)
-          }
-        })
-      }
-    })
   },
   getUserLocation() {
     const qqmapsdk = new QQMapWX({
@@ -246,14 +256,19 @@ Page({
       const updatedList = await Promise.all(
         newList.map(async (item) => {
           const res = await this.getSearchLocation(item.addr);
+          const online = await this.getGroupUserCount(item.id);
           item.distance = res/1000;
           item.distance = item.distance.toFixed(1);
+          item.online = online;
           return item;
         })
       );
+      const disSortList = updatedList.sort((a, b) => a.distance - b.distance);
       this.setData({
-        basketSquareFilterData: updatedList,
+        basketSquareFilterData: disSortList,
       });
+      wx.stopPullDownRefresh();
+      wx.hideLoading();
     } else {
       console.log("获取距离失败");
     }
@@ -364,16 +379,10 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh() {
-    console.log('下拉了');
-    wx.stopPullDownRefresh();
-    Toast.loading({
-      message: '重新定位中...',
-      forbidClick: true,
-      duration: 3000,
+    wx.showLoading({
+      title: '刷新数据中',
     });
-    // setTimeout(() => {
-    //   wx.stopPullDownRefresh();
-    // }, 3000)
+    this.getAddrDistance();
   },
 
   /**
@@ -381,11 +390,7 @@ Page({
    */
   onReachBottom() {
     console.log('触底了');
-    Toast.loading({
-      message: '拉取数据中...',
-      forbidClick: true,
-      duration: 3000,
-    });
+    
   },
 
   /**

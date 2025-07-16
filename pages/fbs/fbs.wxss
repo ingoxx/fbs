@@ -1,15 +1,12 @@
 @charset "UTF-8";
 .box {
-  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
   background: #6a72d9;
 }
 
-.box .container-c {
-  margin: 0 16rpx;
-  background: #6a72d9;
-}
-
-.box .container-c .location {
+.box .location {
   display: flex;
   justify-content: center;
   /* 水平居中 */
@@ -21,28 +18,30 @@
   border-radius: 16rpx;
 }
 
-.box .container-c .location .coordinate {
+.box .location .coordinate {
   color: #ffffff;
   font-size: 25rpx;
 }
 
-.box .container-c .search {
-  margin: 25rpx 0;
+.box .search {
+  margin: 0 25rpx;
+  margin-top: 30rpx;
+  margin-bottom: 17rpx;
   background: #ffffff;
   border-radius: 16rpx;
 }
 
-.box .container-c .search .se {
+.box .search .se {
   padding: 0 0;
 }
 
-.box .container-c .search .s-p {
+.box .search .s-p {
   width: 80%;
   margin: 16rpx auto;
   padding-top: 20rpx;
 }
 
-.box .container-c .search .s-p .s-p-1 {
+.box .search .s-p .s-p-1 {
   height: 70rpx;
   border: 1rpx #d2d2d2 solid;
   border-radius: 9rpx;
@@ -51,20 +50,26 @@
   padding-right: 60rpx;
 }
 
-.box .container-c .search .s-b {
+.box .search .s-b {
   width: 80%;
   margin: 16rpx auto;
   padding-bottom: 10rpx;
 }
 
-.box .container-c .card-1 {
+.box .card-1 {
   display: flex;
   justify-content: center;
   justify-items: center;
   flex-wrap: wrap;
+  flex: 1;
+  /* ✅ 给它固定高度，比如占满剩余高度 */
+  /* ✅ 内容超出就内部滚动 */
+  overflow-y: auto;
+  /* ✅ 如果还有上下外边距，padding，记得加 box-sizing */
+  box-sizing: border-box;
 }
 
-.box .container-c .card-1 .card-1-1 {
+.box .card-1 .card-1-1 {
   width: 310rpx;
   margin: 14rpx 14rpx;
   background: #ffff;
@@ -73,30 +78,30 @@
   padding: 10rpx;
 }
 
-.box .container-c .card-1 .card-1-1 .online-status {
+.box .card-1 .card-1-1 .online-status {
   position: relative;
   bottom: 14rpx;
   width: 20rpx;
   height: 20rpx;
 }
 
-.box .container-c .card-1 .card-1-1 .img, .box .container-c .card-1 .card-1-1 .addr, .box .container-c .card-1 .card-1-1 .distance, .box .container-c .card-1 .card-1-1 .tags, .box .container-c .card-1 .card-1-1 .online {
+.box .card-1 .card-1-1 .img, .box .card-1 .card-1-1 .addr, .box .card-1 .card-1-1 .distance, .box .card-1 .card-1-1 .tags, .box .card-1 .card-1-1 .online {
   display: flex;
   justify-content: center;
 }
 
-.box .container-c .card-1 .card-1-1 .addr .t-f {
+.box .card-1 .card-1-1 .addr .t-f {
   font-size: 28rpx;
   font-weight: 700;
   color: #3d3d3d;
 }
 
-.box .container-c .card-1 .card-1-1 .distance .t-f {
+.box .card-1 .card-1-1 .distance .t-f {
   font-size: 20rpx;
   color: #3d3d3d;
 }
 
-.box .container-c .card-1 .card-1-1 .tags {
+.box .card-1 .card-1-1 .tags {
   gap: 20rpx;
 }
 
@@ -132,4 +137,20 @@
   position: relative !important;
   bottom: 58rpx !important;
   right: 19rpx !important;
+}
+
+.check-list-box {
+  height: 250rpx;
+  overflow-y: auto;
+  -webkit-backface-visibility: hidden;
+  -webkit-transform: translateZ(0);
+}
+
+.check-list-data {
+  display: flex;
+  justify-content: left;
+}
+
+.check-list-data .check-id, .check-list-data .check-addr, .check-list-data .check-submit {
+  padding: 10rpx 10rpx;
 }

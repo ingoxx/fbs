@@ -35,10 +35,10 @@ $friendBg: #374151;
     flex: 1;
     flex-direction: column;
     background: $primary;
-     /* 关键！当内容超出时，出现垂直滚动条 */
-     overflow-y: auto;        
-     /* 兼容性修复：防止flex item在某些情况下无法正确计算尺寸 */
-     min-height: 0;
+    /* 关键！当内容超出时，出现垂直滚动条 */
+    overflow-y: auto;        
+    /* 兼容性修复：防止flex item在某些情况下无法正确计算尺寸 */
+    min-height: 0;
     .chat-content {
       color: #ffffff;
       font-size: 27rpx;
