@@ -313,13 +313,20 @@ Page({
               })
             },
             fail: geoErr => {
+              Notify({ type: 'danger', message: '无法获取定位', duration: 0 });
               console.log('逆地址解析失败：', geoErr)
               reject(geoErr)
+            },
+            complete: function (res) {
+              wx.stopPullDownRefresh();
+              wx.hideLoading();
             }
           })
         },
         fail: locErr => {
           console.log('定位失败：', locErr)
+          wx.stopPullDownRefresh();
+          wx.hideLoading();
           reject(locErr)
         }
       })
@@ -392,6 +399,11 @@ Page({
         fail(err) {
           console.error('请求失败', err);
           reject(err);
+          
+        },
+        complete: function (res) {
+          wx.stopPullDownRefresh();
+          wx.hideLoading();
         }
       });
     });
