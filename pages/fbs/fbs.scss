@@ -52,15 +52,9 @@
     justify-content: center;
     justify-items: center;
     flex-wrap: wrap;
-    flex: 1;
-    /* ✅ 给它固定高度，比如占满剩余高度 */
-  // height: calc(100vh - 200px); /* 这200px就是你顶部 search、location 的高度之和，可按实际值替换 */
-
-  /* ✅ 内容超出就内部滚动 */
-  overflow-y: auto;
-
-  /* ✅ 如果还有上下外边距，padding，记得加 box-sizing */
-  box-sizing: border-box;
+    // flex: 1;
+    overflow-y: auto;
+    box-sizing: border-box;
     .card-1-1 {
       width: 310rpx;
       margin: 14rpx 14rpx;
@@ -79,7 +73,6 @@
         justify-content: center;
       }
       .addr {
-        // width: 285rpx;
         .t-f {
           font-size: 28rpx;
           font-weight: 700;
@@ -129,19 +122,39 @@
 }
 
 .check-list-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   height: 250rpx;
   overflow-y: auto;
   -webkit-backface-visibility: hidden;
   -webkit-transform: translateZ(0);
 }
 .check-list-data {
+  width: 70%;
   display: flex;
-  justify-content: left;
+  // justify-content: left;
+  margin: 0 auto;
+  border-bottom: 1rpx solid #d2d2d2;
   .check-id, .check-addr, .check-submit {
     padding: 10rpx 10rpx;
   }
-  // justify-items: center;
-  // flex-wrap: wrap;
-  // flex: 1;
-  
+  .submit-flex {
+    display: flex;
+    justify-content: center;
+    gap: 53rpx;
+  }
+  .addr-size {
+    font-size: 26rpx;
+  }
+}
+.tx-map {
+  width: 93%;
+  margin: 0 auto;
+}
+.van-empty__description {
+  color: #dcdcdc!important;
+}
+.van-dialog-c .van-dialog__footer{
+  text-align: center!important;
 }

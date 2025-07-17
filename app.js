@@ -37,12 +37,12 @@ App({
     //     // 发送 res.code 到后台换取 openId, sessionKey, unionId
     //   }
     // })
-    // this.login().then(resp => {
-    //   this.globalData.openid = resp.data.openid;
-    //   console.log("wx login openid >>> ", this.globalData.openid);
-    // }).catch(err => {
-    //   console.log("wx login faid >>> ", err);
-    // });
+    this.login().then(resp => {
+      this.globalData.openid = resp.data.openid;
+      console.log("wx login openid >>> ", this.globalData.openid);
+    }).catch(err => {
+      console.log("wx login faid >>> ", err);
+    });
   },
   globalData: {
     openid: null

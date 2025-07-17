@@ -1,7 +1,9 @@
 // pages/fbs/fbs.js
 // import QQMapWX from '../../libs/qqmap-wx-jssdk.js'
+const app = getApp();
 var QQMapWX = require('../../lib/qqmap-wx-jssdk.js');
 import Toast from '@vant/weapp/toast/toast';
+import Dialog from '@vant/weapp/dialog/dialog';
 var qqmapsdk;
 Page({
 
@@ -9,8 +11,12 @@ Page({
    * 页面的初始数据
    */
   data: {
+    isInput: true,
+    showTxMap: false,
+    isEmptyTwo: false,
+    isEmpty: true,
     showCheckList: false,
-    city: '未知',
+    city: '未获取位置',
     addVillage: false,
     showCloseBtn: false,
     villageInfo: '',
@@ -18,22 +24,24 @@ Page({
     lat: 0,
     lng: 0,
     inputValue: "",
+    markers: [],
     currentSquareSelected: 2,
     basketSquareFilter: [
-      {'id': 1, 'icon': 'map-marked','name': '所有', 'customize': 2},
-      {'id': 2, 'icon': 'location','name': '距离最近', 'customize': 2},
-      {'id': 3, 'icon': 'wap-home','name': '城中村', 'customize': 2},
-      {'id': 4, 'icon': 'fire','name': '公园', 'customize': 2},
-      {'id': 5, 'icon': 'thumb-circle','name': '审核', 'customize': 3},
-      {'id': 6, 'icon': 'add-square','name': '添加村/公园', 'customize': 1},
+      {'id': 1, 'icon': 'star','name': '所有', 'customize': 2, 'disable': true, 'isDisable': true},
+      {'id': 2, 'icon': 'location','name': '距离最近', 'customize': 2, 'disable': true, 'isDisable': true},
+      // {'id': 3, 'icon': 'wap-home','name': '城中村', 'customize': 2, 'disable': true, 'isDisable': true},
+      // {'id': 4, 'icon': 'fire','name': '公园', 'customize': 2, 'disable': true, 'isDisable': true},
+      {'id': 5, 'icon': 'comment','name': '审核', 'customize': 3, 'disable': false, 'isDisable': false},
+      {'id': 6, 'icon': 'add-square','name': '添加村/公园', 'customize': 1, 'disable': true, 'isDisable': true},
     ],
     checkListData: [
       {'id': 1, 'addr': '深圳市福田区上沙村'},
       {'id': 2, 'addr': '深圳市福田区下沙村'},
       {'id': 3, 'addr': '深圳市南头古村'},
-      {'id': 4, 'addr': '深圳市南头古村'},
-      {'id': 5, 'addr': '深圳市南头古村'},
-      {'id': 6, 'addr': '深圳市南头古村'},
+      {'id': 3, 'addr': '深圳市南头古村'},
+      {'id': 3, 'addr': '深圳市南头古村'},
+      {'id': 3, 'addr': '深圳市南头古村'},
+      {'id': 3, 'addr': '深圳市南头古村'},
     ],
     basketSquareFilterData: [],
     basketSquareData: [
@@ -84,6 +92,62 @@ Page({
       },
     ]
   },
+  async getBasketSquareFilter() {
+    const newBsf = this.data.basketSquareFilter;
+    const updatedBsf = await Promise.all(
+      newBsf.map(async (item) => {
+        const res = await app.login();
+        if (item.customize == 3) {
+          item.disable = res.data.openid == "ogR3E62jXXJMbVcImRqMA1gTSegM";
+        } else {
+          item.isDisable = false;
+        }
+        return item;
+      })
+    );
+    this.setData({
+      basketSquareFilter: updatedBsf,
+    })
+  },
+  onAdd(e) {
+    const addData = e.currentTarget.dataset.value;
+    Dialog.confirm({
+      zIndex: 200,
+      title: '添加村/公园',
+      message: `确认添加 '${addData.addr}' 吗？`,
+    })
+      .then(() => {
+        const newList = this.data.checkListData.filter(item => item.id !== addData.id);
+        this.setData({
+          checkListData: newList,
+          isEmptyTwo: newList.length == 0,
+        });
+        Toast.success('添加完成');
+      })
+      .catch(() => {
+        // on cancel
+      });
+  },
+  onDelete(e) {
+    const delData = e.currentTarget.dataset.value;
+    Dialog.confirm({
+      zIndex: 200,
+      title: '删除村/公园',
+      message: `确认删除 '${delData.addr}' 吗？`,
+    })
+      .then(() => {
+        // on confirm
+        const newList = this.data.checkListData.filter(item => item.id !== delData.id);
+        this.setData({
+          checkListData: newList,
+          isEmptyTwo: newList.length == 0,
+        });
+        Toast.success('删除完成');
+      })
+      .catch(() => {
+        // on cancel
+      });
+  },
   // 获取每个群组的在线人数
   async getGroupUserCount(gid) {
     const resp = await this.getGroupUserCountApi(gid);
@@ -93,6 +157,7 @@ Page({
     return new Promise((resolve, reject) => {
       wx.request({
         url: `https://ai.anythingai.online/basket-group/get-online?gid=${gid}`,
+        timeout: 10000,
         success: res => {
           if (res.data.code !== 1000) {
             console.log(res.data.msg);
@@ -185,7 +250,7 @@ Page({
       });
       return;
     } else if (name.name == "距离最近") {
-      const newList = this.data.basketSquareFilterData.sort((a, b) => a.distance - b.distance);
+      const newList = this.data.basketSquareData.sort((a, b) => a.distance - b.distance);
       this.setData({
         basketSquareFilterData: newList,
       });
@@ -198,7 +263,13 @@ Page({
         showCheckList: true,
       })
       return;
-    }
+    } else if (name.name == "打开定位") {
+      this.getAddrDistance();
+      this.setData({
+        showTxMap: true,
+      })
+      return;
+    } 
     const fd = this.data.basketSquareData.filter(item => item.tags.includes(name.name));
     this.setData({
       basketSquareFilterData: fd,
@@ -224,9 +295,15 @@ Page({
               longitude: res.longitude
             },
             success: geoRes => {
-              const city = geoRes.result.address
+              const city = geoRes.result.formatted_addresses.rough
               this.setData({
-                city: city
+                city: city,
+                markers: [{
+                  id: 1,
+                  longitude: res.longitude,
+                  latitude: res.latitude,
+                  title: '当前位置'
+                }],
               })
               // 把需要的结果一起 resolve 出去
               resolve({
@@ -264,9 +341,13 @@ Page({
         })
       );
       const disSortList = updatedList.sort((a, b) => a.distance - b.distance);
+      console.log(disSortList);
       this.setData({
         basketSquareFilterData: disSortList,
+        isEmpty: false,
+        isInput: false,
       });
+      this.getBasketSquareFilter();
       wx.stopPullDownRefresh();
       wx.hideLoading();
     } else {
@@ -292,6 +373,7 @@ Page({
           keyword: addr,
           region: that.data.city,
         },
+        timeout: 10000,
         success(res) {
           if (res.data.status === 0 && res.data.data.length > 0) {
             const location = res.data.data[0].location;
@@ -343,8 +425,8 @@ Page({
    */
   onLoad(options) {
     this.setNavigatInfo();
-    // this.getBasketSquareData();
-    this.getAddrDistance();
+    // this.getBasketSquareFilter();
+    // this.getAddrDistance();
   },
 
   /**
@@ -380,9 +462,10 @@ Page({
    */
   onPullDownRefresh() {
     wx.showLoading({
-      title: '刷新数据中',
+      title: '获取定位中',
     });
     this.getAddrDistance();
+    
   },
 
   /**

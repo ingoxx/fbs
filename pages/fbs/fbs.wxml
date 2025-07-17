@@ -9,11 +9,11 @@
     />
   </view>
   <view class="location">
-    <text class="coordinate">📍 {{ city }}</text>
+    <text class="coordinate">📍 {{ city }} </text>
   </view>
   <view class="search">
     <view class="s-p">
-      <input class="s-p-1" value="{{ inputValue }}" bindinput="getVal" placeholder="输入村名/公园搜索"/>
+      <input class="s-p-1" disabled="{{ isInput }}" value="{{ inputValue }}" bindinput="getVal" placeholder="输入村名/公园搜索"/>
       <block>
         <van-transition show="{{ showCloseBtn }}" custom-class="van-transition-c" name="fade-left">
           <van-icon custom-class="van-icon-c-2" name="clear" data-value="{{ inputValue }}" bindtap="onClearInput" />
@@ -22,11 +22,13 @@
     </view>
     <view class="s-b">
       <van-row gutter="16">
-        <van-col span="8" custom-class="van-c" wx:for="{{ basketSquareFilter }}" wx:key="index" wx:for-item="item">
-          <van-button round size="small" custom-style="{{ item.customize == 1 ? 'width:210rpx' : 'width:170rpx'  }}" data-id="{{item.id}}" custom-class="{{ currentSquareSelected === item.id ? 'van-b-isactive' : '' }}" bind:click="onSelected">
-            <van-icon name="{{ item.icon }}" /> {{ item.name }}
-          </van-button>
-        </van-col>
+        <block wx:for="{{ basketSquareFilter }}" wx:key="index" wx:for-item="item">
+          <van-col span="8" custom-class="van-c" wx:if="{{ item.disable }}">
+            <van-button round size="small" disabled="{{ item.isDisable }}"  custom-style="{{ item.customize == 1 ? 'width:210rpx' : 'width:170rpx'  }}" data-id="{{item.id}}" custom-class="{{ currentSquareSelected === item.id ? 'van-b-isactive' : '' }}" bind:click="onSelected">
+              <van-icon name="{{ item.icon }}" /> {{ item.name }}
+            </van-button>
+          </van-col>
+        </block>
       </van-row>
     </view>
   </view>
@@ -55,6 +57,9 @@
         </view>
       </view>
     </block>
+    <block wx:if="{{ isEmpty }}">
+      <van-empty description="老板好，请先下拉小程序以便获取定位"></van-empty>
+    </block>
   </view>
 </view>
 <view>
@@ -66,6 +71,7 @@
   confirm-button-open-type="getUserInfo"
   bind:close="onClose"
   bind:confirm="onConfirm"
+  custom-class="van-dialog-c-1"
 >
   <van-cell-group>
     <van-field
@@ -84,6 +90,8 @@
 </van-dialog>
 <van-dialog
     use-slot
+    cancel-button-text="关闭"
+    z-index="100"
     title="审核列表"
     show="{{ showCheckList }}"
     show-cancel-button
@@ -93,21 +101,21 @@
     <view class="check-list-box">
       <block wx:for="{{checkListData}}" wx:key="index" wx:for-item="item">
         <view class="check-list-data">
-          <view class="check-id">
+          <view class="check-id addr-size">
             <text>{{ item.id }}</text>
           </view>
-          <view class="check-addr">
+          <view class="check-addr addr-size">
             <text>{{ item.addr }}</text>
           </view>
-          <view class="check-submit">
-            <van-button type="danger" round size="small" custom-style="width:170rpx">
-              通过
-            </van-button>
+          <view class="check-submit submit-flex">
+            <van-icon name="close" data-value="{{ item }}" color="#ee0a24" bindtap="onDelete" />
+            <van-icon name="passed" data-value="{{ item }}" color="#07c160" bindtap="onAdd" />
           </view>
         </view>
       </block>
     </view>
-  </van-dialog>
+</van-dialog>
 <van-notify id="van-notify" />
 <van-toast id="van-toast" />
+<van-dialog id="van-dialog" />
 </view>
