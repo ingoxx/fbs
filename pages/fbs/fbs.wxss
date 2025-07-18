@@ -13,7 +13,7 @@
   align-items: center;
   /* 垂直居中 */
   padding: 16rpx 0;
-  height: 100rpx;
+  height: 150rpx;
   background: #7880dd;
   border-radius: 16rpx;
 }

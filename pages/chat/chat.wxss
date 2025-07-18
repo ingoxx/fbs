@@ -53,6 +53,7 @@
   max-width: 300rpx;
   margin-left: 50rpx;
   padding: 20rpx;
+  overflow-wrap: break-word;
 }
 
 .box .chat .chat-content .chat-format {
@@ -64,7 +65,6 @@
   color: #a5a5a5;
   font-size: 25rpx;
   padding: 14rpx 0;
-  overflow-wrap: break-word;
 }
 
 .box .chat .chat-content .user .user-name {

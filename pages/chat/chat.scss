@@ -48,15 +48,17 @@ $friendBg: #374151;
       max-width: 300rpx;
       margin-left: 50rpx;
       padding: 20rpx;
+      overflow-wrap: break-word;
       .chat-format {
         position: relative;
         bottom: 5rpx;
+        
       }
       .user, .time {
         color: #a5a5a5;
         font-size: 25rpx;
         padding: 14rpx 0;
-        overflow-wrap: break-word;
+        // overflow-wrap: break-word;
       }
       .user {
         .user-name {
