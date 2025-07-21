@@ -92,6 +92,20 @@ Page({
       },
     ]
   },
+  getAllDataApi() {
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: `https://ai.anythingai.online/basket-group/show-square?lat=${this.data.lat}&lng=${this.data.lng}`,
+        success: function (res) {
+          resolve(res.data);
+        },
+        fail: function (err) {
+          Notify({ type: 'danger', message: '加载数据失败', duration: 0 });
+          reject(err)
+        }
+      })
+    })
+  },
   async getBasketSquareFilter() {
     const newBsf = this.data.basketSquareFilter;
     const updatedBsf = await Promise.all(
@@ -295,7 +309,8 @@ Page({
               longitude: res.longitude
             },
             success: geoRes => {
-              const city = geoRes.result.formatted_addresses.rough
+              const city = geoRes.result.formatted_addresses.rough;
+              console.log(res.longitude, res.latitude);
               this.setData({
                 city: city,
                 markers: [{
@@ -335,11 +350,17 @@ Page({
   async getAddrDistance() {
     const resp = await this.getUserLocation();
     if (resp.latitude !== "" && resp.longitude !== "" && resp.city !== "") {
+      const allData = await this.getAllDataApi();
+      this.setData({
+        basketSquareData: JSON.parse(allData.data),
+      });
       const newList = this.data.basketSquareData;
+      console.log(typeof(newList));
       // 等待所有异步任务都完成
       const updatedList = await Promise.all(
         newList.map(async (item) => {
-          const res = await this.getSearchLocation(item.addr);
+          // const res = await this.getSearchLocation(item.addr);
+          const res = this.getDistance(this.data.lat, this.data.lng, item.lat, item.lng);
           const online = await this.getGroupUserCount(item.id);
           item.distance = res/1000;
           item.distance = item.distance.toFixed(1);
@@ -348,9 +369,8 @@ Page({
         })
       );
       const disSortList = updatedList.sort((a, b) => a.distance - b.distance);
-      console.log(disSortList);
       this.setData({
-        basketSquareFilterData: disSortList,
+        basketSquareFilterData: disSortList.slice(0, 6),
         isEmpty: false,
         isInput: false,
       });
@@ -372,13 +392,14 @@ Page({
   // 腾讯地图的关键字api
   txMapSearchAddrApi(addr) {
     let that = this;
+    console.log(addr);
     return new Promise((resolve, reject) => {
       wx.request({
-        url: `https://apis.map.qq.com/ws/place/v1/suggestion`,
+        url: `https://apis.map.qq.com/ws/geocoder/v1`,
         data: {
           key: 'YSRBZ-GSVY3-3P23L-RNWCE-OQB3V-T6BXG',
-          keyword: addr,
-          region: that.data.city,
+          address: addr,
+          // region: that.data.city,
         },
         timeout: 10000,
         success(res) {
