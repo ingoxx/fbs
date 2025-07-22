@@ -75,7 +75,6 @@ Page({
     });
     socket.onMessage((res) => {
       const msg = JSON.parse(res.data);
-      console.log(msg);
       if (msg.content == "") {
         this.setData({
           online: msg.user_count,

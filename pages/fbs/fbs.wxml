@@ -102,10 +102,10 @@
       <block wx:for="{{checkListData}}" wx:key="index" wx:for-item="item">
         <view class="check-list-data">
           <view class="check-id addr-size">
-            <text>{{ item.id }}</text>
+            <text user-select="true">{{ item.id }}</text>
           </view>
           <view class="check-addr addr-size">
-            <text>{{ item.addr }}</text>
+            <text user-select="true">{{ item.addr }}</text>
           </view>
           <view class="check-submit submit-flex">
             <van-icon name="close" data-value="{{ item }}" color="#ee0a24" bindtap="onDelete" />

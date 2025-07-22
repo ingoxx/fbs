@@ -150,10 +150,14 @@ Page({
       wx.request({
         url: `https://ai.anythingai.online/basket-group/show-square?lat=${this.data.lat}&lng=${this.data.lng}&city=${this.data.cityPy}&cityCn=${this.data.city}`,
         success: function (res) {
+          if (res.statusCode != 200) {
+            Notify({ type: 'danger', message: '加载数据失败', duration: 30000 });
+            return;
+          }
           resolve(res.data);
         },
         fail: function (err) {
-          Notify({ type: 'danger', message: '加载数据失败', duration: 0 });
+          Notify({ type: 'danger', message: '加载数据失败', duration: 30000 });
           reject(err)
         }
       })
@@ -226,9 +230,9 @@ Page({
         url: `https://ai.anythingai.online/basket-group/get-online?gid=${gid}`,
         timeout: 10000,
         success: res => {
-          if (res.data.code !== 1000) {
-            console.log(res.data.msg);
-          }
+          // if (res.data.code !== 1000 || res.statusCode != 200) {
+          //   console.log(res.data.msg);
+          // }
           resolve(res.data.data);
         },
         fail: reject
@@ -254,7 +258,6 @@ Page({
       lat: respTx.lat,
       lng: respTx.lng,
     }
-
    const resp = await this.userAddAddrReqApi(ad);
    if (resp.code != 1000) {
       const msg = resp.msg ? resp.msg : "添加地址失败, 请联系管理员";
@@ -401,10 +404,6 @@ Page({
               console.log('逆地址解析失败：', geoErr)
               reject(geoErr)
             },
-            complete: function (res) {
-              wx.stopPullDownRefresh();
-              wx.hideLoading();
-            }
           })
         },
         fail: locErr => {
@@ -424,7 +423,6 @@ Page({
         basketSquareData: JSON.parse(allData.data),
       });
       const newList = this.data.basketSquareData;
-      
       // 等待所有异步任务都完成
       const updatedList = await Promise.all(
         newList.map(async (item) => {
@@ -529,8 +527,6 @@ Page({
    */
   onLoad(options) {
     this.setNavigatInfo();
-    // this.getBasketSquareFilter();
-    // this.getAddrDistance();
   },
 
   /**
