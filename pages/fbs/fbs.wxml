@@ -9,7 +9,7 @@
     />
   </view>
   <view class="location">
-    <text class="coordinate">📍 {{ city }} </text>
+    <text class="coordinate">📍 {{ addr }} </text>
   </view>
   <view class="search">
     <view class="s-p">
@@ -58,7 +58,7 @@
       </view>
     </block>
     <block wx:if="{{ isEmpty }}">
-      <van-empty description="老板好，请先下拉小程序以便获取定位"></van-empty>
+      <van-empty description="{{ useNotice }}"></van-empty>
     </block>
   </view>
 </view>
@@ -81,7 +81,7 @@
       autosize
       type="textarea"
       label="地址"
-      placeholder="请输入详细的村/公园地址"
+      placeholder="请输入详细准确的篮球场地址"
       border="{{ false }}"
       confirm-type="done"
       bind:change="onChange"

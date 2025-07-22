@@ -2,9 +2,11 @@
 // import QQMapWX from '../../libs/qqmap-wx-jssdk.js'
 const app = getApp();
 var QQMapWX = require('../../lib/qqmap-wx-jssdk.js');
+import Notify from '@vant/weapp/notify/notify';
 import Toast from '@vant/weapp/toast/toast';
+const { generateUUID } = require('../../utils/util'); 
 import Dialog from '@vant/weapp/dialog/dialog';
-var qqmapsdk;
+var PinYin = require('../../miniprogram_npm/tiny-pinyin/index.js');
 Page({
 
   /**
@@ -17,10 +19,13 @@ Page({
     isEmpty: true,
     showCheckList: false,
     city: '未获取位置',
+    addr : '未获取位置',
+    cityPy: '',
     addVillage: false,
     showCloseBtn: false,
     villageInfo: '',
-    notice: "可添加您所在城中村或者公园，点击进入发消息一起约球，点击屏幕下拉即可刷新定位跟页面数据",
+    useNotice: "下拉小程序以获取附近篮球场地址",
+    notice: "本小程序旨在为篮球爱好者方便在陌生的城市约起打篮球运动。如没有您当前所在的篮球场地址, 您可以添加当前篮球场位置以便后续大家共同约球，非常感谢您的使用，祝您身体健康，万事如意",
     lat: 0,
     lng: 0,
     inputValue: "",
@@ -52,6 +57,7 @@ Page({
         'distance': 0, 
         'online': 0, 
         'basketType': '城中村',
+        'title': '',
         'tags': ['城中村','室外','有棚顶']
       },
       {
@@ -60,6 +66,7 @@ Page({
         'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/bk3.svg', 
         'distance': 0, 
         'online': 0, 
+        'title': '',
         'basketType': '城中村',
         'tags': ['城中村','室外']
       },
@@ -69,6 +76,7 @@ Page({
         'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/bk3.svg', 
         'distance': 0, 
         'online': 0, 
+        'title': '',
         'basketType': '公园',
         'tags': ['公园','室外']
       },
@@ -78,6 +86,7 @@ Page({
         'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/bk3.svg', 
         'distance': 0, 
         'online': 0, 
+        'title': '',
         'basketType': '城中村',
         'tags': ['城中村','室外']
       },
@@ -87,15 +96,59 @@ Page({
         'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/bk3.svg', 
         'distance': 0, 
         'online': 0, 
+        'title': '',
         'basketType': '城中村',
         'tags': ['城中村','室外','有棚顶']
       },
     ]
   },
+  userAddAddrReqApi(data) {
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: 'https://ai.anythingai.online/basket-group/user-add-square',
+        method: 'POST',
+        timeout: 10000,
+        data: data,
+        success: function (res) {
+          resolve(res.data);
+        },
+        fail: function (err) {
+          reject(err)
+        }
+      })
+    })
+  },
+  refuseAddAddrApi() {},
+  allowAddAddrApi() {},
+  getCheckListApi() {
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: `https://ai.anythingai.online/basket-group/check-list?uid=${app.globalData.openid}`,
+        timeout: 10000,
+        success: function (res) {
+          resolve(res.data);
+        },
+        fail: function (err) {
+          reject(err)
+        }
+      })
+    })
+  },
+  async getCheckList() {
+    const data = await this.getCheckListApi();
+    if (data.code != 1000) {
+      const msg = data.msg ? data.msg : "获取审核列表失败";
+      Notify({ type: 'danger', message: msg, duration: 20000 });
+      return;
+    }
+    this.setData({
+      checkListData: data.data,
+    })
+  },
   getAllDataApi() {
     return new Promise((resolve, reject) => {
       wx.request({
-        url: `https://ai.anythingai.online/basket-group/show-square?lat=${this.data.lat}&lng=${this.data.lng}`,
+        url: `https://ai.anythingai.online/basket-group/show-square?lat=${this.data.lat}&lng=${this.data.lng}&city=${this.data.cityPy}&cityCn=${this.data.city}`,
         success: function (res) {
           resolve(res.data);
         },
@@ -186,20 +239,29 @@ Page({
     const value = e.detail;
     this.setData({villageInfo: value});
   },
-  onConfirm() {
-    console.log('提交的值:', this.data.villageInfo);
+  async onConfirm() {
     // 在这里写你的提交逻辑
     const val = this.data.villageInfo;
     if (val == "") {
       Toast.fail("不能输入空值");
       return;
     }
-    
-    Toast.success({
-      type: 'success',
-      message: "后台审核后会更新到页面上",
-      duration: 6000,
-    });
+    const respTx = await this.txMapSearchAddrApi(this.data.villageInfo);
+    const ad = {
+      id: generateUUID(),
+      user_id: app.globalData.openid,
+      addr: this.data.villageInfo,
+      lat: respTx.lat,
+      lng: respTx.lng,
+    }
+
+   const resp = await this.userAddAddrReqApi(ad);
+   if (resp.code != 1000) {
+      const msg = resp.msg ? resp.msg : "添加地址失败, 请联系管理员";
+      Notify({ type: 'danger', message: msg, duration: 20000 });
+      return;
+    }
+    Notify({ type: 'success', message: "地址已提交,审核通过会更新到页面上", duration: 10000 });
   },
   getUserInfo(event) {
     console.log(event.detail);
@@ -273,6 +335,7 @@ Page({
       this.setData({ addVillage: true})
       return;
     } else if (name.name == "审核") {
+      this.getCheckList();
       this.setData({
         showCheckList: true,
       })
@@ -309,10 +372,14 @@ Page({
               longitude: res.longitude
             },
             success: geoRes => {
-              const city = geoRes.result.formatted_addresses.rough;
-              console.log(res.longitude, res.latitude);
+              const addr = geoRes.result.formatted_addresses.rough;
+              console.log(geoRes.result);
+              const city = geoRes.result.address_component.city
+              const cityPy = PinYin.convertToPinyin(city, '', true);
               this.setData({
+                addr: addr,
                 city: city,
+                cityPy: cityPy,
                 markers: [{
                   id: 1,
                   longitude: res.longitude,
@@ -324,7 +391,9 @@ Page({
               resolve({
                 latitude: res.latitude,
                 longitude: res.longitude,
+                addr: addr,
                 city: city,
+                cityPy: cityPy,
               })
             },
             fail: geoErr => {
@@ -349,13 +418,13 @@ Page({
   },
   async getAddrDistance() {
     const resp = await this.getUserLocation();
-    if (resp.latitude !== "" && resp.longitude !== "" && resp.city !== "") {
+    if (resp.latitude !== "" && resp.longitude !== "" && resp.city !== "" && resp.cityPy !== "" && resp.addr !== "") {
       const allData = await this.getAllDataApi();
       this.setData({
         basketSquareData: JSON.parse(allData.data),
       });
       const newList = this.data.basketSquareData;
-      console.log(typeof(newList));
+      
       // 等待所有异步任务都完成
       const updatedList = await Promise.all(
         newList.map(async (item) => {
@@ -391,7 +460,6 @@ Page({
   },
   // 腾讯地图的关键字api
   txMapSearchAddrApi(addr) {
-    let that = this;
     console.log(addr);
     return new Promise((resolve, reject) => {
       wx.request({
@@ -403,22 +471,25 @@ Page({
         },
         timeout: 10000,
         success(res) {
-          if (res.data.status === 0 && res.data.data.length > 0) {
-            const location = res.data.data[0].location;
+          if (res.data.status === 0) {
+            const location = res.data.result.location;
             const lat = location.lat;
             const lng = location.lng;
-            const dis = that.getDistance(that.data.lat, that.data.lng, lat, lng);
+            // const dis = that.getDistance(that.data.lat, that.data.lng, lat, lng);
             // 把需要的结果用 resolve 返回
             resolve({
-              distance: dis,
+              // distance: dis,
+              lat: lat,
+              lng: lng,
             });
           } else {
-            console.log('没有找到匹配地址');
+            Toast.fail('没有找到匹配地址');
             reject(new Error('没有找到匹配地址'));
           }
         },
         fail(err) {
           console.error('请求失败', err);
+          Toast.fail('请求失败', err);
           reject(err);
           
         },
@@ -498,7 +569,6 @@ Page({
       title: '获取定位中',
     });
     this.getAddrDistance();
-    
   },
 
   /**
