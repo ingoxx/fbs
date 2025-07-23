@@ -27,6 +27,7 @@
             <van-button round size="small" disabled="{{ item.isDisable }}"  custom-style="{{ item.customize == 1 ? 'width:210rpx' : 'width:170rpx'  }}" data-id="{{item.id}}" custom-class="{{ currentSquareSelected === item.id ? 'van-b-isactive' : '' }}" bind:click="onSelected">
               <van-icon name="{{ item.icon }}" /> {{ item.name }}
             </van-button>
+            <!-- <button open-type="contact" class="share-btn">联系我们</button> -->
           </van-col>
         </block>
       </van-row>
@@ -60,6 +61,9 @@
     <block wx:if="{{ isEmpty }}">
       <van-empty description="{{ useNotice }}"></van-empty>
     </block>
+  </view>
+  <view class="contact-us">
+    <button size="mini"  open-type="contact" class="share-btn"><van-icon name="service" /></button>
   </view>
 </view>
 <view>

@@ -10,7 +10,7 @@
     padding: 16rpx 0;
     height: 150rpx;
     background: #7880dd;
-    border-radius: 16rpx;
+    // border-radius: 16rpx;
     .coordinate {
       color: #ffffff;
       font-size: 25rpx;
@@ -26,10 +26,8 @@
       padding: 0 0;
     }
     .s-p {
-      // display: flex;
       width: 80%;
-      margin: 16rpx auto;
-      // text-align: center;
+      margin: 19rpx auto;
       padding-top: 20rpx;
       .s-p-1 {
         // flex: 1;
@@ -90,9 +88,18 @@
       }
     }
   }
-
   .basket {
     color: #ffffff;
+  }
+  .contact-us {
+    position: fixed;
+    top: 56%;
+    .share-btn {
+      opacity: 0.7;
+      width: 93rpx;
+      color: #2d2c2c;
+      font-size: 37rpx;
+    }
   }
 }
 .van-c {

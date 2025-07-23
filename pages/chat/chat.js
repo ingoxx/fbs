@@ -7,7 +7,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    notice: "请文明发言，否则将被禁言",
+    notice: "请严格遵守相关法律法规文明发言，否则将禁言。本小程序不会永久保留用户的聊天信息每天都会定时清除。",
     openid_key: 'openid',
     socket: null,
     showSendBtn: false,

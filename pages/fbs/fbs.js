@@ -25,82 +25,19 @@ Page({
     showCloseBtn: false,
     villageInfo: '',
     useNotice: "下拉小程序以获取附近篮球场地址",
-    notice: "本小程序旨在为篮球爱好者方便在陌生的城市约起打篮球运动。如没有您当前所在的篮球场地址, 您可以添加当前篮球场位置以便后续大家共同约球，非常感谢您的使用，祝您身体健康，万事如意",
+    notice: "本小程序旨在为篮球爱好者方便在陌生城市约球。您也可以添加当前篮球场位置以便大家约球，非常感谢您的使用，祝您身体健康，万事如意",
     lat: 0,
     lng: 0,
     inputValue: "",
     markers: [],
     currentSquareSelected: 2,
     basketSquareFilter: [
-      // {'id': 1, 'icon': 'star','name': '所有', 'customize': 2, 'disable': true, 'isDisable': true},
-      // {'id': 2, 'icon': 'location','name': '距离最近', 'customize': 2, 'disable': true, 'isDisable': true},
-      // {'id': 3, 'icon': 'wap-home','name': '城中村', 'customize': 2, 'disable': true, 'isDisable': true},
-      // {'id': 4, 'icon': 'fire','name': '公园', 'customize': 2, 'disable': true, 'isDisable': true},
-      {'id': 5, 'icon': 'comment','name': '审核', 'customize': 3, 'disable': false, 'isDisable': false},
-      {'id': 6, 'icon': 'add-square','name': '添加村/公园', 'customize': 1, 'disable': true, 'isDisable': true},
+      {'id': 5, 'icon': 'comment','name': '审核', 'customize': 3, 'disable': false, 'isDisable': false, 'action': false},
+      {'id': 6, 'icon': 'add-square','name': '添加村/公园', 'customize': 1, 'disable': true, 'isDisable': true, 'action': false},
     ],
-    checkListData: [
-      {'id': 1, 'addr': '深圳市福田区上沙村'},
-      {'id': 2, 'addr': '深圳市福田区下沙村'},
-      {'id': 3, 'addr': '深圳市南头古村'},
-      {'id': 3, 'addr': '深圳市南头古村'},
-      {'id': 3, 'addr': '深圳市南头古村'},
-      {'id': 3, 'addr': '深圳市南头古村'},
-      {'id': 3, 'addr': '深圳市南头古村'},
-    ],
+    checkListData: [],
     basketSquareFilterData: [],
-    basketSquareData: [
-      {
-        'id': 1, 
-        'addr': '深圳市观澜田背一村',
-        'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/bk3.svg', 
-        'distance': 0, 
-        'online': 0, 
-        'basketType': '城中村',
-        'title': '',
-        'tags': ['城中村','室外','有棚顶']
-      },
-      {
-        'id': 2, 
-        'addr': '深圳市观澜大水坑村',
-        'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/bk3.svg', 
-        'distance': 0, 
-        'online': 0, 
-        'title': '',
-        'basketType': '城中村',
-        'tags': ['城中村','室外']
-      },
-      {
-        'id': 3, 
-        'addr': '深圳市福田香蜜湖篮球公园',
-        'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/bk3.svg', 
-        'distance': 0, 
-        'online': 0, 
-        'title': '',
-        'basketType': '公园',
-        'tags': ['公园','室外']
-      },
-      {
-        'id': 4, 
-        'addr': '深圳市龙华区竹村',
-        'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/bk3.svg', 
-        'distance': 0, 
-        'online': 0, 
-        'title': '',
-        'basketType': '城中村',
-        'tags': ['城中村','室外']
-      },
-      {
-        'id': 5, 
-        'addr': '深圳市观澜茜坑村',
-        'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/bk3.svg', 
-        'distance': 0, 
-        'online': 0, 
-        'title': '',
-        'basketType': '城中村',
-        'tags': ['城中村','室外','有棚顶']
-      },
-    ]
+    basketSquareData: []
   },
   userAddAddrReqApi(data) {
     return new Promise((resolve, reject) => {
@@ -148,7 +85,7 @@ Page({
   getAllDataApi() {
     return new Promise((resolve, reject) => {
       wx.request({
-        url: `https://ai.anythingai.online/basket-group/show-square?lat=${this.data.lat}&lng=${this.data.lng}&city=${this.data.cityPy}&cityCn=${this.data.city}`,
+        url: `https://ai.anythingai.online/basket-group/show-square?lat=${this.data.lat}&lng=${this.data.lng}&city=${this.data.city}&cityCn=${this.data.city}`,
         success: function (res) {
           if (res.statusCode != 200) {
             Notify({ type: 'danger', message: '加载数据失败', duration: 30000 });
@@ -180,44 +117,87 @@ Page({
       basketSquareFilter: updatedBsf,
     })
   },
-  onAdd(e) {
-    const addData = e.currentTarget.dataset.value;
-    Dialog.confirm({
-      zIndex: 200,
-      title: '添加村/公园',
-      message: `确认添加 '${addData.addr}' 吗？`,
-    })
-      .then(() => {
-        const newList = this.data.checkListData.filter(item => item.id !== addData.id);
-        this.setData({
-          checkListData: newList,
-          isEmptyTwo: newList.length == 0,
-        });
-        Toast.success('添加完成');
+  refuseAddAddrReqApi(id) {
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: 'https://ai.anythingai.online/basket-group/add-square-refuse',
+        method: "POST",
+        timeout: 10000,
+        data: JSON.stringify({id: id}),
+        success: function (res) {
+          if (res.statusCode != 200) {
+            Toast.fail("请求接口失败");
+          }
+          resolve(res.data);
+        },
+        fail: function (err) {
+          Toast.fail("请求接口失败");
+          reject(err);
+        }
       })
-      .catch(() => {
-        // on cancel
-      });
+    })
   },
-  onDelete(e) {
-    const delData = e.currentTarget.dataset.value;
-    Dialog.confirm({
-      zIndex: 200,
-      title: '删除村/公园',
-      message: `确认删除 '${delData.addr}' 吗？`,
-    })
-      .then(() => {
-        // on confirm
-        const newList = this.data.checkListData.filter(item => item.id !== delData.id);
-        this.setData({
-          checkListData: newList,
-          isEmptyTwo: newList.length == 0,
-        });
-        Toast.success('删除完成');
+  passAddAddrReqApi(id) {
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: `https://ai.anythingai.online/basket-group/add-square-pass?city=${this.data.city}`,
+        method: "POST",
+        timeout: 10000,
+        data: JSON.stringify({id: id}),
+        success: function (res) {
+          if (res.statusCode != 200) {
+            Toast.fail("请求接口失败");
+          }
+          resolve(res.data);
+        },
+        fail: function (err) {
+          Toast.fail("请求接口失败");
+          reject(err);
+        }
       })
-      .catch(() => {
-        // on cancel
+    })
+  },
+  // 在审核页面提交通过审核的添加地址请求
+  async onAdd(e) {
+    const addData = e.currentTarget.dataset.value;
+    try {
+      await Dialog.confirm({
+        title: '确认添加',
+        message: `确认添加 '${addData.addr}' 吗？`
       });
+      const pdd = await this.passAddAddrReqApi(addData.id);
+      if (pdd.code != 1000) {
+        Toast.fail("添加失败");
+        return;
+      }
+      this.setData({
+        checkListData: pdd.data,
+      });
+      Toast.success("添加成功");
+    } catch (err) {
+      console.log('取消或失败:', err);
+    }
+  },
+  // 在审核页面审核不通过的加地址请求将会删除
+  async onDelete(e) {
+    const delData = e.currentTarget.dataset.value;
+    try {
+      await Dialog.confirm({
+        title: '确认删除',
+        message: `确认删除 '${delData.addr}' 吗？`
+      });
+      const pdd = await this.refuseAddAddrReqApi(delData.id);
+      if (pdd.code != 1000) {
+        Toast.fail("删除失败");
+        return;
+      }
+      this.setData({
+        checkListData: pdd.data,
+      });
+      Toast.success("删除成功");
+    } catch (err) {
+      console.log('取消或失败:', err);
+    }
   },
   // 获取每个群组的在线人数
   async getGroupUserCount(gid) {
@@ -243,14 +223,18 @@ Page({
     const value = e.detail;
     this.setData({villageInfo: value});
   },
+  // 用户提交添加篮球场地址的请求
   async onConfirm() {
-    // 在这里写你的提交逻辑
     const val = this.data.villageInfo;
     if (val == "") {
       Toast.fail("不能输入空值");
       return;
     }
     const respTx = await this.txMapSearchAddrApi(this.data.villageInfo);
+    if (respTx.status != 1000) {
+      Notify({type: 'danger', message: '输入的地址无效', duration: 30000});
+      return;
+    }
     const ad = {
       id: generateUUID(),
       user_id: app.globalData.openid,
@@ -376,19 +360,12 @@ Page({
             },
             success: geoRes => {
               const addr = geoRes.result.formatted_addresses.rough;
-              console.log(geoRes.result);
               const city = geoRes.result.address_component.city
-              const cityPy = PinYin.convertToPinyin(city, '', true);
+              // const cityPy = PinYin.convertToPinyin(city, '', true);
               this.setData({
                 addr: addr,
                 city: city,
-                cityPy: cityPy,
-                markers: [{
-                  id: 1,
-                  longitude: res.longitude,
-                  latitude: res.latitude,
-                  title: '当前位置'
-                }],
+                cityPy: city,
               })
               // 把需要的结果一起 resolve 出去
               resolve({
@@ -396,7 +373,7 @@ Page({
                 longitude: res.longitude,
                 addr: addr,
                 city: city,
-                cityPy: cityPy,
+                // cityPy: cityPy,
               })
             },
             fail: geoErr => {
@@ -407,7 +384,7 @@ Page({
           })
         },
         fail: locErr => {
-          console.log('定位失败：', locErr)
+          Notify({ type: 'danger', message: '无法获取定位', duration: 0 });
           wx.stopPullDownRefresh();
           wx.hideLoading();
           reject(locErr)
@@ -458,7 +435,6 @@ Page({
   },
   // 腾讯地图的关键字api
   txMapSearchAddrApi(addr) {
-    console.log(addr);
     return new Promise((resolve, reject) => {
       wx.request({
         url: `https://apis.map.qq.com/ws/geocoder/v1`,
@@ -469,31 +445,24 @@ Page({
         },
         timeout: 10000,
         success(res) {
+          var lat = 0;
+          var lng = 0;
+          var status = 1000;
           if (res.data.status === 0) {
             const location = res.data.result.location;
-            const lat = location.lat;
-            const lng = location.lng;
-            // const dis = that.getDistance(that.data.lat, that.data.lng, lat, lng);
-            // 把需要的结果用 resolve 返回
-            resolve({
-              // distance: dis,
-              lat: lat,
-              lng: lng,
-            });
+            lat = location.lat;
+            lng = location.lng;
           } else {
-            Toast.fail('没有找到匹配地址');
-            reject(new Error('没有找到匹配地址'));
+            status = 1001;
           }
+          resolve({
+            lat: lat,
+            lng: lng,
+            status: status,
+          });
         },
         fail(err) {
-          console.error('请求失败', err);
-          Toast.fail('请求失败', err);
           reject(err);
-          
-        },
-        complete: function (res) {
-          wx.stopPullDownRefresh();
-          wx.hideLoading();
         }
       });
     });

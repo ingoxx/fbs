@@ -15,7 +15,6 @@
   padding: 16rpx 0;
   height: 150rpx;
   background: #7880dd;
-  border-radius: 16rpx;
 }
 
 .box .location .coordinate {
@@ -37,7 +36,7 @@
 
 .box .search .s-p {
   width: 80%;
-  margin: 16rpx auto;
+  margin: 19rpx auto;
   padding-top: 20rpx;
 }
 
@@ -103,6 +102,18 @@
 
 .box .basket {
   color: #ffffff;
+}
+
+.box .contact-us {
+  position: fixed;
+  top: 56%;
+}
+
+.box .contact-us .share-btn {
+  opacity: 0.7;
+  width: 93rpx;
+  color: #2d2c2c;
+  font-size: 37rpx;
 }
 
 .van-c {
