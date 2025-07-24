@@ -28,7 +28,7 @@ Page({
     showPrivacy: false,
     villageInfo: '',
     useNotice: "下拉小程序以获取附近篮球场地址",
-    notice: "本小程序致力于让篮球爱好者无论身处何地，都能轻松找到球友一起打球。您也可以随时添加新的球场位置，方便更多人加入。感谢您的支持，祝您身体健康，事事顺心！",
+    notice: "本小程序致力于让篮球爱好者无论身处何地，都能轻松找到球友一起打球。您也可以随时添加新的球场位置，方便更多人加入，另外本小程序每两周会更新最新的球场地址，重新下拉刷新页面即可获得最新数据。感谢您的支持，祝您身体健康，事事顺心！",
     lat: 0,
     lng: 0,
     inputValue: "",
@@ -345,10 +345,15 @@ Page({
         showCloseBtn: true,
       });
     }
-    
-    var fd = this.data.basketSquareData.filter(item => item.addr.includes(e.detail.value));
+    // var fd = this.data.basketSquareData.filter(item => item.addr.includes(e.detail.value));
+    const fd = this.data.basketSquareData.filter(item => {
+      const addrMatch = item.addr.includes(e.detail.value);
+      const tagsMatch = item.tags.some(tag => tag.includes(e.detail.value));
+      return addrMatch || tagsMatch;
+    });
+    const disSortList = fd.sort((a, b) => a.distance - b.distance);
     this.setData({
-      basketSquareFilterData: fd,
+      basketSquareFilterData: disSortList.slice(0, 6),
     });
 },
   chatRoot(e) {
