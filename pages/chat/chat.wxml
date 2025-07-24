@@ -8,7 +8,7 @@
     />
   </view>
   <view class="addr">
-    <view>
+    <view class="addr-detail">
       <text class="addr-content">📍 {{ addr }}</text>
     </view>
     <view class="online-status">
@@ -18,16 +18,31 @@
   <view class="open-time">
     <van-tag round color="#2b3748"> <van-icon custom-class="van-icon-c" name="clock-o" /> 07:00-21:00</van-tag>
   </view>
-  <view class="chat">
+  <scroll-view 
+    class="chat" 
+    scroll-y="true" 
+    scroll-with-animation 
+    scroll-into-view="{{toView}}"
+  >
     <block wx:for="{{chatData}}" wx:key="index" wx:for-item="item">
-      <view class="chat-content {{ item.user_id == user_id ? 'right my' : '' }}">
-        <view class="user chat-format"><text class="user-name" user-select="true">{{ item.user_id }}</text></view>
-        <!-- <view class="user">{{ item.user_id }}</view> -->
+      <view id="chat-{{index}}" class="chat-content {{ item.user_id == user_id ? 'right my' : 'left others' }}">
+        <view class="user chat-format">
+          <text class="user-name" user-select="true">{{ item.user_id }}</text>
+        </view>
         <view class="content chat-format">{{ item.content }}</view>
         <view class="time chat-format">{{ item.time }}</view>
       </view>
     </block>
-  </view>
+  </scroll-view>
+  <!-- <view class="chat">
+    <block wx:for="{{chatData}}" wx:key="index" wx:for-item="item">
+      <view class="chat-content {{ item.user_id == user_id ? 'right my' : 'left others' }}">
+        <view class="user chat-format"><text class="user-name" user-select="true">{{ item.user_id }}</text></view>
+        <view class="content chat-format">{{ item.content }}</view>
+        <view class="time chat-format">{{ item.time }}</view>
+      </view>
+    </block>
+  </view> -->
   <view class="send">
     <view class="content">
       <input class="send-input" type="text" value="{{ inputValue }}" bindinput="getVal" placeholder="输入内容发送"/>
@@ -38,7 +53,6 @@
     <van-transition show="{{ showSendBtn }}" custom-class="block" name="slide-right">
       <view class="submit">
           <van-button round size="small" type="warning" custom-style="width:170rpx" bind:click="sendMsg">发送</van-button>
-        <!-- <van-button round size="small" type="warning" custom-style="width:170rpx" bind:click="sendMsg">发送</van-button> -->
       </view>
     </van-transition>
   </view>

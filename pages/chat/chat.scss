@@ -16,7 +16,10 @@ $friendBg: #374151;
     align-items: center;
     flex-direction: column;
     background: #675094;
-    // border-radius: 10rpx;
+    padding: 13rpx 0;
+    .addr-detail {
+      padding: 0 13rpx;
+    }
     .addr-content {
       color: #ffffff;
       font-size: 27rpx;
@@ -31,13 +34,11 @@ $friendBg: #374151;
     font-size: 24rpx;
   }
   .chat {
-    display: flex;
+    // display: flex;
     flex: 1;
-    flex-direction: column;
+    // flex-direction: column;
     background: $primary;
-    /* 关键！当内容超出时，出现垂直滚动条 */
     overflow-y: auto;        
-    /* 兼容性修复：防止flex item在某些情况下无法正确计算尺寸 */
     min-height: 0;
     .chat-content {
       color: #ffffff;
@@ -71,6 +72,7 @@ $friendBg: #374151;
       &.right {
         align-self: flex-end;
         margin-right: 50rpx;
+        margin-left: auto;
       }
       &.friend {
         background: $friendBg;
@@ -78,6 +80,10 @@ $friendBg: #374151;
       &.my {
         background: $orange;
         color: #ffffff;
+      }
+      &.others {
+        background: #374151;
+        // color: #ffffff;
       }
     }
   }

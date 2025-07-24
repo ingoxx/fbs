@@ -6,13 +6,15 @@ import Notify from '@vant/weapp/notify/notify';
 import Toast from '@vant/weapp/toast/toast';
 const { generateUUID } = require('../../utils/util'); 
 import Dialog from '@vant/weapp/dialog/dialog';
-var PinYin = require('../../miniprogram_npm/tiny-pinyin/index.js');
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
+    agreeKey: 'is_agree',
+    isShowPrivacyKey: 'show_privacy',
+    isUse: false,
     isInput: true,
     showTxMap: false,
     isEmptyTwo: false,
@@ -23,9 +25,10 @@ Page({
     cityPy: '',
     addVillage: false,
     showCloseBtn: false,
+    showPrivacy: false,
     villageInfo: '',
     useNotice: "下拉小程序以获取附近篮球场地址",
-    notice: "本小程序旨在为篮球爱好者方便在陌生城市约球。您也可以添加当前篮球场位置以便大家约球，非常感谢您的使用，祝您身体健康，万事如意",
+    notice: "本小程序致力于让篮球爱好者无论身处何地，都能轻松找到球友一起打球。您也可以随时添加新的球场位置，方便更多人加入。感谢您的支持，祝您身体健康，事事顺心！",
     lat: 0,
     lng: 0,
     inputValue: "",
@@ -38,6 +41,75 @@ Page({
     checkListData: [],
     basketSquareFilterData: [],
     basketSquareData: []
+  },
+  cusSetStorage(key, data) {
+    wx.setStorage({
+      key: key,
+      data: JSON.stringify(data),
+      success(res) {
+        console.log(res.data);
+      },
+      fail(err) {
+        Toast.fail("数据存储失败");
+      }
+    })
+  },
+  cusGetStorage(key) {
+    return new Promise((resolve, reject) => {
+      wx.getStorage({
+        key: key,
+        success(res) {
+          resolve(JSON.parse(res.data)); // ✅ 拿到结果
+        },
+        fail(err) {
+          reject(err); // ⚠️ 如果没找到
+        }
+      });
+    });
+  },
+  async isShowPrivacy() {
+    try {
+      const value = await this.cusGetStorage(this.data.isShowPrivacyKey);
+      if (value == 2) {
+        this.setData({
+          showPrivacy: true,
+          isUse: false,
+        })
+      } else if (value == 1) {
+        this.setData({
+          showPrivacy: false,
+          isUse: true,
+        })
+      }
+    } catch (err) {
+      this.cusSetStorage(this.data.isShowPrivacyKey, 2);
+      this.setData({
+        showPrivacy: true,
+        isUse: false,
+      })
+    }
+  },
+  iAacceptPrivacy(e) {
+    const res = e.currentTarget.dataset.item;
+    if (res == 1) {
+      this.cusSetStorage(this.data.isShowPrivacyKey, 1);
+      this.setData({
+        showPrivacy: false,
+        isUse: true,
+      })
+    } else if (res == 2) {
+      this.cusSetStorage(this.data.isShowPrivacyKey, 2);
+      this.setData({
+        showPrivacy: false,
+        isUse: false,
+      })
+      setTimeout(() => {
+        this.setData({
+          showPrivacy: true,
+          isUse: false,
+        })
+      }, 5000)
+    }
   },
   userAddAddrReqApi(data) {
     return new Promise((resolve, reject) => {
@@ -55,8 +127,6 @@ Page({
       })
     })
   },
-  refuseAddAddrApi() {},
-  allowAddAddrApi() {},
   getCheckListApi() {
     return new Promise((resolve, reject) => {
       wx.request({
@@ -496,6 +566,7 @@ Page({
    */
   onLoad(options) {
     this.setNavigatInfo();
+    this.isShowPrivacy();
   },
 
   /**
@@ -530,10 +601,12 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh() {
-    wx.showLoading({
-      title: '获取定位中',
-    });
-    this.getAddrDistance();
+    if (this.data.isUse) {
+      wx.showLoading({
+        title: '获取数据中',
+      });
+      this.getAddrDistance();
+    }
   },
 
   /**

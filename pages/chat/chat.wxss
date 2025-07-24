@@ -17,6 +17,11 @@
   align-items: center;
   flex-direction: column;
   background: #675094;
+  padding: 13rpx 0;
+}
+
+.box .addr .addr-detail {
+  padding: 0 13rpx;
 }
 
 .box .addr .addr-content {
@@ -34,13 +39,9 @@
 }
 
 .box .chat {
-  display: flex;
   flex: 1;
-  flex-direction: column;
   background: #1f2937;
-  /* 关键！当内容超出时，出现垂直滚动条 */
   overflow-y: auto;
-  /* 兼容性修复：防止flex item在某些情况下无法正确计算尺寸 */
   min-height: 0;
 }
 
@@ -78,6 +79,7 @@
 .box .chat .chat-content.right {
   align-self: flex-end;
   margin-right: 50rpx;
+  margin-left: auto;
 }
 
 .box .chat .chat-content.friend {
@@ -87,6 +89,10 @@
 .box .chat .chat-content.my {
   background: #ff976a;
   color: #ffffff;
+}
+
+.box .chat .chat-content.others {
+  background: #374151;
 }
 
 .box .send {

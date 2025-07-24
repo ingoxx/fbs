@@ -7,11 +7,12 @@ Page({
    * 页面的初始数据
    */
   data: {
-    notice: "请严格遵守相关法律法规文明发言，否则将禁言。本小程序不会永久保留用户的聊天信息每天都会定时清除。",
+    notice: "请大家遵守法律法规，文明发言，违规将被禁言。本小程序不会长期保留聊天信息，系统每天都会自动清理。",
     openid_key: 'openid',
     socket: null,
     showSendBtn: false,
     showCloseBtn: false,
+    toView: '',
     group_id: 0,
     user_id: '',
     online: 0,
@@ -23,12 +24,10 @@ Page({
   onClearInput(e) {
     if (e.currentTarget.dataset.value != "") {
       const data = {detail: {value: ""}};
-      
       this.getVal(data);
     }
   },
   getVal(e) {
-    console.log(e);
     if (e.detail.value!="") {
       this.setData({ 
         showSendBtn: true,
@@ -80,8 +79,10 @@ Page({
           online: msg.user_count,
         })
       } else {
+        const newChatData = this.data.chatData.concat(msg);
         this.setData({
-          chatData: [...this.data.chatData, msg],
+          chatData: newChatData,
+          toView: `chat-${newChatData.length - 1}` // 自动滚到最后一条
         })
       }
     });
@@ -101,6 +102,8 @@ Page({
       user_id: this.data.user_id,
     };
     this.data.socket.send({ data: JSON.stringify(initMsg)});
+    const data = {detail: {value: ""}};
+    this.getVal(data);
   },
   setNavigatInfo() {
     wx.setNavigationBarColor({

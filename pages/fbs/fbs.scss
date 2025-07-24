@@ -165,3 +165,25 @@
 .van-dialog-c .van-dialog__footer{
   text-align: center!important;
 }
+.privacy-title {
+  text-align: center;
+    margin: 18rpx 0;
+    font-weight: 700;
+}
+.privacy-center {
+  .privacy-content {
+    padding: 0 11rpx;
+    .privacy-detail {
+      display: block;
+      padding: 10rpx 10rpx;
+      font-size: 28rpx;
+    }
+  }
+  .privacy-status {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 17rpx 0;
+    gap: 68rpx;
+  }
+}
