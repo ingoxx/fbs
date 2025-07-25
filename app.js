@@ -39,7 +39,10 @@ App({
     // })
     this.login().then(resp => {
       this.globalData.openid = resp.data.openid;
-      console.log("wx login openid >>> ", this.globalData.openid);
+      wx.setStorage({
+        key: "openid",
+        data: resp.data.openid,
+      })
     }).catch(err => {
       console.log("wx login faid >>> ", err);
     });

@@ -105,9 +105,12 @@
     <view class="check-list-box">
       <block wx:for="{{checkListData}}" wx:key="index" wx:for-item="item">
         <view class="check-list-data" wx:if="{{ !item.is_record }}">
-          <view class="check-id addr-size">
+          <!-- <view class="check-id addr-size">
             <text user-select="true">{{ item.id }}</text>
           </view>
+          <view class="check-addr addr-size">
+            <text user-select="true">{{ item.city }}</text>
+          </view> -->
           <view class="check-addr addr-size">
             <text user-select="true">{{ item.addr }}</text>
           </view>
@@ -129,9 +132,9 @@ close-on-click-overlay="false"
   <view class="privacy-center">
     <view class="privacy-content">
       <text class="privacy-detail">欢迎使用本小程序！为保障您的合法权益，请您在使用前仔细阅读并同意以下条款：</text>
-      <text class="privacy-detail">1.您需遵守国家法律法规，文明发言，禁止发布违法、违规、骚扰、攻击性或不实信息，违规行为将导致禁言或永久禁止您使用本小程序。</text> 
+      <text class="privacy-detail">1.您需遵守国家法律法规，文明发言，禁止发布违法、违规、骚扰、攻击性或不实信息，违规行为将导致永久禁止您使用本小程序。</text> 
       <text class="privacy-detail">2.您在本小程序中发布的信息及内容由您本人负责，如因内容引发的法律责任由用户自行承担。</text> 
-      <text class="privacy-detail">3.本小程序不会永久保存用户的聊天记录所有聊天记录将定期清理也不会收集用户的任何个人信息(仅获取微信小程序开发平台提供的有效信息)</text> 
+      <text class="privacy-detail">3.本小程序不会永久保存用户的聊天记录，所有聊天记录将定期清理，也不会收集用户的任何个人信息(仅从开放平台获取有限的信息)</text> 
       <text class="privacy-detail">4.您在使用过程中若遇到问题或发现违规行为，可通过小程序内提供的反馈渠道联系我们。</text> 
       <text class="privacy-detail">5.点击下方'同意协议'即表示您已阅读并同意本协议的全部内容，'拒绝协议'您将不能使用本小程序。</text> 
       <text class="privacy-detail">感谢您的理解与配合，祝您使用愉快！</text> 

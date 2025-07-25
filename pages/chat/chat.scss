@@ -34,12 +34,15 @@ $friendBg: #374151;
     font-size: 24rpx;
   }
   .chat {
-    // display: flex;
     flex: 1;
-    // flex-direction: column;
-    background: $primary;
+    background-image: url("https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/main-bk.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    // background: $primary;
     overflow-y: auto;        
     min-height: 0;
+    padding-bottom: 25rpx;
     .chat-content {
       color: #ffffff;
       font-size: 27rpx;
@@ -91,7 +94,7 @@ $friendBg: #374151;
     display: flex;
     justify-items: center;
     align-items: center;
-    height: 193rpx;
+    height: 221rpx;
     position:fixed;
     padding: 30rpx;
     bottom: 0rpx;

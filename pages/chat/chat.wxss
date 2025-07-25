@@ -40,9 +40,13 @@
 
 .box .chat {
   flex: 1;
-  background: #1f2937;
+  background-image: url("https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/main-bk.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
   overflow-y: auto;
   min-height: 0;
+  padding-bottom: 25rpx;
 }
 
 .box .chat .chat-content {
@@ -99,7 +103,7 @@
   display: flex;
   justify-items: center;
   align-items: center;
-  height: 193rpx;
+  height: 221rpx;
   position: fixed;
   padding: 30rpx;
   bottom: 0rpx;

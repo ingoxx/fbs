@@ -7,11 +7,13 @@ Page({
    * 页面的初始数据
    */
   data: {
-    notice: "请大家遵守法律法规，文明发言，违规将被禁言。本小程序不会长期保留聊天信息，系统每两周会自动清理一次。",
+    tryConNum: 0,
+    notice: "请大家严格遵守法律法规，文明发言，违规将永久禁止您使用本小程序。本小程序不会长期保留聊天信息，系统每天23:59:59点会自动清理。",
     openid_key: 'openid',
     socket: null,
     showSendBtn: false,
     showCloseBtn: false,
+    connectText: "连接中...",
     toView: '',
     group_id: 0,
     user_id: '',
@@ -44,32 +46,37 @@ Page({
   },
   // 初始化websocket
   initWss() {
+    // if (this.data.tryConNum >= 10) {
+    //   Notify({ type: 'danger', message: '已尝试连接10次服务器均失败,请联系客服处理.', duration: 0 });
+    //   wx.hideLoading();
+    //   return;
+    // }
     wx.showLoading({
-      title: '连接中...',
+      title: this.data.connectText,
     });
     const socket = wx.connectSocket({
       url: 'wss://ai.anythingai.online/basket-group/ws',
       timeout: 10000,
     });
     this.data.socket = socket;
-    let that = this;
     socket.onOpen(() => {
       console.log('连接成功');
       wx.hideLoading();
       const initMsg = {
-        group_id: that.data.group_id,
+        group_id: this.data.group_id,
         content: '',
-        time: that.getCurrentTime(),
-        user_id: that.data.user_id,
+        time: this.getCurrentTime(),
+        user_id: this.data.user_id,
       };
       socket.send({ data: JSON.stringify(initMsg)});
     })
     socket.onClose(() => {
-      console.log('WebSocket 已关闭')
+      console.log('WebSocket 已关闭');
+      wx.hideLoading();
     });
     socket.onError((err) => {
       console.error('WebSocket 错误:', err)
-      Notify({ type: 'danger', message: '服务器无法连接', duration: 0 })
+      Notify({ type: 'danger', message: '服务器无法连接', duration: 10000 });
       wx.hideLoading();
     });
     socket.onMessage((res) => {
@@ -209,7 +216,10 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide() {
-
+    if (this.data.socket) {
+      this.data.socket.close();
+      console.log('已关闭连接');
+    }
   },
 
   /**

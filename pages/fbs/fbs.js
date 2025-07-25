@@ -22,13 +22,14 @@ Page({
     showCheckList: false,
     city: '未获取位置',
     addr : '未获取位置',
+    loadText: "获取数据中...",
     cityPy: '',
     addVillage: false,
     showCloseBtn: false,
     showPrivacy: false,
     villageInfo: '',
     useNotice: "下拉小程序以获取附近篮球场地址",
-    notice: "本小程序致力于让篮球爱好者无论身处何地，都能轻松找到球友一起打球。您也可以随时添加新的球场位置，方便更多人加入，另外本小程序每两周会更新最新的球场地址，重新下拉刷新页面即可获得最新数据。感谢您的支持，祝您身体健康，事事顺心！",
+    notice: "本小程序致力于让篮球爱好者无论身处何地，都能轻松找到球友一起打球。您也可以随时添加新的球场位置，方便更多人加入。另外本小程序每两周会更新最新的球场地址，重新下拉刷新页面即可获得最新数据。感谢您的支持，祝您身体健康，事事顺心！",
     lat: 0,
     lng: 0,
     inputValue: "",
@@ -74,11 +75,13 @@ Page({
         this.setData({
           showPrivacy: true,
           isUse: false,
+          loadText: "首次加载数据会比较耗时",
         })
       } else if (value == 1) {
         this.setData({
           showPrivacy: false,
           isUse: true,
+          loadText: "获取数据中...",
         })
       }
     } catch (err) {
@@ -86,6 +89,7 @@ Page({
       this.setData({
         showPrivacy: true,
         isUse: false,
+        loadText: "首次加载数据会比较耗时",
       })
     }
   },
@@ -96,6 +100,7 @@ Page({
       this.setData({
         showPrivacy: false,
         isUse: true,
+        loadText: "首次加载数据会比较耗时",
       })
     } else if (res == 2) {
       this.cusSetStorage(this.data.isShowPrivacyKey, 2);
@@ -155,16 +160,20 @@ Page({
   getAllDataApi() {
     return new Promise((resolve, reject) => {
       wx.request({
-        url: `https://ai.anythingai.online/basket-group/show-square?lat=${this.data.lat}&lng=${this.data.lng}&city=${this.data.city}&cityCn=${this.data.city}`,
+        url: `https://ai.anythingai.online/basket-group/show-square?lat=${this.data.lat}&lng=${this.data.lng}&city=${this.data.city}`,
         success: function (res) {
           if (res.statusCode != 200) {
-            Notify({ type: 'danger', message: '加载数据失败', duration: 30000 });
+            wx.stopPullDownRefresh();
+            // wx.hideLoading();
+            Toast.clear();
+            Notify({ type: 'danger', message: `加载数据失败：${res.statusCode}`, duration: 30000 });
+            reject(new Error(`HTTP 状态码异常: ${res.statusCode}`));
             return;
           }
           resolve(res.data);
         },
         fail: function (err) {
-          Notify({ type: 'danger', message: '加载数据失败', duration: 30000 });
+          Notify({ type: 'danger', message: '请求失败', duration: 30000 });
           reject(err)
         }
       })
@@ -187,13 +196,13 @@ Page({
       basketSquareFilter: updatedBsf,
     })
   },
-  refuseAddAddrReqApi(id) {
+  refuseAddAddrReqApi(id, city) {
     return new Promise((resolve, reject) => {
       wx.request({
         url: 'https://ai.anythingai.online/basket-group/add-square-refuse',
         method: "POST",
         timeout: 10000,
-        data: JSON.stringify({id: id}),
+        data: JSON.stringify({id: id, city: city}),
         success: function (res) {
           if (res.statusCode != 200) {
             Toast.fail("请求接口失败");
@@ -207,13 +216,13 @@ Page({
       })
     })
   },
-  passAddAddrReqApi(id) {
+  passAddAddrReqApi(id, city) {
     return new Promise((resolve, reject) => {
       wx.request({
-        url: `https://ai.anythingai.online/basket-group/add-square-pass?city=${this.data.city}`,
+        url: 'https://ai.anythingai.online/basket-group/add-square-pass',
         method: "POST",
         timeout: 10000,
-        data: JSON.stringify({id: id}),
+        data: JSON.stringify({id: id, city: city}),
         success: function (res) {
           if (res.statusCode != 200) {
             Toast.fail("请求接口失败");
@@ -235,7 +244,7 @@ Page({
         title: '确认添加',
         message: `确认添加 '${addData.addr}' 吗？`
       });
-      const pdd = await this.passAddAddrReqApi(addData.id);
+      const pdd = await this.passAddAddrReqApi(addData.id, addData.city_py);
       if (pdd.code != 1000) {
         Toast.fail("添加失败");
         return;
@@ -256,7 +265,7 @@ Page({
         title: '确认删除',
         message: `确认删除 '${delData.addr}' 吗？`
       });
-      const pdd = await this.refuseAddAddrReqApi(delData.id);
+      const pdd = await this.refuseAddAddrReqApi(delData.id, addData.city_py);
       if (pdd.code != 1000) {
         Toast.fail("删除失败");
         return;
@@ -280,9 +289,6 @@ Page({
         url: `https://ai.anythingai.online/basket-group/get-online?gid=${gid}`,
         timeout: 10000,
         success: res => {
-          // if (res.data.code !== 1000 || res.statusCode != 200) {
-          //   console.log(res.data.msg);
-          // }
           resolve(res.data.data);
         },
         fail: reject
@@ -311,6 +317,7 @@ Page({
       addr: this.data.villageInfo,
       lat: respTx.lat,
       lng: respTx.lng,
+      city: this.data.city,
     }
    const resp = await this.userAddAddrReqApi(ad);
    if (resp.code != 1000) {
@@ -435,12 +442,10 @@ Page({
             },
             success: geoRes => {
               const addr = geoRes.result.formatted_addresses.rough;
-              const city = geoRes.result.address_component.city
-              // const cityPy = PinYin.convertToPinyin(city, '', true);
+              const city = geoRes.result.address_component.city;
               this.setData({
                 addr: addr,
                 city: city,
-                cityPy: city,
               })
               // 把需要的结果一起 resolve 出去
               resolve({
@@ -448,7 +453,6 @@ Page({
                 longitude: res.longitude,
                 addr: addr,
                 city: city,
-                // cityPy: cityPy,
               })
             },
             fail: geoErr => {
@@ -461,7 +465,8 @@ Page({
         fail: locErr => {
           Notify({ type: 'danger', message: '无法获取定位', duration: 0 });
           wx.stopPullDownRefresh();
-          wx.hideLoading();
+          // wx.hideLoading();
+          Toast.clear();
           reject(locErr)
         }
       })
@@ -469,7 +474,7 @@ Page({
   },
   async getAddrDistance() {
     const resp = await this.getUserLocation();
-    if (resp.latitude !== "" && resp.longitude !== "" && resp.city !== "" && resp.cityPy !== "" && resp.addr !== "") {
+    if (resp.latitude !== "" && resp.longitude !== "" && resp.city !== "") {
       const allData = await this.getAllDataApi();
       this.setData({
         basketSquareData: JSON.parse(allData.data),
@@ -478,7 +483,6 @@ Page({
       // 等待所有异步任务都完成
       const updatedList = await Promise.all(
         newList.map(async (item) => {
-          // const res = await this.getSearchLocation(item.addr);
           const res = this.getDistance(this.data.lat, this.data.lng, item.lat, item.lng);
           const online = await this.getGroupUserCount(item.id);
           item.distance = res/1000;
@@ -495,9 +499,13 @@ Page({
       });
       this.getBasketSquareFilter();
       wx.stopPullDownRefresh();
-      wx.hideLoading();
+      // wx.hideLoading();
+      Toast.clear();
     } else {
-      console.log("获取距离失败");
+      wx.stopPullDownRefresh();
+      // wx.hideLoading();
+      Toast.clear();
+      Toast.fail("加载数据失败");
     }
   },
   async getSearchLocation(addr) {
@@ -606,9 +614,15 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh() {
+    this.isShowPrivacy();
     if (this.data.isUse) {
-      wx.showLoading({
-        title: '获取数据中',
+      // wx.showLoading({
+      //   title: '获取数据中',
+      // });
+      Toast.loading({
+        message: this.data.loadText,
+        forbidClick: true,
+        duration: 0,
       });
       this.getAddrDistance();
     }
@@ -618,8 +632,6 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom() {
-    console.log('触底了');
-    
   },
 
   /**
