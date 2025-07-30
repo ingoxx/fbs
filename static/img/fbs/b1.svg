@@ -1,0 +1,6 @@
+<svg width="400" height="200" viewBox="0 0 400 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="400" height="200" fill="#667eea"/>
+<rect x="50" y="40" width="300" height="120" rx="10" fill="#454545"/>
+<circle cx="200" cy="100" r="40" stroke="#fff" stroke-width="3" fill="none"/>
+<text x="200" y="185" font-family="Arial" font-size="14" fill="#fff" text-anchor="middle">Indoor Court</text>
+</svg>

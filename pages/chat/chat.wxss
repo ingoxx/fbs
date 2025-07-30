@@ -1,0 +1,170 @@
+@charset "UTF-8";
+.box {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding-bottom: 220rpx;
+  /* send 的高度（或比它稍大） */
+  box-sizing: border-box;
+  min-height: 100vh;
+  background: #1f2937;
+}
+
+.box .addr {
+  height: 130rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background: #675094;
+  padding: 13rpx 0;
+}
+
+.box .addr .addr-detail {
+  padding: 0 13rpx;
+}
+
+.box .addr .addr-content {
+  color: #ffffff;
+  font-size: 27rpx;
+}
+
+.box .open-time {
+  height: 60rpx;
+  line-height: 60rpx;
+  padding-left: 15rpx;
+  background: #2b3748;
+  color: #ffffff;
+  font-size: 24rpx;
+}
+
+.box .chat {
+  flex: 1;
+  background-image: url("https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/main-bk.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  overflow-y: auto;
+  min-height: 0;
+  padding-bottom: 25rpx;
+}
+
+.box .chat .chat-content {
+  color: #ffffff;
+  font-size: 27rpx;
+  background: #374151;
+  margin: 33rpx 0;
+  border-radius: 10rpx;
+  max-width: 300rpx;
+  margin-left: 50rpx;
+  padding: 20rpx;
+  overflow-wrap: break-word;
+}
+
+.box .chat .chat-content .chat-format {
+  position: relative;
+  bottom: 5rpx;
+}
+
+.box .chat .chat-content .user, .box .chat .chat-content .time {
+  color: #a5a5a5;
+  font-size: 25rpx;
+  padding: 14rpx 0;
+}
+
+.box .chat .chat-content .user .user-name {
+  word-break: break-all;
+}
+
+.box .chat .chat-content.left {
+  align-self: flex-start;
+}
+
+.box .chat .chat-content.right {
+  align-self: flex-end;
+  margin-right: 50rpx;
+  margin-left: auto;
+}
+
+.box .chat .chat-content.friend {
+  background: #374151;
+}
+
+.box .chat .chat-content.my {
+  background: #ff976a;
+  color: #ffffff;
+}
+
+.box .chat .chat-content.others {
+  background: #374151;
+}
+
+.box .send {
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  height: 221rpx;
+  position: fixed;
+  padding: 30rpx;
+  bottom: 0rpx;
+  width: 100%;
+  background: #2b3748;
+  box-sizing: border-box;
+}
+
+.box .send .content {
+  display: flex;
+  /* 重点：flex 容器 */
+  align-items: center;
+  /* 垂直居中 */
+  height: 80rpx;
+  line-height: 80rpx;
+  border: 1rpx #d2d2d2 solid;
+  border-radius: 9rpx;
+  font-size: 25rpx;
+  color: #ffffff;
+  padding: 0 20rpx;
+  margin-bottom: 43rpx;
+  width: 100%;
+}
+
+.box .send .content .send-input {
+  height: 100%;
+  padding-top: 0rpx;
+  padding-right: 3rpx;
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #fff;
+}
+
+.box .send .submit {
+  height: 70rpx;
+  line-height: 70rpx;
+  padding-left: 15rpx;
+  color: #fff;
+  margin-bottom: 43rpx;
+}
+
+.van-icon-c {
+  position: relative !important;
+  right: 9rpx !important;
+  top: 3rpx !important;
+}
+
+.van-icon-c-1 {
+  top: 5rpx !important;
+}
+
+.van-icon-c-2 {
+  margin-left: 20rpx;
+  /* 和输入框留点距离 */
+  font-size: 30rpx;
+  color: #fff;
+}
+
+.van-icon-l {
+  position: relative;
+  top: 3rpx;
+  color: #ff6161;
+}

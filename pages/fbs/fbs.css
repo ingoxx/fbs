@@ -1,0 +1,8 @@
+.box {
+  height: 100%;
+  background: #8389d3;
+}
+
+.box .basket {
+  color: red;
+}

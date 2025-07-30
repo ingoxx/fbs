@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@vant/weapp": "^1.11.7",
+    "qqmap-wx-jssdk": "^1.0.0",
+    "tiny-pinyin": "^1.3.2",
+    "uuid": "^11.1.0",
+    "vant": "^4.9.20"
+  }
+}

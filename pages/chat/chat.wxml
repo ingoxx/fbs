@@ -1,0 +1,55 @@
+<!--pages/chat/chat.wxml-->
+<view class="box">
+  <view class="notice">
+    <van-notice-bar
+      scrollable 
+      left-icon="volume-o"
+      text="{{ notice }}"
+    />
+  </view>
+  <view class="addr">
+    <view class="addr-detail" bind:tap="openMapApp">
+      <van-icon name="location" custom-class="van-icon-l"/> <text class="addr-content">{{ addr }}</text>
+    </view>
+    <view class="online-status">
+        <van-icon custom-class="van-icon-c van-icon-c-1" color="#4caf50" name="friends" /> <text class="addr-content">({{ online }})</text>
+    </view>
+  </view>
+  <view class="open-time">
+    <van-tag round color="#2b3748"> <van-icon custom-class="van-icon-c" name="clock-o" /> 07:00-21:00</van-tag>
+  </view>
+  <scroll-view 
+    class="chat" 
+    scroll-y="true" 
+    scroll-with-animation 
+    scroll-into-view="{{toView}}"
+  >
+    <block wx:for="{{chatData}}" wx:key="index" wx:for-item="item">
+      <view id="chat-{{index}}" class="chat-content {{ item.user_id == user_id ? 'right my' : 'left others' }}">
+        <view class="user chat-format">
+          <text class="user-name" user-select="true">{{ item.user_id }}</text>
+        </view>
+        <view class="content chat-format" user-select="true">
+          <text user-select="true">{{ item.content }}</text>
+        </view>
+        <view class="time chat-format" >
+          <text user-select="true">{{ item.time }}</text>
+        </view>
+      </view>
+    </block>
+  </scroll-view>
+  <view class="send">
+    <view class="content">
+      <input class="send-input" type="text" value="{{ inputValue }}" bindinput="getVal" placeholder="输入内容发送"/>
+      <van-transition show="{{ showCloseBtn }}" custom-class="block">
+        <van-icon custom-class="van-icon-c-2" name="clear" data-value="{{ inputValue }}" bindtap="onClearInput" />
+      </van-transition>
+    </view>
+    <van-transition show="{{ showSendBtn }}" custom-class="block" name="slide-right">
+      <view class="submit">
+          <van-button round size="small" type="warning" custom-style="width:170rpx" bind:click="sendMsg">发送</van-button>
+      </view>
+    </van-transition>
+  </view>
+  <van-notify id="van-notify" />
+</view>

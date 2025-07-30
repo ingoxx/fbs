@@ -1,0 +1,20 @@
+{
+  "usingComponents": {
+    "van-button": "/miniprogram_npm/@vant/weapp/button/index",
+    "van-row": "/miniprogram_npm/@vant/weapp/row/index",
+    "van-col": "/miniprogram_npm/@vant/weapp/col/index",
+    "van-icon": "/miniprogram_npm/@vant/weapp/icon/index",
+    "van-toast": "/miniprogram_npm/@vant/weapp/toast/index",
+    "van-transition": "/miniprogram_npm/@vant/weapp/transition/index",
+    "van-dialog": "/miniprogram_npm/@vant/weapp/dialog/index",
+    "van-loading": "/miniprogram_npm/@vant/weapp/loading/index",
+    "van-empty": "/miniprogram_npm/@vant/weapp/empty/index",
+    "van-popup": "/miniprogram_npm/@vant/weapp/popup/index",
+    "van-notify": "/miniprogram_npm/@vant/weapp/notify/index",
+    "van-tag": "/miniprogram_npm/@vant/weapp/tag/index",
+    "van-image": "/miniprogram_npm/@vant/weapp/image/index",
+    "van-notice-bar": "/miniprogram_npm/@vant/weapp/notice-bar",
+    "van-field": "/miniprogram_npm/@vant/weapp/field/index",
+    "van-cell-group": "/miniprogram_npm/@vant/weapp/cell-group/index"
+  }
+}

@@ -1,0 +1,154 @@
+<!--pages/fbs/fbs.wxml-->
+<!-- <text>pages/fbs/fbs.wxml</text> -->
+<view class="box">
+  <view class="notice">
+    <van-notice-bar
+      scrollable 
+      left-icon="volume-o"
+      text="{{ notice }}"
+    />
+  </view>
+  <!-- <view class="basketball-map">
+    <van-icon name="location" custom-class="van-icon-l"/> <text>地图</text>
+  </view> -->
+  <view class="location">
+    <block wx:if="{{ addr == '未获取位置' }}">
+      <van-icon name="location" custom-class="van-icon-l"/> <text class="coordinate" >{{ addr }}</text>
+    </block>
+    <block wx:else>
+      <van-icon name="location" custom-class="van-icon-l"/> <text class="coordinate" bind:tap="openMapApp">您现在的位置: 【{{ addr }}】</text>
+    </block>
+    
+    <!-- <text class="coordinate">🌦️ 深圳 多云转小雨 30°</text> -->
+  </view>
+  <view class="search">
+    <view class="s-p">
+      <input class="s-p-1" disabled="{{ isInput }}" value="{{ inputValue }}" bindinput="getVal" placeholder="输入村名/公园搜索"/>
+      <block>
+        <van-transition show="{{ showCloseBtn }}" custom-class="van-transition-c" name="fade-left">
+          <van-icon custom-class="van-icon-c-2" name="clear" data-value="{{ inputValue }}" bindtap="onClearInput" />
+        </van-transition>
+      </block>
+    </view>
+    <view class="s-b">
+      <van-row gutter="16">
+        <block wx:for="{{ basketSquareFilter }}" wx:key="index" wx:for-item="item">
+          <van-col span="8" custom-class="van-c" wx:if="{{ item.disable }}">
+            <van-button round size="small" disabled="{{ item.isDisable }}"  custom-style="{{ item.customize == 1 ? 'width:210rpx' : 'width:170rpx'  }}" data-id="{{item.id}}" custom-class="{{ currentSquareSelected === item.id ? 'van-b-isactive' : '' }}" bind:click="onSelected">
+              <van-icon name="{{ item.icon }}" /> {{ item.name }}
+            </van-button>
+          </van-col>
+        </block>
+      </van-row>
+    </view>
+  </view>
+  <view class="card-1">
+    <block wx:for="{{ basketSquareFilterData }}" wx:key="index" wx:for-item="item">
+      <view class="card-1-1" data-item="{{ item }}" bindtap="chatRoot">
+        <view class="online-status">
+          <van-icon color="{{ item.online > 0 ? '#4caf50': '#909090' }}" name="friends" />
+        </view>
+        <view class="img">
+          <van-image round fit="cover" width="150" height="150" src="{{ item.img }}" />
+        </view>
+        <view class="addr">
+          <text class="t-f">{{ item.addr }}</text>
+        </view>
+        <view class="distance">
+          <van-icon name="location" custom-class="van-icon-l"/> <text class="t-f">距您{{ item.distance }}公里</text>
+        </view>
+        <view class="online">
+          <van-tag round type="success" custom-class="{{ item.online == 0 ? 'van-tag-c': '' }}"><van-icon name="friends" /> {{ item.online }}人在线</van-tag>
+        </view>
+        <view class="tags">
+          <van-tag type="primary"  wx:for="{{ item.tags }}" wx:key="index" wx:for-item="item2">
+            🏀{{ item2 }}
+          </van-tag>
+        </view>
+      </view>
+    </block>
+    <block wx:if="{{ isEmpty }}">
+      <van-empty description="{{ isUse ? useNotice: '请先同意用户隐私协议' }}"></van-empty>
+    </block>
+  </view>
+  <view class="contact-us">
+    <button size="mini"  open-type="contact" class="share-btn"><van-icon name="service" /></button>
+  </view>
+</view>
+<view>
+<van-dialog
+  use-slot
+  title="添加村/公园"
+  show="{{ addVillage }}"
+  show-cancel-button
+  confirm-button-open-type="getUserInfo"
+  bind:close="onClose"
+  bind:confirm="onConfirm"
+  custom-class="van-dialog-c-1"
+>
+  <van-cell-group>
+    <van-field
+      value="{{ villageInfo }}"
+      required
+      clearable
+      autosize
+      type="textarea"
+      label="地址"
+      placeholder="请输入详细准确的篮球场地址"
+      border="{{ false }}"
+      confirm-type="done"
+      bind:change="onChange"
+    />
+  </van-cell-group>
+</van-dialog>
+<van-dialog
+    use-slot
+    cancel-button-text="关闭"
+    z-index="100"
+    title="审核列表"
+    show="{{ showCheckList }}"
+    show-cancel-button
+    confirm-button-open-type="getUserInfo"
+    bind:close="onClose"
+  >
+    <view class="check-list-box">
+      <block wx:for="{{checkListData}}" wx:key="index" wx:for-item="item">
+        <view class="check-list-data" wx:if="{{ !item.is_record }}">
+          <view class="check-addr addr-size">
+            <text user-select="true">{{ item.addr }}</text>
+          </view>
+          <view class="check-submit submit-flex">
+            <van-icon name="close" data-value="{{ item }}" color="#ee0a24" bindtap="onDelete" />
+            <van-icon name="passed" data-value="{{ item }}" color="#07c160" bindtap="onAdd" />
+          </view>
+        </view>
+      </block>
+    </view>
+</van-dialog>
+<van-action-sheet 
+show="{{ showPrivacy }}" 
+close-on-click-overlay="false"
+>
+  <view class="privacy-title">
+    <text>用户隐私协议</text>
+  </view>
+  <view class="privacy-center">
+    <view class="privacy-content">
+      <text class="privacy-detail">欢迎使用本小程序！为保障您的合法权益，请您在使用前仔细阅读并同意以下条款：</text>
+      <text class="privacy-detail"><text class="privacy-item">1.</text>您需遵守国家法律法规，文明发言，禁止发布违法、违规、骚扰、攻击性或不实信息，违规行为将导致永久禁止您使用本小程序。</text> 
+      <text class="privacy-detail"><text class="privacy-item">2.</text>您在本小程序中发布的信息及内容由您本人负责，如因内容引发的法律责任由用户自行承担。</text> 
+      <text class="privacy-detail"><text class="privacy-item">3.</text>本小程序不会永久保存用户的聊天记录，将定期清理，也不会收集用户的任何个人信息(仅从开放平台获取有限的信息)</text> 
+      <text class="privacy-detail"><text class="privacy-item">4.</text>您在使用过程中若遇到问题或发现违规行为，可通过小程序内提供的反馈渠道联系我们。</text> 
+      <text class="privacy-detail"><text class="privacy-item">5.</text>点击下方'同意协议'即表示您已阅读并同意本协议的全部内容，'拒绝协议'您将不能使用本小程序。</text> 
+      <text class="privacy-detail">感谢您的理解与配合，祝您使用愉快！</text> 
+    </view>
+    <view class="privacy-status">
+      <van-button custom-style="width: 170rpx" size="small" round type="info" data-item="1" bind:tap="iAacceptPrivacy">同意协议</van-button>
+      <van-button custom-style="width: 170rpx" size="small" round type="danger" data-item="2" bind:tap="iAacceptPrivacy">拒绝协议</van-button>
+    </view>
+  </view>
+</van-action-sheet>
+<van-notify id="van-notify" />
+<van-toast id="van-toast" />
+<van-dialog id="van-dialog" />
+</view>
