@@ -18,16 +18,18 @@
   <view class="open-time">
     <van-tag round color="#2b3748"> <van-icon custom-class="van-icon-c" name="clock-o" /> 07:00-21:00</van-tag>
   </view>
+  <!-- 聊天内容 -->
   <scroll-view 
     class="chat" 
     scroll-y="true" 
     scroll-with-animation 
     scroll-into-view="{{toView}}"
+    style="background-image: url('https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/main-bk.jpg');"
   >
     <block wx:for="{{chatData}}" wx:key="index" wx:for-item="item">
-      <view id="chat-{{index}}" class="chat-content {{ item.user_id == user_id ? 'right my' : 'left others' }}">
+      <view id="chat-{{index}}" class="chat-content {{ item.sender_id == sender_id ? 'right my' : 'left others' }}">
         <view class="user chat-format">
-          <text class="user-name" user-select="true">{{ item.user_id }}</text>
+          <text class="user-name" user-select="true">user_{{ item.sender_id }}</text>
         </view>
         <view class="content chat-format" user-select="true">
           <text user-select="true">{{ item.content }}</text>
@@ -40,7 +42,7 @@
   </scroll-view>
   <view class="send">
     <view class="content">
-      <input class="send-input" type="text" value="{{ inputValue }}" bindinput="getVal" placeholder="输入内容发送"/>
+      <input class="send-input" type="text" value="{{ inputValue }}" bindinput="getVal" placeholder="发信息在线寻找篮球搭子"/>
       <van-transition show="{{ showCloseBtn }}" custom-class="block">
         <van-icon custom-class="van-icon-c-2" name="clear" data-value="{{ inputValue }}" bindtap="onClearInput" />
       </van-transition>

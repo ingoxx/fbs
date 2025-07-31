@@ -7,12 +7,18 @@ import Notify from '@vant/weapp/notify/notify';
 import Toast from '@vant/weapp/toast/toast';
 const { generateUUID } = require('../../utils/util'); 
 import Dialog from '@vant/weapp/dialog/dialog';
+const md5 = require('../../utils/md5');
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
+    sportsKey: 'is_show_sports',
+    defaultSportSquare: '篮球场',
+    defaultSportKey: 'bks',
+    showSportsList: false,
+    result: [],
     agreeKey: 'is_agree',
     isShowPrivacyKey: 'show_privacy',
     isUse: false,
@@ -29,8 +35,8 @@ Page({
     showCloseBtn: false,
     showPrivacy: false,
     villageInfo: '',
-    useNotice: "下拉小程序以获取附近篮球场地址",
-    notice: "本小程序致力于让篮球爱好者无论身处何地，都能轻松找到球友一起打球。您也可以随时添加新的球场位置，方便更多人加入。感谢您的支持，祝您身体健康，事事顺心！",
+    useNotice: "下拉小程序以获取附近运动场所地址",
+    notice: "本小程序致力于让运动爱好者无论身处何地，都能轻松找到运动搭子一起运动。您也可以随时添加新的运动场所位置，方便更多人加入。感谢您的支持，祝您身体健康，事事顺心！",
     lat: 0,
     lng: 0,
     inputValue: "",
@@ -38,11 +44,59 @@ Page({
     currentSquareSelected: 2,
     basketSquareFilter: [
       {'id': 5, 'icon': 'comment','name': '审核', 'customize': 3, 'disable': false, 'isDisable': false, 'action': false},
-      {'id': 6, 'icon': 'add-square','name': '添加村/公园', 'customize': 1, 'disable': true, 'isDisable': true, 'action': false},
+      {'id': 6, 'icon': 'add-square','name': '添加场地', 'customize': 1, 'disable': true, 'isDisable': true, 'action': false},
+    ],
+    sports: [
+      {'name': '篮球场', 'key': 'bks', 'checked': false, 'icon': '🏀',},
+      {'name': '游泳馆', 'key': 'sws', 'checked': false, 'icon': '🏊'},
+      {'name': '羽毛球馆', 'key': 'bms', 'checked': false, 'icon': '🏸'},
+      {'name': '足球场', 'key': 'fbs', 'checked': false, 'icon': '⚽'},
+      {'name': '网球场', 'key': 'tns', 'checked': false, 'icon': '🎾'},
+      {'name': '高尔夫球场', 'key': 'gos', 'checked': false, 'icon': '🏌️'},
     ],
     checkListData: [],
     basketSquareFilterData: [],
     basketSquareData: []
+  },
+  // 运动偏好弹窗
+  async isShowSportList() {
+    // 1：打开场地选择，2：关闭场地选择
+    if (this.data.isUse) {
+      try {
+        const resp = await this.cusGetStorage(this.data.sportsKey);
+        if (resp == 2) {
+          this.setData({
+            showSportsList: false,
+          });
+        } else {
+          this.setData({
+            showSportsList: true,
+          });
+        }
+      } catch (error) {
+        this.cusSetStorage(this.data.sportsKey, 2);
+        this.setData({
+          showSportsList: true,
+        });
+      }
+    }
+  },
+  // 运动偏好选择
+  onSportsChange(e) {
+    const sd = e.currentTarget.dataset.item;
+    const nd = this.data.sports.map((item) => {
+      if (item.key == sd.key) {
+        item.checked = true;
+      } else {
+        item.checked = false;
+      }
+      return item
+    })
+    this.setData({
+      sports: nd,
+      defaultSportKey: sd.key,
+      defaultSportSquare: sd.name,
+    })
   },
   openMapApp() {
     wx.openLocation({
@@ -84,6 +138,7 @@ Page({
     });
   },
   async isShowPrivacy() {
+    // 1: 关闭隐私协议弹窗，2：打开隐私协议弹窗
     try {
       const value = await this.cusGetStorage(this.data.isShowPrivacyKey);
       if (value == 2) {
@@ -117,6 +172,9 @@ Page({
         isUse: true,
         loadText: "首次加载数据会比较耗时",
       })
+      setTimeout(()=>{
+        this.isShowSportList();
+      },500)
     } else if (res == 2) {
       this.cusSetStorage(this.data.isShowPrivacyKey, 2);
       this.setData({
@@ -131,6 +189,7 @@ Page({
       }, 5000)
     }
   },
+  // 提交添加地址的api
   userAddAddrReqApi(data) {
     return new Promise((resolve, reject) => {
       wx.request({
@@ -173,10 +232,11 @@ Page({
       checkListData: data.data,
     })
   },
+  // 拉取所有数据
   getAllDataApi() {
     return new Promise((resolve, reject) => {
       wx.request({
-        url: `${BASE_URL}/show-square?lat=${this.data.lat}&lng=${this.data.lng}&city=${this.data.city}&uid=${app.globalData.openid}`,
+        url: `${BASE_URL}/show-square?lat=${this.data.lat}&lng=${this.data.lng}&city=${this.data.city}&uid=${app.globalData.openid}&sport_key=${this.data.defaultSportKey}&sport_name=${this.data.defaultSportSquare}`,
         success: function (res) {
           if (res.statusCode != 200) {
             wx.stopPullDownRefresh();
@@ -260,7 +320,7 @@ Page({
         title: '确认添加',
         message: `确认添加 '${addData.addr}' 吗？`
       });
-      const pdd = await this.passAddAddrReqApi(addData.id, addData.city_py);
+      const pdd = await this.passAddAddrReqApi(addData.id, addData.sport_key);
       if (pdd.code != 1000) {
         Toast.fail("添加失败");
         return;
@@ -281,7 +341,7 @@ Page({
         title: '确认删除',
         message: `确认删除 '${delData.addr}' 吗？`
       });
-      const pdd = await this.refuseAddAddrReqApi(delData.id, addData.city_py);
+      const pdd = await this.refuseAddAddrReqApi(delData.id, addData.sport_key);
       if (pdd.code != 1000) {
         Toast.fail("删除失败");
         return;
@@ -323,6 +383,7 @@ Page({
       Notify({type: 'danger', message: '输入的地址无效', duration: 30000});
       return;
     }
+    
     const ad = {
       id: generateUUID(),
       user_id: app.globalData.openid,
@@ -330,6 +391,8 @@ Page({
       lat: respTx.lat,
       lng: respTx.lng,
       city: this.data.city,
+      sport_key: this.data.defaultSportKey,
+      tags: this.data.defaultSportSquare,
     }
    const resp = await this.userAddAddrReqApi(ad);
    if (resp.code != 1000) {
@@ -379,7 +442,7 @@ Page({
   chatRoot(e) {
     const id = e.currentTarget.dataset.item;
     wx.navigateTo({
-      url: `/pages/chat/chat?id=${id.id}&addr=${id.addr}&lat=${id.lat}&lng=${id.lng}&user_id=${app.globalData.openid}`,
+      url: `/pages/chat/chat?id=${id.id}&addr=${id.addr}&lat=${id.lat}&lng=${id.lng}&user_id=${app.globalData.openid}&sender_id=${md5(app.globalData.openid)}`,
     });
   },
   getBasketSquareData() {
@@ -413,7 +476,7 @@ Page({
         basketSquareFilterData: newList,
       });
       return;
-    } else if (name.name == "添加村/公园") {
+    } else if (name.name == "添加场地") {
       this.setData({ addVillage: true})
       return;
     } else if (name.name == "审核") {
@@ -655,6 +718,7 @@ Page({
         forbidClick: true,
         duration: 0,
       });
+      this.isShowSportList();
       this.getAddrDistance();
     }
   },

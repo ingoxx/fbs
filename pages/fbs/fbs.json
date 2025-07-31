@@ -18,6 +18,8 @@
     "van-field": "/miniprogram_npm/@vant/weapp/field/index",
     "van-notice-bar": "/miniprogram_npm/@vant/weapp/notice-bar",
     "van-cell-group": "/miniprogram_npm/@vant/weapp/cell-group/index",
+    "van-checkbox": "/miniprogram_npm/@vant/weapp/checkbox/index",
+    "van-checkbox-group": "/miniprogram_npm/@vant/weapp/checkbox-group/index",
     "van-action-sheet": "/miniprogram_npm/@vant/weapp/action-sheet/index"
   }
 }

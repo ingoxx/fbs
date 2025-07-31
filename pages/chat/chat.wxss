@@ -40,7 +40,6 @@
 
 .box .chat {
   flex: 1;
-  background-image: url("https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/main-bk.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;

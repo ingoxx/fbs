@@ -12,14 +12,18 @@
   /* 水平居中 */
   align-items: center;
   /* 垂直居中 */
-  height: 150rpx;
-  line-height: 150rpx;
+  height: 180rpx;
   background: #7880dd;
+  padding: 0 20rpx;
 }
 
 .box .location .coordinate {
   color: #ffffff;
   font-size: 25rpx;
+  line-height: 1.4;
+  word-break: break-word;
+  white-space: normal;
+  font-weight: 600;
 }
 
 .box .search {
@@ -223,4 +227,14 @@
   position: relative;
   bottom: 3rpx;
   color: #ff6161;
+}
+
+.sports-list-box {
+  display: flex;
+  flex-direction: inherit;
+  justify-content: center;
+  align-items: center;
+  gap: 37rpx;
+  flex-wrap: wrap;
+  padding: 20rpx 20rpx;
 }

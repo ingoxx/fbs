@@ -7,14 +7,16 @@
     display: flex;
     justify-content: center; /* 水平居中 */
     align-items: center;     /* 垂直居中 */
-    // padding: 16rpx 0;
-    height: 150rpx;
-    line-height: 150rpx;
+    height: 180rpx;
     background: #7880dd;
-    // border-radius: 16rpx;
+    padding: 0 20rpx;
     .coordinate {
       color: #ffffff;
       font-size: 25rpx;
+      line-height: 1.4; // 设置合理的行高，或者具体值如 35rpx
+      word-break: break-word; // 若地址太长可断行
+      white-space: normal;
+      font-weight: 600;
     }
   }
   .search {
@@ -196,4 +198,13 @@
   position: relative;
   bottom: 3rpx;
   color: #ff6161;
+}
+.sports-list-box {
+  display: flex;
+  flex-direction: inherit;
+  justify-content: center;
+  align-items: center;
+  gap: 37rpx;
+  flex-wrap: wrap;
+  padding: 20rpx 20rpx;
 }

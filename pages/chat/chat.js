@@ -3,6 +3,7 @@ const app = getApp();
 const { BASE_URL } = require('../../utils/http');
 const { WSS_URL } = require('../../utils/http');
 import Notify from '@vant/weapp/notify/notify';
+const md5 = require('../../utils/md5');
 Page({
 
   /**
@@ -19,6 +20,7 @@ Page({
     toView: '',
     group_id: 0,
     user_id: '',
+    sender_id: '',
     online: 0,
     addr: '',
     lat: 0,
@@ -66,6 +68,7 @@ Page({
         content: '',
         time: this.getCurrentTime(),
         user_id: options.user_id,
+        sender_id: options.sender_id,
       };
       socket.send({ data: JSON.stringify(initMsg)});
     })
@@ -103,6 +106,7 @@ Page({
     const content = this.data.inputValue;
     const initMsg = {
       group_id: this.data.group_id,
+      sender_id: this.data.sender_id,
       content: content,
       time: this.getCurrentTime(),
       user_id: this.data.user_id,
@@ -206,6 +210,7 @@ Page({
       lat: options.lat,
       lng: options.lng,
       user_id: options.user_id,
+      sender_id: options.sender_id,
     });
     this.initWss(options);
   },
@@ -227,10 +232,10 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide() {
-    if (this.data.socket) {
-      this.data.socket.close();
-      console.log('已关闭连接');
-    }
+    // if (this.data.socket) {
+    //   this.data.socket.close();
+    //   console.log('已关闭连接');
+    // }
   },
 
   /**
