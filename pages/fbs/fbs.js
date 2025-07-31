@@ -173,6 +173,7 @@ Page({
         loadText: "首次加载数据会比较耗时",
       })
     }
+    this.getSiteSelection();
   },
   iAacceptPrivacy(e) {
     const res = e.currentTarget.dataset.item;
@@ -597,7 +598,6 @@ Page({
           return item;
         })
       );
-      this.getSiteSelection();
       this.setData({
         basketSquareFilterData: newUL,
         isEmpty: false,
