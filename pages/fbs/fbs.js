@@ -9,18 +9,15 @@ const { generateUUID } = require('../../utils/util');
 import Dialog from '@vant/weapp/dialog/dialog';
 const md5 = require('../../utils/md5');
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-    sportsKey: 'is_show_sports',
+    sportSelectedCacheKey: 'selected_sport',
+    sportsCacheKey: 'is_show_sports',
     defaultSportSquare: '篮球场',
     defaultSportKey: 'bks',
     showSportsList: false,
     result: [],
-    agreeKey: 'is_agree',
-    isShowPrivacyKey: 'show_privacy',
+    agreeCacheKey: 'is_agree',
+    isShowPrivacyCacheKey: 'show_privacy',
     isUse: false,
     isInput: true,
     showTxMap: false,
@@ -44,7 +41,8 @@ Page({
     currentSquareSelected: 2,
     basketSquareFilter: [
       {'id': 5, 'icon': 'comment','name': '审核', 'customize': 3, 'disable': false, 'isDisable': false, 'action': false},
-      {'id': 6, 'icon': 'add-square','name': '添加场地', 'customize': 1, 'disable': true, 'isDisable': true, 'action': false},
+      {'id': 6, 'icon': 'add-square','name': '运动偏好选择', 'customize': 1, 'disable': true, 'isDisable': true, 'action': false},
+      {'id': 7, 'icon': 'add-square','name': '添加场地', 'customize': 1, 'disable': true, 'isDisable': true, 'action': false},
     ],
     sports: [
       {'name': '篮球场', 'key': 'bks', 'checked': false, 'icon': '🏀',},
@@ -58,12 +56,23 @@ Page({
     basketSquareFilterData: [],
     basketSquareData: []
   },
+  async getSiteSelection() {
+    try {
+      const sss = await this.cusGetStorage(this.data.sportSelectedCacheKey);
+      this.setData({
+        defaultSportKey: sss.key,
+        defaultSportSquare: sss.name,
+      });
+    } catch (error) {
+      console.log("缓存失效");
+    }
+  },
   // 运动偏好弹窗
   async isShowSportList() {
     // 1：打开场地选择，2：关闭场地选择
     if (this.data.isUse) {
       try {
-        const resp = await this.cusGetStorage(this.data.sportsKey);
+        const resp = await this.cusGetStorage(this.data.sportsCacheKey);
         if (resp == 2) {
           this.setData({
             showSportsList: false,
@@ -74,11 +83,12 @@ Page({
           });
         }
       } catch (error) {
-        this.cusSetStorage(this.data.sportsKey, 2);
+        this.cusSetStorage(this.data.sportsCacheKey, 2);
         this.setData({
           showSportsList: true,
         });
       }
+      
     }
   },
   // 运动偏好选择
@@ -96,7 +106,8 @@ Page({
       sports: nd,
       defaultSportKey: sd.key,
       defaultSportSquare: sd.name,
-    })
+    });
+    this.cusSetStorage(this.data.sportSelectedCacheKey, sd);
   },
   openMapApp() {
     wx.openLocation({
@@ -140,7 +151,7 @@ Page({
   async isShowPrivacy() {
     // 1: 关闭隐私协议弹窗，2：打开隐私协议弹窗
     try {
-      const value = await this.cusGetStorage(this.data.isShowPrivacyKey);
+      const value = await this.cusGetStorage(this.data.isShowPrivacyCacheKey);
       if (value == 2) {
         this.setData({
           showPrivacy: true,
@@ -155,7 +166,7 @@ Page({
         })
       }
     } catch (err) {
-      this.cusSetStorage(this.data.isShowPrivacyKey, 2);
+      this.cusSetStorage(this.data.isShowPrivacyCacheKey, 2);
       this.setData({
         showPrivacy: true,
         isUse: false,
@@ -166,7 +177,7 @@ Page({
   iAacceptPrivacy(e) {
     const res = e.currentTarget.dataset.item;
     if (res == 1) {
-      this.cusSetStorage(this.data.isShowPrivacyKey, 1);
+      this.cusSetStorage(this.data.isShowPrivacyCacheKey, 1);
       this.setData({
         showPrivacy: false,
         isUse: true,
@@ -176,7 +187,7 @@ Page({
         this.isShowSportList();
       },500)
     } else if (res == 2) {
-      this.cusSetStorage(this.data.isShowPrivacyKey, 2);
+      this.cusSetStorage(this.data.isShowPrivacyCacheKey, 2);
       this.setData({
         showPrivacy: false,
         isUse: false,
@@ -465,9 +476,9 @@ Page({
   },
   filterBasketSquare(id) {
     var name = this.data.basketSquareFilter.find(item => item.id == id);
-    if (name.name == "所有") {
+    if (name.name == "运动偏好选择") {
       this.setData({
-        basketSquareFilterData: this.data.basketSquareData,
+        showSportsList: true,
       });
       return;
     } else if (name.name == "距离最近") {
@@ -586,6 +597,7 @@ Page({
           return item;
         })
       );
+      this.getSiteSelection();
       this.setData({
         basketSquareFilterData: newUL,
         isEmpty: false,

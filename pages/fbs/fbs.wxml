@@ -24,9 +24,9 @@
       </block>
     </view>
     <view class="s-b">
-      <van-row gutter="16">
+      <van-row gutter="8">
         <block wx:for="{{ basketSquareFilter }}" wx:key="index" wx:for-item="item">
-          <van-col span="8" custom-class="van-c" wx:if="{{ item.disable }}">
+          <van-col span="{{item.customize == 1 ? 10 : 8}}" custom-class="van-c" wx:if="{{ item.disable }}">
             <van-button round size="small" disabled="{{ item.isDisable }}"  custom-style="{{ item.customize == 1 ? 'width:210rpx' : 'width:170rpx'  }}" data-id="{{item.id}}" custom-class="{{ currentSquareSelected === item.id ? 'van-b-isactive' : '' }}" bind:click="onSelected">
               <van-icon name="{{ item.icon }}" /> {{ item.name }}
             </van-button>
