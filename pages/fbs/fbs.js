@@ -184,6 +184,7 @@ Page({
           isUse: true,
           loadText: "获取数据中...",
         })
+        this.getAddrDistance();
       }
     } catch (err) {
       this.cusSetStorage(this.data.isShowPrivacyCacheKey, 2);
@@ -604,7 +605,7 @@ Page({
     if (resp.latitude !== "" && resp.longitude !== "" && resp.city !== "") {
       const allData = await this.getAllDataApi();
       if (allData.code != 1000) {
-        Toast.fail("加载数据失败");
+        Toast.fail("加载数据失败1");
         return;
       }
       this.setData({
@@ -624,7 +625,7 @@ Page({
         sliceDataList.map(async (item) => {
           const online = await this.getGroupUserCountApi(item.id);
           if (online.code && online.code != 1000) {
-            Toast.fail("加载数据失败");
+            Toast.fail("加载数据失败2");
             return;
           }
           item.online = online.data;
@@ -644,7 +645,7 @@ Page({
       wx.stopPullDownRefresh();
       // wx.hideLoading();
       Toast.clear();
-      Toast.fail("加载数据失败");
+      Toast.fail("加载数据失败3");
     }
   },
   async getSearchLocation(addr) {
