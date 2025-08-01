@@ -10,6 +10,7 @@ import Dialog from '@vant/weapp/dialog/dialog';
 const md5 = require('../../utils/md5');
 Page({
   data: {
+    placeTag: "",
     sportSelectedCacheKey: 'selected_sport',
     sportsCacheKey: 'is_show_sports',
     defaultSportSquare: '篮球场',
@@ -40,26 +41,45 @@ Page({
     markers: [],
     currentSquareSelected: 2,
     basketSquareFilter: [
+      {'id': 6, 'icon': 'medal','name': '运动场地选择', 'customize': 1, 'disable': true, 'isDisable': false, 'action': false},
+      {'id': 7, 'icon': 'add-square','name': '添加场地', 'customize': 1, 'disable': true, 'isDisable': false, 'action': false},
       {'id': 5, 'icon': 'comment','name': '审核', 'customize': 3, 'disable': false, 'isDisable': false, 'action': false},
-      {'id': 6, 'icon': 'add-square','name': '运动偏好选择', 'customize': 1, 'disable': true, 'isDisable': true, 'action': false},
-      {'id': 7, 'icon': 'add-square','name': '添加场地', 'customize': 1, 'disable': true, 'isDisable': true, 'action': false},
     ],
     sports: [
-      {'name': '篮球场', 'key': 'bks', 'checked': false, 'icon': '🏀',},
-      {'name': '游泳馆', 'key': 'sws', 'checked': false, 'icon': '🏊'},
-      {'name': '羽毛球馆', 'key': 'bms', 'checked': false, 'icon': '🏸'},
-      {'name': '足球场', 'key': 'fbs', 'checked': false, 'icon': '⚽'},
-      {'name': '网球场', 'key': 'tns', 'checked': false, 'icon': '🎾'},
-      {'name': '高尔夫球场', 'key': 'gos', 'checked': false, 'icon': '🏌️'},
+      {'name': '篮球场', 'key': 'bks', 'checked': false, 'icon': '🏀', 'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/main-bk.jpg'},
+      {'name': '游泳馆', 'key': 'sws', 'checked': false, 'icon': '🏊', 'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/swim.png'},
+      {'name': '羽毛球馆', 'key': 'bms', 'checked': false, 'icon': '🏸', 'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/badminton.png'},
+      {'name': '足球场', 'key': 'fbs', 'checked': false, 'icon': '⚽', 'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/football.png'},
+      {'name': '网球场', 'key': 'tns', 'checked': false, 'icon': '🎾', 'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/tennis.png'},
+      {'name': '高尔夫球场', 'key': 'gos', 'checked': false, 'icon': '🏌️', 'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/golf.png'},
     ],
     checkListData: [],
     basketSquareFilterData: [],
     basketSquareData: []
   },
+  onConfirmSportSelection() {
+    if (this.data.isUse) {
+      Toast.loading({
+        message: this.data.loadText,
+        forbidClick: true,
+        duration: 0,
+      });
+      this.getAddrDistance();
+    } 
+  },
   async getSiteSelection() {
     try {
       const sss = await this.cusGetStorage(this.data.sportSelectedCacheKey);
+      const nd = this.data.sports.map((item) => {
+        if (item.key == sss.key) {
+          item.checked = true;
+        } else {
+          item.checked = false;
+        }
+        return item;
+      })
       this.setData({
+        sports: nd,
         defaultSportKey: sss.key,
         defaultSportSquare: sss.name,
       });
@@ -353,7 +373,7 @@ Page({
         title: '确认删除',
         message: `确认删除 '${delData.addr}' 吗？`
       });
-      const pdd = await this.refuseAddAddrReqApi(delData.id, addData.sport_key);
+      const pdd = await this.refuseAddAddrReqApi(delData.id, delData.sport_key);
       if (pdd.code != 1000) {
         Toast.fail("删除失败");
         return;
@@ -379,15 +399,24 @@ Page({
       });
     });
   },
-  onChange(e) {
+  onChangeAddAddrField(e) {
     const value = e.detail;
     this.setData({villageInfo: value});
   },
+  onChangeAddTagField(e) {
+    const value = e.detail;
+    this.setData({placeTag: value});
+  },
   // 用户提交添加篮球场地址的请求
-  async onConfirm() {
+  async onConfirmAddPlace() {
     const val = this.data.villageInfo;
+    const val2 = this.data.placeTag;
     if (val == "") {
-      Toast.fail("不能输入空值");
+      Toast.fail("地址不能为空");
+      return;
+    }
+    if (val2 == "") {
+      Toast.fail("简称不能为空");
       return;
     }
     const respTx = await this.txMapSearchAddrApi(this.data.villageInfo);
@@ -404,8 +433,9 @@ Page({
       lng: respTx.lng,
       city: this.data.city,
       sport_key: this.data.defaultSportKey,
-      tags: this.data.defaultSportSquare,
+      tags: val2 ? val2 : this.data.defaultSportSquare,
     }
+    console.log("ad >>> ", ad);
    const resp = await this.userAddAddrReqApi(ad);
    if (resp.code != 1000) {
       const msg = resp.msg ? resp.msg : "添加地址失败, 请联系管理员";
@@ -413,9 +443,6 @@ Page({
       return;
     }
     Notify({ type: 'success', message: "地址已提交,审核通过会更新到页面上", duration: 10000 });
-  },
-  getUserInfo(event) {
-    console.log(event.detail);
   },
   onClose() {
     this.setData({ addVillage: false, showCheckList: false, });
@@ -453,8 +480,10 @@ Page({
   // 进到群组
   chatRoot(e) {
     const id = e.currentTarget.dataset.item;
+    const img = this.data.sports.find(item => item.key == this.data.defaultSportKey);
+    console.log("img >>> ", img);
     wx.navigateTo({
-      url: `/pages/chat/chat?id=${id.id}&addr=${id.addr}&lat=${id.lat}&lng=${id.lng}&user_id=${app.globalData.openid}&sender_id=${md5(app.globalData.openid)}`,
+      url: `/pages/chat/chat?id=${id.id}&addr=${id.addr}&lat=${id.lat}&lng=${id.lng}&user_id=${app.globalData.openid}&sender_id=${md5(app.globalData.openid)}&img=${img.img}`,
     });
   },
   getBasketSquareData() {
@@ -476,8 +505,12 @@ Page({
     }
   },
   filterBasketSquare(id) {
+    if (!this.data.isUse) {
+      Toast.fail("请先同意协议");
+      return;
+    }
     var name = this.data.basketSquareFilter.find(item => item.id == id);
-    if (name.name == "运动偏好选择") {
+    if (name.name == "运动场地选择") {
       this.setData({
         showSportsList: true,
       });

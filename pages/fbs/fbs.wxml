@@ -1,7 +1,8 @@
 <view class="box">
   <view class="notice">
     <van-notice-bar
-      scrollable 
+      scrollable
+      mode="closeable"
       left-icon="volume-o"
       text="{{ notice }}"
     />
@@ -27,7 +28,7 @@
       <van-row gutter="8">
         <block wx:for="{{ basketSquareFilter }}" wx:key="index" wx:for-item="item">
           <van-col span="{{item.customize == 1 ? 10 : 8}}" custom-class="van-c" wx:if="{{ item.disable }}">
-            <van-button round size="small" disabled="{{ item.isDisable }}"  custom-style="{{ item.customize == 1 ? 'width:210rpx' : 'width:170rpx'  }}" data-id="{{item.id}}" custom-class="{{ currentSquareSelected === item.id ? 'van-b-isactive' : '' }}" bind:click="onSelected">
+            <van-button round size="small" disabled="{{ item.isDisable }}"  custom-style="{{ item.customize == 1 ? 'width:220rpx' : 'width:170rpx'  }}" data-id="{{item.id}}" custom-class="{{ currentSquareSelected === item.id ? 'van-b-isactive' : '' }}" bind:click="onSelected">
               <van-icon name="{{ item.icon }}" /> {{ item.name }}
             </van-button>
           </van-col>
@@ -94,7 +95,7 @@
   show-cancel-button
   confirm-button-open-type="getUserInfo"
   bind:close="onClose"
-  bind:confirm="onConfirm"
+  bind:confirm="onConfirmAddPlace"
   custom-class="van-dialog-c-1"
 >
   <van-cell-group>
@@ -105,10 +106,22 @@
       autosize
       type="textarea"
       label="地址"
-      placeholder="请输入详细准确的场地地址"
+      placeholder="请输入详细的场地地址"
+      confirm-type="done"
+      bind:change="onChangeAddAddrField"
+    />
+    <!-- <van-divider /> -->
+    <van-field
+      value="{{ placeTag }}"
+      required
+      clearable
+      autosize
+      type="textarea"
+      label="简称"
+      placeholder="如: 新湖{{defaultSportSquare}}"
       border="{{ false }}"
       confirm-type="done"
-      bind:change="onChange"
+      bind:change="onChangeAddTagField"
     />
   </van-cell-group>
 </van-dialog>
@@ -122,6 +135,7 @@
     show-cancel-button
     confirm-button-open-type="getUserInfo"
     bind:close="onClose"
+    bind:confirm="onConfirmSportSelection"
   >
     <view class="sports-list-box">
       <block wx:for="{{sports}}" wx:key="index" wx:for-item="item">
@@ -142,9 +156,12 @@
   >
     <view class="check-list-box">
       <block wx:for="{{checkListData}}" wx:key="index" wx:for-item="item">
-        <view class="check-list-data" wx:if="{{ !item.is_record }}">
+        <view class="check-list-data" wx:if="{{ !item.is_show }}">
           <view class="check-addr addr-size">
             <text user-select="true">{{ item.addr }}</text>
+          </view>
+          <view class="check-addr addr-size">
+            <text user-select="true">{{ defaultSportSquare }}</text>
           </view>
           <view class="check-submit submit-flex">
             <van-icon name="close" data-value="{{ item }}" color="#ee0a24" bindtap="onDelete" />

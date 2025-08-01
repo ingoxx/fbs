@@ -3,15 +3,16 @@ const app = getApp();
 const { BASE_URL } = require('../../utils/http');
 const { WSS_URL } = require('../../utils/http');
 import Notify from '@vant/weapp/notify/notify';
-const md5 = require('../../utils/md5');
+// const md5 = require('../../utils/md5');
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
+    bkUrl: '',
     tryConNum: 0,
-    notice: "请大家严格遵守法律法规，文明发言，违规将永久禁止您使用本小程序。本小程序不会长期保留聊天信息，系统会自动定时清理。点击地址可唤醒导航",
+    notice: "点击地址可唤醒导航。本小程序不会长期保留聊天信息，系统会自动定时清理。",
     openid_key: 'openid',
     socket: null,
     showSendBtn: false,
@@ -211,6 +212,7 @@ Page({
       lng: options.lng,
       user_id: options.user_id,
       sender_id: options.sender_id,
+      bkUrl: options.img,
     });
     this.initWss(options);
   },

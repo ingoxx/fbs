@@ -4,19 +4,20 @@
     <van-notice-bar
       scrollable 
       left-icon="volume-o"
+      mode="closeable"
       text="{{ notice }}"
     />
   </view>
   <view class="addr">
     <view class="addr-detail" bind:tap="openMapApp">
-      <van-icon name="location" custom-class="van-icon-l"/> <text class="addr-content">{{ addr }}</text>
+      <van-icon name="map-marked" custom-class="van-icon-l"/> <text class="addr-content">{{ addr }}</text>
     </view>
     <view class="online-status">
         <van-icon custom-class="van-icon-c van-icon-c-1" color="#4caf50" name="friends" /> <text class="addr-content">({{ online }})</text>
     </view>
   </view>
   <view class="open-time">
-    <van-tag round color="#2b3748"> <van-icon custom-class="van-icon-c" name="clock-o" /> 07:00-21:00</van-tag>
+    开放时间：<van-icon name="clock-o" />  07:00-21:00 
   </view>
   <!-- 聊天内容 -->
   <scroll-view 
@@ -24,7 +25,7 @@
     scroll-y="true" 
     scroll-with-animation 
     scroll-into-view="{{toView}}"
-    style="background-image: url('https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/main-bk.jpg');"
+    style="background-image: url('{{bkUrl}}');"
   >
     <block wx:for="{{chatData}}" wx:key="index" wx:for-item="item">
       <view id="chat-{{index}}" class="chat-content {{ item.sender_id == sender_id ? 'right my' : 'left others' }}">
@@ -40,16 +41,17 @@
       </view>
     </block>
   </scroll-view>
+  <!-- 发送 -->
   <view class="send">
     <view class="content">
-      <input class="send-input" type="text" value="{{ inputValue }}" bindinput="getVal" placeholder="发信息在线寻找篮球搭子"/>
+      <input class="send-input" type="text" confirm-type="send" value="{{ inputValue }}" bindinput="getVal" bindconfirm="sendMsg" placeholder="输入内容发送在线寻找运动搭子"/>
       <van-transition show="{{ showCloseBtn }}" custom-class="block">
         <van-icon custom-class="van-icon-c-2" name="clear" data-value="{{ inputValue }}" bindtap="onClearInput" />
       </van-transition>
     </view>
     <van-transition show="{{ showSendBtn }}" custom-class="block" name="slide-right">
       <view class="submit">
-          <van-button round size="small" type="warning" custom-style="width:170rpx" bind:click="sendMsg">发送</van-button>
+          <van-button round size="small" type="warning" custom-style="width:170rpx" bind:click="sendMsg"><van-icon name="like" />发送</van-button>
       </view>
     </van-transition>
   </view>
