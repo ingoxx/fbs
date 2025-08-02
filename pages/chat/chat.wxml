@@ -43,6 +43,9 @@
   </scroll-view>
   <!-- 发送 -->
   <view class="send">
+    <view class="navigation">
+      <van-button bind:tap="openMapApp" type="default" size="small"custom-style='width:100rpx;height:80rpx;background:#2b3748;color:#ffff;border: 1rpx solid #2b3748;margin-bottom: 43rpx;'><van-icon name="map-marked"/>导航</van-button>
+    </view>
     <view class="content">
       <input class="send-input" type="text" confirm-type="send" value="{{ inputValue }}" bindinput="getVal" bindconfirm="sendMsg" placeholder="输入内容发送在线寻找运动搭子"/>
       <van-transition show="{{ showCloseBtn }}" custom-class="block">

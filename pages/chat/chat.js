@@ -26,6 +26,7 @@ Page({
     addr: '',
     lat: 0,
     lng: 0,
+    tag: '',
     inputValue: '',
     chatData: [],
   },
@@ -189,7 +190,7 @@ Page({
     wx.openLocation({
       latitude: Number(this.data.lat),  // 纬度
       longitude: Number(this.data.lng), // 经度
-      address: this.data.addr, // 地址（可选）
+      address: this.data.addr+this.data.tag, // 地址（可选）
       scale: 18,
       success(res) {
         console.log('打开成功');
@@ -213,6 +214,7 @@ Page({
       user_id: options.user_id,
       sender_id: options.sender_id,
       bkUrl: options.img,
+      tag: options.tag,
     });
     this.initWss(options);
   },

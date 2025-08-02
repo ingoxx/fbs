@@ -10,6 +10,8 @@ import Dialog from '@vant/weapp/dialog/dialog';
 const md5 = require('../../utils/md5');
 Page({
   data: {
+    openid: "",
+    showDataNumber: 8,
     placeTag: "",
     sportSelectedCacheKey: 'selected_sport',
     sportsCacheKey: 'is_show_sports',
@@ -184,7 +186,16 @@ Page({
           isUse: true,
           loadText: "获取数据中...",
         })
-        this.getAddrDistance();
+        if (this.data.isUse) {
+          Toast.loading({
+            message: this.data.loadText,
+            forbidClick: true,
+            duration: 0,
+          });
+          console.log("getAddrDistance >>> ", 1111);
+          this.isShowSportList();
+          this.getAddrDistance();
+        }
       }
     } catch (err) {
       this.cusSetStorage(this.data.isShowPrivacyCacheKey, 2);
@@ -226,7 +237,7 @@ Page({
   userAddAddrReqApi(data) {
     return new Promise((resolve, reject) => {
       wx.request({
-        url: `${BASE_URL}/user-add-square?uid=${app.globalData.openid}`,
+        url: `${BASE_URL}/user-add-square?uid=${this.data.openid}`,
         method: 'POST',
         timeout: 10000,
         data: data,
@@ -243,7 +254,7 @@ Page({
   getCheckListApi() {
     return new Promise((resolve, reject) => {
       wx.request({
-        url: `${BASE_URL}/check-list?uid=${app.globalData.openid}`,
+        url: `${BASE_URL}/check-list?uid=${this.data.openid}`,
         timeout: 10000,
         success: function (res) {
           resolve(res.data);
@@ -269,7 +280,7 @@ Page({
   getAllDataApi() {
     return new Promise((resolve, reject) => {
       wx.request({
-        url: `${BASE_URL}/show-square?lat=${this.data.lat}&lng=${this.data.lng}&city=${this.data.city}&uid=${app.globalData.openid}&sport_key=${this.data.defaultSportKey}&sport_name=${this.data.defaultSportSquare}`,
+        url: `${BASE_URL}/show-square?lat=${this.data.lat}&lng=${this.data.lng}&city=${this.data.city}&uid=${this.data.openid}&sport_key=${this.data.defaultSportKey}&sport_name=${this.data.defaultSportSquare}`,
         success: function (res) {
           if (res.statusCode != 200) {
             wx.stopPullDownRefresh();
@@ -294,7 +305,7 @@ Page({
       newBsf.map(async (item) => {
         // const res = await app.login();
         if (item.customize == 3) {
-          item.disable = app.globalData.openid == app.globalData.admin;
+          item.disable = this.data.openid == app.globalData.admin;
         } else {
           item.isDisable = false;
         }
@@ -308,7 +319,7 @@ Page({
   refuseAddAddrReqApi(id, city) {
     return new Promise((resolve, reject) => {
       wx.request({
-        url: `${BASE_URL}/add-square-refuse?uid=${app.globalData.openid}`,
+        url: `${BASE_URL}/add-square-refuse?uid=${this.data.openid}`,
         method: "POST",
         timeout: 10000,
         data: JSON.stringify({id: id, city: city}),
@@ -328,7 +339,7 @@ Page({
   passAddAddrReqApi(id, city) {
     return new Promise((resolve, reject) => {
       wx.request({
-        url: `${BASE_URL}/add-square-pass?uid=${app.globalData.openid}`,
+        url: `${BASE_URL}/add-square-pass?uid=${this.data.openid}`,
         method: "POST",
         timeout: 10000,
         data: JSON.stringify({id: id, city: city}),
@@ -391,7 +402,7 @@ Page({
   getGroupUserCountApi(gid) {
     return new Promise((resolve, reject) => {
       wx.request({
-        url: `${BASE_URL}/get-online?gid=${gid}&uid=${app.globalData.openid}&user_id=${app.globalData.openid}`,
+        url: `${BASE_URL}/get-online?gid=${gid}&uid=${this.data.openid}&user_id=${this.data.openid}`,
         timeout: 10000,
         success: res => {
           resolve(res.data);
@@ -428,7 +439,7 @@ Page({
     
     const ad = {
       id: generateUUID(),
-      user_id: app.globalData.openid,
+      user_id: this.data.openid,
       addr: this.data.villageInfo,
       lat: respTx.lat,
       lng: respTx.lng,
@@ -482,9 +493,8 @@ Page({
   chatRoot(e) {
     const id = e.currentTarget.dataset.item;
     const img = this.data.sports.find(item => item.key == this.data.defaultSportKey);
-    console.log("img >>> ", img);
     wx.navigateTo({
-      url: `/pages/chat/chat?id=${id.id}&addr=${id.addr}&lat=${id.lat}&lng=${id.lng}&user_id=${app.globalData.openid}&sender_id=${md5(app.globalData.openid)}&img=${img.img}`,
+      url: `/pages/chat/chat?id=${id.id}&addr=${id.addr}&lat=${id.lat}&lng=${id.lng}&user_id=${this.data.openid}&sender_id=${md5(this.data.openid)}&img=${img.img}&tag=${id.tags[0]}`,
     });
   },
   getBasketSquareData() {
@@ -516,12 +526,6 @@ Page({
         showSportsList: true,
       });
       return;
-    } else if (name.name == "距离最近") {
-      const newList = this.data.basketSquareData.sort((a, b) => a.distance - b.distance);
-      this.setData({
-        basketSquareFilterData: newList,
-      });
-      return;
     } else if (name.name == "添加场地") {
       this.setData({ addVillage: true})
       return;
@@ -531,13 +535,7 @@ Page({
         showCheckList: true,
       })
       return;
-    } else if (name.name == "打开定位") {
-      this.getAddrDistance();
-      this.setData({
-        showTxMap: true,
-      })
-      return;
-    } 
+    }
     const fd = this.data.basketSquareData.filter(item => item.tags.includes(name.name));
     this.setData({
       basketSquareFilterData: fd,
@@ -605,7 +603,7 @@ Page({
     if (resp.latitude !== "" && resp.longitude !== "" && resp.city !== "") {
       const allData = await this.getAllDataApi();
       if (allData.code != 1000) {
-        Toast.fail("加载数据失败1");
+        Toast.fail(allData.code);
         return;
       }
       this.setData({
@@ -619,7 +617,7 @@ Page({
           return item;
       });
       const disSortList = updatedList.sort((a, b) => a.distance - b.distance);
-      const sliceDataList = disSortList.slice(0, 6);
+      const sliceDataList = disSortList.slice(0, this.data.showDataNumber);
       // 等待所有异步任务都完成
       const newUL = await Promise.all(
         sliceDataList.map(async (item) => {
@@ -704,6 +702,19 @@ Page({
     s = s * 1000;   // 米
     return Math.floor(s);
   },
+  // 获取openid
+  getOpenid() {
+    let that = this;
+    app.login().then(resp => {
+      const openid = resp.openid || resp.data.data;
+      that.setData({
+        openid: openid,
+      });
+      that.isShowPrivacy();
+    }).catch(err => {
+      console.error('登录失败:', err);
+    });
+  },
   // 设置当前页的标题
   setNavigatInfo() {
     wx.setNavigationBarColor({
@@ -719,7 +730,8 @@ Page({
    */
   onLoad(options) {
     this.setNavigatInfo();
-    this.isShowPrivacy();
+    this.getOpenid();
+    // this.isShowPrivacy();
   },
 
   /**
@@ -733,9 +745,8 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-
+    // this.getOpenid();
   },
-
   /**
    * 生命周期函数--监听页面隐藏
    */
@@ -754,21 +765,13 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh() {
-    this.isShowPrivacy();
-    if (this.data.isUse) {
-      // wx.showLoading({
-      //   title: '获取数据中',
-      // });
-      Toast.loading({
-        message: this.data.loadText,
-        forbidClick: true,
-        duration: 0,
-      });
-      this.isShowSportList();
-      this.getAddrDistance();
-    }
+    Toast.loading({
+      message: this.data.loadText,
+      forbidClick: true,
+      duration: 0,
+    });
+    this.getOpenid();
   },
-
   /**
    * 页面上拉触底事件的处理函数
    */
