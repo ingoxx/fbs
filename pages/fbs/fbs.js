@@ -54,6 +54,7 @@ Page({
       {'name': '足球场', 'key': 'fbs', 'checked': false, 'icon': '⚽', 'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/football.png'},
       {'name': '网球场', 'key': 'tns', 'checked': false, 'icon': '🎾', 'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/tennis.png'},
       {'name': '高尔夫球场', 'key': 'gos', 'checked': false, 'icon': '🏌️', 'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/golf.png'},
+      {'name': '健身房', 'key': 'gym', 'checked': false, 'icon': '🏋️‍♂️', 'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/gym.png'},
     ],
     checkListData: [],
     basketSquareFilterData: [],

@@ -74,6 +74,9 @@
             <van-tag type="primary" wx:if="{{ defaultSportKey == 'gos' }}">
               🏌️{{ item2 }}
             </van-tag>
+            <van-tag type="primary" wx:if="{{ defaultSportKey == 'gym' }}">
+              🏋️‍♂️{{ item2 }}
+            </van-tag>
           </block>
         </view>
       </view>
