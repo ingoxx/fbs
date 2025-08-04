@@ -120,6 +120,19 @@
   font-size: 37rpx;
 }
 
+.box .flush-data {
+  position: fixed;
+  top: 56%;
+  right: 0;
+}
+
+.box .flush-data .share-btn {
+  opacity: 0.7;
+  width: 93rpx;
+  color: #2d2c2c;
+  font-size: 37rpx;
+}
+
 .van-c {
   padding: 10rpx 0;
 }

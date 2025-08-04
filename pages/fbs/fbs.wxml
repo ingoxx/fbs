@@ -83,7 +83,13 @@
     </block>
   </view>
   <view class="contact-us">
-    <button size="mini"  open-type="contact" class="share-btn"><van-icon name="service" /></button>
+    <button size="mini"  open-type="contact" class="share-btn"><van-icon name="https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/service.svg" /></button>
+  </view>
+  <view class="flush-data" wx:if="{{isUse}}">
+    <button size="mini" bind:tap="getOpenid" class="share-btn">
+      <!-- <text>刷新</text> -->
+      <van-icon name="https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/flush-5.svg" />
+    </button>
   </view>
 </view>
 <view>

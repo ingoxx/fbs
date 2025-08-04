@@ -192,7 +192,6 @@ Page({
             forbidClick: true,
             duration: 0,
           });
-          console.log("getAddrDistance >>> ", 1111);
           this.isShowSportList();
           this.getAddrDistance();
         }
@@ -486,7 +485,7 @@ Page({
     });
     const disSortList = fd.sort((a, b) => a.distance - b.distance);
     this.setData({
-      basketSquareFilterData: disSortList.slice(0, 6),
+      basketSquareFilterData: disSortList.slice(0, this.data.showDataNumber),
     });
 },
   // 进到群组
@@ -623,7 +622,7 @@ Page({
         sliceDataList.map(async (item) => {
           const online = await this.getGroupUserCountApi(item.id);
           if (online.code && online.code != 1000) {
-            Toast.fail("加载数据失败2");
+            Toast.fail("失败: ", online.code);
             return;
           }
           item.online = online.data;
@@ -731,7 +730,6 @@ Page({
   onLoad(options) {
     this.setNavigatInfo();
     this.getOpenid();
-    // this.isShowPrivacy();
   },
 
   /**
