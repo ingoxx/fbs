@@ -2,6 +2,7 @@
 // import QQMapWX from '../../libs/qqmap-wx-jssdk.js'
 const app = getApp();
 var QQMapWX = require('../../lib/qqmap-wx-jssdk.js');
+const { WSS_URL } = require('../../utils/http');
 const { BASE_URL } = require('../../utils/http');
 import Notify from '@vant/weapp/notify/notify';
 import Toast from '@vant/weapp/toast/toast';
@@ -10,6 +11,12 @@ import Dialog from '@vant/weapp/dialog/dialog';
 const md5 = require('../../utils/md5');
 Page({
   data: {
+    isShowMsgBtn: false,
+    sender_id: '',
+    user_id: '',
+    wssUrl: '',
+    baseUrl: '',
+    showChatRoom: false,
     openid: "",
     showDataNumber: 8,
     placeTag: "",
@@ -59,6 +66,18 @@ Page({
     checkListData: [],
     basketSquareFilterData: [],
     basketSquareData: []
+  },
+  onCloseChatRoom() {
+    this.setData({
+      showChatRoom: false,
+    });
+  },
+  isShowChatRoom(e) {
+    if (this.data.openid == app.globalData.admin) {
+      this.setData({
+        showChatRoom: true,
+      });
+    }
   },
   onConfirmSportSelection() {
     if (this.data.isUse) {
@@ -186,6 +205,10 @@ Page({
           showPrivacy: false,
           isUse: true,
           loadText: "获取数据中...",
+          wssUrl: WSS_URL,
+          baseUrl: BASE_URL,
+          user_id: this.data.openid,
+          sender_id: md5(this.data.openid),
         })
         if (this.data.isUse) {
           Toast.loading({
@@ -193,6 +216,11 @@ Page({
             forbidClick: true,
             duration: 0,
           });
+          if (this.data.openid == app.globalData.admin) {
+            this.setData({
+              isShowMsgBtn: true,
+            });
+          }
           this.isShowSportList();
           this.getAddrDistance();
         }

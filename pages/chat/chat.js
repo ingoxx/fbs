@@ -22,6 +22,7 @@ Page({
     group_id: 0,
     user_id: '',
     sender_id: '',
+    sender_id: '',
     online: 0,
     addr: '',
     lat: 0,

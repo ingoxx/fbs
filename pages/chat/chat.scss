@@ -43,7 +43,6 @@ $friendBg: #374151;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    // background: $primary;
     overflow-y: auto;        
     min-height: 0;
     padding-bottom: 25rpx;
@@ -60,7 +59,6 @@ $friendBg: #374151;
       .chat-format {
         position: relative;
         bottom: 5rpx;
-        
       }
       .user, .time {
         color: #a5a5a5;

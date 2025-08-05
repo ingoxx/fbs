@@ -94,117 +94,134 @@
       <van-icon name="https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/flush-5.svg" />
     </button>
   </view>
+  <view class="message-reply" wx:if="{{isShowMsgBtn}}">
+    <button size="mini" bind:tap="isShowChatRoom" class="share-btn">
+      <!-- <text>刷新</text> -->
+      <van-icon name="https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/mr.svg" />
+    </button>
+  </view>
 </view>
 <view>
-<!-- 添加场地 -->
-<van-dialog
-  use-slot
-  title="添加场地"
-  show="{{ addVillage }}"
-  show-cancel-button
-  confirm-button-open-type="getUserInfo"
-  bind:close="onClose"
-  bind:confirm="onConfirmAddPlace"
-  custom-class="van-dialog-c-1"
->
-  <van-cell-group>
-    <van-field
-      value="{{ villageInfo }}"
-      required
-      clearable
-      autosize
-      type="textarea"
-      label="地址"
-      placeholder="请输入详细的场地地址"
-      confirm-type="done"
-      bind:change="onChangeAddAddrField"
-    />
-    <!-- <van-divider /> -->
-    <van-field
-      value="{{ placeTag }}"
-      required
-      clearable
-      autosize
-      type="textarea"
-      label="简称"
-      placeholder="如: 新湖{{defaultSportSquare}}"
-      border="{{ false }}"
-      confirm-type="done"
-      bind:change="onChangeAddTagField"
-    />
-  </van-cell-group>
-</van-dialog>
-<!-- 运动偏好 -->
-<van-dialog
+  <!-- 聊天框 -->
+  <van-popup
+    wx:if="{{ showChatRoom }}"
+    show="{{ showChatRoom }}"
+    round
+    position="right"
+    custom-style="height: 40%;width: 80%"
+    bind:close="onCloseChatRoom"
+  >
+    <chat-room wssUrl="{{ wssUrl }}" user_id="{{user_id}}" sender_id="{{sender_id}}" baseUrl="{{ baseUrl }}" class="com-chat-room"></chat-room>
+  </van-popup>
+  <!-- 添加场地 -->
+  <van-dialog
     use-slot
-    cancel-button-text="关闭"
-    z-index="100"
-    title="🏃运动场地选择"
-    show="{{ showSportsList }}"
+    title="添加场地"
+    show="{{ addVillage }}"
     show-cancel-button
     confirm-button-open-type="getUserInfo"
     bind:close="onClose"
-    bind:confirm="onConfirmSportSelection"
+    bind:confirm="onConfirmAddPlace"
+    custom-class="van-dialog-c-1"
   >
-    <view class="sports-list-box">
-      <block wx:for="{{sports}}" wx:key="index" wx:for-item="item">
-        <van-checkbox value="{{ item.checked }}" data-item="{{ item }}" bind:change="onSportsChange">{{item.icon}}{{ item.name }}</van-checkbox>
-      </block>
-    </view>
-</van-dialog>
-<!-- 审核列表 -->
-<van-dialog
-    use-slot
-    cancel-button-text="关闭"
-    z-index="100"
-    title="审核列表"
-    show="{{ showCheckList }}"
-    show-cancel-button
-    confirm-button-open-type="getUserInfo"
-    bind:close="onClose"
+    <van-cell-group>
+      <van-field
+        value="{{ villageInfo }}"
+        required
+        clearable
+        autosize
+        type="textarea"
+        label="地址"
+        placeholder="请输入详细的场地地址"
+        confirm-type="done"
+        bind:change="onChangeAddAddrField"
+      />
+      <!-- <van-divider /> -->
+      <van-field
+        value="{{ placeTag }}"
+        required
+        clearable
+        autosize
+        type="textarea"
+        label="简称"
+        placeholder="如: 新湖{{defaultSportSquare}}"
+        border="{{ false }}"
+        confirm-type="done"
+        bind:change="onChangeAddTagField"
+      />
+    </van-cell-group>
+  </van-dialog>
+  <!-- 运动偏好 -->
+  <van-dialog
+      use-slot
+      cancel-button-text="关闭"
+      z-index="100"
+      title="🏃运动场地选择"
+      show="{{ showSportsList }}"
+      show-cancel-button
+      confirm-button-open-type="getUserInfo"
+      bind:close="onClose"
+      bind:confirm="onConfirmSportSelection"
+    >
+      <view class="sports-list-box">
+        <block wx:for="{{sports}}" wx:key="index" wx:for-item="item">
+          <van-checkbox value="{{ item.checked }}" data-item="{{ item }}" bind:change="onSportsChange">{{item.icon}}{{ item.name }}</van-checkbox>
+        </block>
+      </view>
+  </van-dialog>
+  <!-- 审核列表 -->
+  <van-dialog
+      use-slot
+      cancel-button-text="关闭"
+      z-index="100"
+      title="审核列表"
+      show="{{ showCheckList }}"
+      show-cancel-button
+      confirm-button-open-type="getUserInfo"
+      bind:close="onClose"
+    >
+      <view class="check-list-box">
+        <block wx:for="{{checkListData}}" wx:key="index" wx:for-item="item">
+          <view class="check-list-data" wx:if="{{ !item.is_show }}">
+            <view class="check-addr addr-size">
+              <text user-select="true">{{ item.addr }}</text>
+            </view>
+            <view class="check-addr addr-size">
+              <text user-select="true">{{ defaultSportSquare }}</text>
+            </view>
+            <view class="check-submit submit-flex">
+              <van-icon name="close" data-value="{{ item }}" color="#ee0a24" bindtap="onDelete" />
+              <van-icon name="passed" data-value="{{ item }}" color="#07c160" bindtap="onAdd" />
+            </view>
+          </view>
+        </block>
+      </view>
+  </van-dialog>
+  <!-- 隐私协议 -->
+  <van-action-sheet 
+  show="{{ showPrivacy }}" 
+  close-on-click-overlay="false"
   >
-    <view class="check-list-box">
-      <block wx:for="{{checkListData}}" wx:key="index" wx:for-item="item">
-        <view class="check-list-data" wx:if="{{ !item.is_show }}">
-          <view class="check-addr addr-size">
-            <text user-select="true">{{ item.addr }}</text>
-          </view>
-          <view class="check-addr addr-size">
-            <text user-select="true">{{ defaultSportSquare }}</text>
-          </view>
-          <view class="check-submit submit-flex">
-            <van-icon name="close" data-value="{{ item }}" color="#ee0a24" bindtap="onDelete" />
-            <van-icon name="passed" data-value="{{ item }}" color="#07c160" bindtap="onAdd" />
-          </view>
-        </view>
-      </block>
+    <view class="privacy-title">
+      <text>用户隐私协议</text>
     </view>
-</van-dialog>
-<!-- 隐私协议 -->
-<van-action-sheet 
-show="{{ showPrivacy }}" 
-close-on-click-overlay="false"
->
-  <view class="privacy-title">
-    <text>用户隐私协议</text>
-  </view>
-  <view class="privacy-center">
-    <view class="privacy-content">
-      <text class="privacy-detail">欢迎使用本小程序！为保障您的合法权益，请您在使用前仔细阅读并同意以下条款：</text>
-      <text class="privacy-detail"><text class="privacy-item">1.</text>您需遵守国家法律法规，文明发言，禁止发布违法、违规、骚扰、攻击性或不实信息，违规行为将导致永久禁止您使用本小程序。</text> 
-      <text class="privacy-detail"><text class="privacy-item">2.</text>您在本小程序中发布的信息及内容由您本人负责，如因内容引发的法律责任由用户自行承担。</text> 
-      <text class="privacy-detail"><text class="privacy-item">3.</text>本小程序不会永久保存用户的聊天记录，将定期清理，也不会收集用户的任何个人信息(仅从开放平台获取有限的信息)</text> 
-      <text class="privacy-detail"><text class="privacy-item">4.</text>您在使用过程中若遇到问题或发现违规行为，可通过小程序内提供的反馈渠道联系我们。</text> 
-      <text class="privacy-detail"><text class="privacy-item">5.</text>点击下方'同意协议'即表示您已阅读并同意本协议的全部内容，'拒绝协议'您将不能使用本小程序。</text> 
-      <text class="privacy-detail">感谢您的理解与配合，祝您使用愉快！</text> 
+    <view class="privacy-center">
+      <view class="privacy-content">
+        <text class="privacy-detail">欢迎使用本小程序！为保障您的合法权益，请您在使用前仔细阅读并同意以下条款：</text>
+        <text class="privacy-detail"><text class="privacy-item">1.</text>您需遵守国家法律法规，文明发言，禁止发布违法、违规、骚扰、攻击性或不实信息，违规行为将导致永久禁止您使用本小程序。</text> 
+        <text class="privacy-detail"><text class="privacy-item">2.</text>您在本小程序中发布的信息及内容由您本人负责，如因内容引发的法律责任由用户自行承担。</text> 
+        <text class="privacy-detail"><text class="privacy-item">3.</text>本小程序不会永久保存用户的聊天记录，将定期清理，也不会收集用户的任何个人信息(仅从开放平台获取有限的信息)</text> 
+        <text class="privacy-detail"><text class="privacy-item">4.</text>您在使用过程中若遇到问题或发现违规行为，可通过小程序内提供的反馈渠道联系我们。</text> 
+        <text class="privacy-detail"><text class="privacy-item">5.</text>点击下方'同意协议'即表示您已阅读并同意本协议的全部内容，'拒绝协议'您将不能使用本小程序。</text> 
+        <text class="privacy-detail">感谢您的理解与配合，祝您使用愉快！</text> 
+      </view>
+      <view class="privacy-status">
+        <van-button custom-style="width: 170rpx" size="small" round type="info" data-item="1" bind:tap="iAacceptPrivacy">同意协议</van-button>
+        <van-button custom-style="width: 170rpx" size="small" round type="danger" data-item="2" bind:tap="iAacceptPrivacy">拒绝协议</van-button>
+      </view>
     </view>
-    <view class="privacy-status">
-      <van-button custom-style="width: 170rpx" size="small" round type="info" data-item="1" bind:tap="iAacceptPrivacy">同意协议</van-button>
-      <van-button custom-style="width: 170rpx" size="small" round type="danger" data-item="2" bind:tap="iAacceptPrivacy">拒绝协议</van-button>
-    </view>
-  </view>
-</van-action-sheet>
-<van-notify id="van-notify" />
-<van-toast id="van-toast" />
-<van-dialog id="van-dialog" />
+  </van-action-sheet>
+  <van-notify id="van-notify" />
+  <van-toast id="van-toast" />
+  <van-dialog id="van-dialog" />
 </view>
