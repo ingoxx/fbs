@@ -54,18 +54,40 @@ Page({
       {'id': 7, 'icon': 'add-square','name': '添加场地', 'customize': 1, 'disable': true, 'isDisable': false, 'action': false},
       {'id': 5, 'icon': 'comment','name': '审核', 'customize': 3, 'disable': false, 'isDisable': false, 'action': false},
     ],
-    sports: [
-      {'name': '篮球场', 'key': 'bks', 'checked': false, 'icon': '🏀', 'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/main-bk.jpg'},
-      {'name': '游泳馆', 'key': 'sws', 'checked': false, 'icon': '🏊', 'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/swim.png'},
-      {'name': '羽毛球馆', 'key': 'bms', 'checked': false, 'icon': '🏸', 'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/badminton.png'},
-      {'name': '足球场', 'key': 'fbs', 'checked': false, 'icon': '⚽', 'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/football.png'},
-      {'name': '网球场', 'key': 'tns', 'checked': false, 'icon': '🎾', 'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/tennis.png'},
-      {'name': '高尔夫球场', 'key': 'gos', 'checked': false, 'icon': '🏌️', 'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/golf.png'},
-      {'name': '健身房', 'key': 'gym', 'checked': false, 'icon': '🏋️‍♂️', 'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/gym.png'},
+    all_sport_list: [
+      // {'name': '篮球场', 'key': 'bks', 'checked': false, 'icon': '🏀', 'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/main-bk.jpg'},
+      // {'name': '游泳馆', 'key': 'sws', 'checked': false, 'icon': '🏊', 'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/swim.png'},
+      // {'name': '羽毛球馆', 'key': 'bms', 'checked': false, 'icon': '🏸', 'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/badminton.png'},
+      // {'name': '足球场', 'key': 'fbs', 'checked': false, 'icon': '⚽', 'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/football.png'},
+      // {'name': '网球场', 'key': 'tns', 'checked': false, 'icon': '🎾', 'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/tennis.png'},
+      // {'name': '高尔夫球场', 'key': 'gos', 'checked': false, 'icon': '🏌️', 'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/golf.png'},
+      // {'name': '健身房', 'key': 'gym', 'checked': false, 'icon': '🏋️‍♂️', 'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/gym.png'},
     ],
     checkListData: [],
     basketSquareFilterData: [],
     basketSquareData: []
+  },
+  getAllSportsApi() {
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: `${BASE_URL}/get-all-sports?uid=${this.data.openid}`,
+        timeout: 10000,
+        success: (res) => {
+          if (res.statusCode == 200) {
+            resolve(res.data);
+          } else {
+            reject({
+              statusCode: res.statusCode,
+              message: '请求失败',
+              response: res
+            })
+          }
+        },
+        fail: (err) => {
+          reject(err);
+        }
+      })
+    });
   },
   onCloseChatRoom() {
     this.setData({
@@ -92,7 +114,7 @@ Page({
   async getSiteSelection() {
     try {
       const sss = await this.cusGetStorage(this.data.sportSelectedCacheKey);
-      const nd = this.data.sports.map((item) => {
+      const nd = this.data.all_sport_list.map((item) => {
         if (item.key == sss.key) {
           item.checked = true;
         } else {
@@ -101,7 +123,7 @@ Page({
         return item;
       })
       this.setData({
-        sports: nd,
+        all_sport_list: nd,
         defaultSportKey: sss.key,
         defaultSportSquare: sss.name,
       });
@@ -136,7 +158,7 @@ Page({
   // 运动偏好选择
   onSportsChange(e) {
     const sd = e.currentTarget.dataset.item;
-    const nd = this.data.sports.map((item) => {
+    const nd = this.data.all_sport_list.map((item) => {
       if (item.key == sd.key) {
         item.checked = true;
       } else {
@@ -145,7 +167,7 @@ Page({
       return item
     })
     this.setData({
-      sports: nd,
+      all_sport_list: nd,
       defaultSportKey: sd.key,
       defaultSportSquare: sd.name,
     });
@@ -221,6 +243,15 @@ Page({
               isShowMsgBtn: true,
             });
           }
+          this.getAllSportsApi().then((resp) => {
+            if (resp.code == 1000) {
+              this.setData({
+                all_sport_list: resp.data,
+              });
+            }
+          }).catch((err) => {
+            Toast.fail("502")
+          });
           this.isShowSportList();
           this.getAddrDistance();
         }
@@ -235,6 +266,7 @@ Page({
     }
     this.getSiteSelection();
   },
+  // 隐私协议， 1：统一，2：拒绝
   iAacceptPrivacy(e) {
     const res = e.currentTarget.dataset.item;
     if (res == 1) {
@@ -245,7 +277,16 @@ Page({
         loadText: "首次加载数据会比较耗时",
       })
       setTimeout(()=>{
-        this.isShowSportList();
+        this.getAllSportsApi().then((resp) => {
+          if (resp.code == 1000) {
+            this.setData({
+              all_sport_list: resp.data,
+            });
+          }
+          this.isShowSportList();
+        }).catch((err) => {
+          Toast.fail("502")
+        })
       },500)
     } else if (res == 2) {
       this.cusSetStorage(this.data.isShowPrivacyCacheKey, 2);
@@ -520,7 +561,7 @@ Page({
   // 进到群组
   chatRoot(e) {
     const id = e.currentTarget.dataset.item;
-    const img = this.data.sports.find(item => item.key == this.data.defaultSportKey);
+    const img = this.data.all_sport_list.find(item => item.key == this.data.defaultSportKey);
     wx.navigateTo({
       url: `/pages/chat/chat?id=${id.id}&addr=${id.addr}&lat=${id.lat}&lng=${id.lng}&user_id=${this.data.openid}&sender_id=${md5(this.data.openid)}&img=${img.img}&tag=${id.tags[0]}`,
     });
@@ -550,6 +591,7 @@ Page({
     }
     var name = this.data.basketSquareFilter.find(item => item.id == id);
     if (name.name == "运动场地选择") {
+      this.getSiteSelection();
       this.setData({
         showSportsList: true,
       });

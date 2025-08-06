@@ -56,6 +56,14 @@
         </view>
         <view class="tags">
           <block wx:for="{{ item.tags }}" wx:key="index" wx:for-item="item2">
+            <block wx:for="{{ all_sport_list }}" wx:key="index3" wx:for-item="item3">
+              <van-tag type="primary" wx:if="{{ defaultSportKey == item3.key }}">
+              {{ item3.icon }}{{ item2 }}
+            </van-tag>
+            </block>
+          </block>
+
+          <!-- <block wx:for="{{ item.tags }}" wx:key="index" wx:for-item="item2">
             <van-tag type="primary" wx:if="{{ defaultSportKey == 'bks' }}">
               🏀{{ item2 }}
             </van-tag>
@@ -77,7 +85,7 @@
             <van-tag type="primary" wx:if="{{ defaultSportKey == 'gym' }}">
               🏋️‍♂️{{ item2 }}
             </van-tag>
-          </block>
+          </block> -->
         </view>
       </view>
     </block>
@@ -107,9 +115,9 @@
     wx:if="{{ showChatRoom }}"
     show="{{ showChatRoom }}"
     round
-    position="right"
-    custom-style="height: 40%;width: 80%"
+    custom-style="height: 40%;width: 80%; background:#374151"
     bind:close="onCloseChatRoom"
+
   >
     <chat-room wssUrl="{{ wssUrl }}" user_id="{{user_id}}" sender_id="{{sender_id}}" baseUrl="{{ baseUrl }}" class="com-chat-room"></chat-room>
   </van-popup>
@@ -164,7 +172,7 @@
       bind:confirm="onConfirmSportSelection"
     >
       <view class="sports-list-box">
-        <block wx:for="{{sports}}" wx:key="index" wx:for-item="item">
+        <block wx:for="{{all_sport_list}}" wx:key="index" wx:for-item="item">
           <van-checkbox value="{{ item.checked }}" data-item="{{ item }}" bind:change="onSportsChange">{{item.icon}}{{ item.name }}</van-checkbox>
         </block>
       </view>

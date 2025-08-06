@@ -237,10 +237,6 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide() {
-    // if (this.data.socket) {
-    //   this.data.socket.close();
-    //   console.log('已关闭连接');
-    // }
   },
 
   /**
