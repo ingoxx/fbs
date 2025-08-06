@@ -52,7 +52,7 @@
           <van-icon name="location" custom-class="van-icon-l"/> <text class="t-f">距您{{ item.distance }}公里</text>
         </view>
         <view class="online">
-          <van-tag round type="success" custom-class="{{ item.online == 0 ? 'van-tag-c': '' }}"><van-icon name="friends" /> {{ item.online }}人在线</van-tag>
+          <van-tag round type="success" custom-class="{{ item.online == 0 ? 'van-tag-c': '' }}"><van-icon name="friends" /> {{ item.online }}人在线，点击进入</van-tag>
         </view>
         <view class="tags">
           <block wx:for="{{ item.tags }}" wx:key="index" wx:for-item="item2">
@@ -62,30 +62,6 @@
             </van-tag>
             </block>
           </block>
-
-          <!-- <block wx:for="{{ item.tags }}" wx:key="index" wx:for-item="item2">
-            <van-tag type="primary" wx:if="{{ defaultSportKey == 'bks' }}">
-              🏀{{ item2 }}
-            </van-tag>
-            <van-tag type="primary" wx:if="{{ defaultSportKey == 'sws' }}">
-              🏊{{ item2 }}
-            </van-tag>
-            <van-tag type="primary" wx:if="{{ defaultSportKey == 'bms' }}">
-              🏸{{ item2 }}
-            </van-tag>
-            <van-tag type="primary" wx:if="{{ defaultSportKey == 'fbs' }}">
-              ⚽{{ item2 }}
-            </van-tag>
-            <van-tag type="primary" wx:if="{{ defaultSportKey == 'tns' }}">
-              🎾{{ item2 }}
-            </van-tag>
-            <van-tag type="primary" wx:if="{{ defaultSportKey == 'gos' }}">
-              🏌️{{ item2 }}
-            </van-tag>
-            <van-tag type="primary" wx:if="{{ defaultSportKey == 'gym' }}">
-              🏋️‍♂️{{ item2 }}
-            </van-tag>
-          </block> -->
         </view>
       </view>
     </block>
