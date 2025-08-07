@@ -103,6 +103,13 @@ $friendBg: #374151;
     width: 100%;
     background: #2b3748;
     box-sizing: border-box;
+    .navigation {
+      .upload .van-uploader {
+        height: 83rpx;
+        position: relative;
+        bottom: 10rpx;
+      }
+    }
     .content {
       display: flex;
       align-items: center;

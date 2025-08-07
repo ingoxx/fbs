@@ -46,6 +46,11 @@
     <view class="navigation">
       <van-button bind:tap="openMapApp" type="default" size="small"custom-style='width:100rpx;height:80rpx;background:#2b3748;color:#ffff;border: 1rpx solid #2b3748;margin-bottom: 43rpx;'><van-icon name="map-marked"/>导航</van-button>
     </view>
+    <view class="navigation" wx:if="{{ uploadBtn }}">
+      <van-uploader class="upload">
+        <van-button icon="https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/add.svg" size="mini" custom-style="width:100rpx; height: 71rpx;background: #2b3748; border-color: #2b3748;font-size: 50rpx;"></van-button>
+      </van-uploader>
+    </view>
     <view class="content">
       <input class="send-input" type="text" confirm-type="send" value="{{ inputValue }}" bindinput="getVal" bindconfirm="sendMsg" placeholder="输入内容发送在线寻找运动搭子"/>
       <van-transition show="{{ showCloseBtn }}" custom-class="block">

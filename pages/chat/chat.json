@@ -15,6 +15,7 @@
     "van-image": "/miniprogram_npm/@vant/weapp/image/index",
     "van-notice-bar": "/miniprogram_npm/@vant/weapp/notice-bar",
     "van-field": "/miniprogram_npm/@vant/weapp/field/index",
+    "van-uploader": "/miniprogram_npm/@vant/weapp/uploader/index",
     "van-cell-group": "/miniprogram_npm/@vant/weapp/cell-group/index"
   }
 }

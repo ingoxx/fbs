@@ -10,9 +10,11 @@ Page({
    * 页面的初始数据
    */
   data: {
+    uploadBtn: false,
+    fileList: [],
     bkUrl: '',
     tryConNum: 0,
-    notice: "点击地址可唤醒导航。本小程序不会长期保留聊天信息，系统会自动定时清理。",
+    notice: "本小程序不会长期保留聊天信息，系统会自动定期清理。",
     openid_key: 'openid',
     socket: null,
     showSendBtn: false,

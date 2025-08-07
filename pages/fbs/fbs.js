@@ -55,13 +55,6 @@ Page({
       {'id': 5, 'icon': 'comment','name': '审核', 'customize': 3, 'disable': false, 'isDisable': false, 'action': false},
     ],
     all_sport_list: [
-      // {'name': '篮球场', 'key': 'bks', 'checked': false, 'icon': '🏀', 'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/main-bk.jpg'},
-      // {'name': '游泳馆', 'key': 'sws', 'checked': false, 'icon': '🏊', 'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/swim.png'},
-      // {'name': '羽毛球馆', 'key': 'bms', 'checked': false, 'icon': '🏸', 'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/badminton.png'},
-      // {'name': '足球场', 'key': 'fbs', 'checked': false, 'icon': '⚽', 'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/football.png'},
-      // {'name': '网球场', 'key': 'tns', 'checked': false, 'icon': '🎾', 'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/tennis.png'},
-      // {'name': '高尔夫球场', 'key': 'gos', 'checked': false, 'icon': '🏌️', 'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/golf.png'},
-      // {'name': '健身房', 'key': 'gym', 'checked': false, 'icon': '🏋️‍♂️', 'img': 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/gym.png'},
     ],
     checkListData: [],
     basketSquareFilterData: [],
@@ -587,6 +580,9 @@ Page({
   filterBasketSquare(id) {
     if (!this.data.isUse) {
       Toast.fail("请先同意协议");
+      this.setData({
+        showPrivacy: true,
+      });
       return;
     }
     var name = this.data.basketSquareFilter.find(item => item.id == id);
@@ -834,12 +830,16 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh() {
-    Toast.loading({
-      message: this.data.loadText,
-      forbidClick: true,
-      duration: 0,
-    });
-    this.getOpenid();
+    if (this.data.isUse) {
+      Toast.loading({
+        message: this.data.loadText,
+        forbidClick: true,
+        duration: 0,
+      });
+      this.getOpenid();
+    } else {
+      wx.stopPullDownRefresh();
+    }
   },
   /**
    * 页面上拉触底事件的处理函数

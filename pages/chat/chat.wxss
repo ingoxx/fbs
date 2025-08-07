@@ -109,6 +109,12 @@
   box-sizing: border-box;
 }
 
+.box .send .navigation .upload .van-uploader {
+  height: 83rpx;
+  position: relative;
+  bottom: 10rpx;
+}
+
 .box .send .content {
   display: flex;
   align-items: center;
