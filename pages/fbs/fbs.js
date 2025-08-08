@@ -60,26 +60,49 @@ Page({
     basketSquareFilterData: [],
     basketSquareData: [],
     join_users: [
-      {user: 'user_aasdasdasdsad', img: 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_1.JPG'},
-      {user: 'user_2sdjasdsadasd', img: 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_2.JPG'},
-      {user: 'user_2sdjasdsadasd', img: 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_3.JPG'},
-      {user: 'user_2sdjasdsadasd', img: 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_4.JPG'},
-      {user: 'user_2sdjasdsadasd', img: 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_5.JPG'},
+      // {user: 'user_aasdasdasdsad', img: 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_1.JPG'},
+      // {user: 'user_2sdjasdsadasd', img: 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_2.JPG'},
+      // {user: 'user_2sdjasdsadasd', img: 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_3.JPG'},
+      // {user: 'user_2sdjasdsadasd', img: 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_4.JPG'},
+      // {user: 'user_2sdjasdsadasd', img: 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_5.JPG'},
     ],
   },
-
+  // 获取群组人数
+  getGroupUsersApi(gid) {
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: `${BASE_URL}/get-join-users?uid=${this.data.openid}&gid=${gid}`,
+        timeout: 10000,
+        success: function (res) {
+          if (res.statusCode != 200) {
+            reject({msg: '网络错误', code: 400});
+            return
+          }
+          resolve(res.data);
+        },
+        fail: function (err) {
+          reject(err)
+        }
+      })
+    })
+  },
   // 加入组局api
-  joinSportGroupApi() {
+  joinSportGroupApi(data) {
     return new Promise((resolve, reject) => {
       wx.request({
         url: `${BASE_URL}/user-join-group?uid=${this.data.openid}`,
         timeout: 10000,
         method: "POST",
+        data: data,
         success: function (res) {
+          if (res.statusCode != 200) {
+            reject({msg: '网络错误', code: 400});
+            return
+          }
           resolve(res.data);
         },
         fail: function (err) {
-          reject(err)
+          reject({msg: err, code: 400})
         }
       })
     })
@@ -91,22 +114,25 @@ Page({
       title: data.tags[0],
       message: '确定加入吗？',
     })
-      .then(() => {
-        // on confirm
-        // Toast.success("加入完成")
-        wx.getUserProfile({
-          desc: '获取头像用于展示', 
-          success: (res) => {
-            console.log(res.userInfo.avatarUrl)
-          },
-          fail: (err) => {
-            console.log(err);
+      .then(async () => {
+        const fd = {group_id: data.id, user: this.data.openid, img: "https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_1.JPG"}; 
+        try {
+          const resp = await this.joinSportGroupApi(fd);
+          if (resp.code == 1006) {
+            Toast.fail(resp.msg)
+            return;
           }
-        })
+          if (resp.code != 1000) {
+            Toast.fail(resp.code);
+            return;
+          }
+          this.getAddrDistance();
+          Toast.success("加入成功");
+        } catch (error) {
+          Toast.fail(error.code);
+        }
       })
       .catch(() => {
-        // on cancel
-        Toast.success("已取消")
       });
   },
   // 打开地图
@@ -324,7 +350,7 @@ Page({
     }
     this.getSiteSelection();
   },
-  // 隐私协议， 1：统一，2：拒绝
+  // 隐私协议， 1：同意，2：拒绝
   iAacceptPrivacy(e) {
     const res = e.currentTarget.dataset.item;
     if (res == 1) {
@@ -753,11 +779,20 @@ Page({
       const newUL = await Promise.all(
         sliceDataList.map(async (item) => {
           const online = await this.getGroupUserCountApi(item.id);
-          if (online.code && online.code != 1000) {
+          if (online.code != 1000) {
             Toast.fail("失败: ", online.code);
             return;
           }
           item.online = online.data;
+          const group_users = await this.getGroupUsersApi(item.id);
+          if (group_users.code != 1000) {
+            Toast.fail("失败: ", online.code);
+            return;
+          }
+          if (group_users.data.length > 0 ) {
+            item.join_user_count = group_users.data.length;
+          }
+          item.join_users = group_users.data.slice(-7);
           return item;
         })
       );
