@@ -747,6 +747,7 @@ Page({
         },
         fail: locErr => {
           Notify({ type: 'danger', message: '无法获取定位', duration: 0 });
+          console.log(locErr);
           wx.stopPullDownRefresh();
           // wx.hideLoading();
           Toast.clear();

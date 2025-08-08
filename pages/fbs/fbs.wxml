@@ -40,7 +40,7 @@
     <block wx:for="{{ basketSquareFilterData }}" wx:key="index" wx:for-item="item">
       <view class="card-1-1">
         <view class="online-status">
-          <van-icon color="{{ item.online > 0 ? '#ff6161': '#909090' }}" name="fire" />
+          <van-icon color="{{ item.join_user_count > 0 ? '#ff6161': '#909090' }}" name="fire" />
         </view>
         <!-- <view class="img">
           <van-image round fit="cover" width="150" height="150" src="https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/sport-3.png" />
