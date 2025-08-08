@@ -84,9 +84,35 @@
   height: 20rpx;
 }
 
-.box .card-1 .card-1-1 .img, .box .card-1 .card-1-1 .addr, .box .card-1 .card-1-1 .distance, .box .card-1 .card-1-1 .tags, .box .card-1 .card-1-1 .online {
+.box .card-1 .card-1-1 .img, .box .card-1 .card-1-1 .addr, .box .card-1 .card-1-1 .distance, .box .card-1 .card-1-1 .tags, .box .card-1 .card-1-1 .online, .box .card-1 .card-1-1 .group-status, .box .card-1 .card-1-1 .show-join-user {
   display: flex;
   justify-content: center;
+}
+
+.box .card-1 .card-1-1 .group-status {
+  gap: 16rpx;
+  padding: 10rpx;
+}
+
+.box .card-1 .card-1-1 .show-join-user {
+  justify-content: flex-start;
+}
+
+.box .card-1 .card-1-1 .show-join-user .o-user {
+  width: 49rpx;
+  height: 49rpx;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  background: #6b6ed4;
+  border-radius: 58%;
+  color: #fff;
+  background-size: cover;
+  /* 等比例放大，覆盖元素 */
+  background-position: center;
+  /* 居中对齐 */
+  background-repeat: no-repeat;
+  /* 不平铺重复 */
 }
 
 .box .card-1 .card-1-1 .addr .t-f {
@@ -253,6 +279,12 @@
   position: relative;
   bottom: 3rpx;
   color: #ff6161;
+}
+
+.van-icon-2 {
+  font-size: 35rpx !important;
+  position: relative;
+  top: 4rpx;
 }
 
 .sports-list-box {

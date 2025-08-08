@@ -69,9 +69,29 @@
         width: 20rpx;
         height: 20rpx;
       }
-      .img,.addr,.distance,.tags, .online {
+      .img,.addr,.distance,.tags, .online, .group-status,.show-join-user {
         display: flex;
         justify-content: center;
+      }
+      .group-status {
+        gap: 16rpx;
+        padding: 10rpx;
+      }
+      .show-join-user {
+        justify-content: flex-start;
+        .o-user {
+          width: 49rpx;
+          height: 49rpx;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          background: #6b6ed4;
+          border-radius: 58%;
+          color: #fff;
+          background-size: cover;                  /* 等比例放大，覆盖元素 */
+          background-position: center;             /* 居中对齐 */
+          background-repeat: no-repeat;             /* 不平铺重复 */
+        }
       }
       .addr {
         .t-f {
@@ -220,6 +240,11 @@
   position: relative;
   bottom: 3rpx;
   color: #ff6161;
+}
+.van-icon-2 {
+  font-size: 35rpx!important;
+  position: relative;
+  top: 4rpx;
 }
 .sports-list-box {
   display: flex;

@@ -58,7 +58,72 @@ Page({
     ],
     checkListData: [],
     basketSquareFilterData: [],
-    basketSquareData: []
+    basketSquareData: [],
+    join_users: [
+      {user: 'user_aasdasdasdsad', img: 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_1.JPG'},
+      {user: 'user_2sdjasdsadasd', img: 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_2.JPG'},
+      {user: 'user_2sdjasdsadasd', img: 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_3.JPG'},
+      {user: 'user_2sdjasdsadasd', img: 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_4.JPG'},
+      {user: 'user_2sdjasdsadasd', img: 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_5.JPG'},
+    ],
+  },
+
+  // 加入组局api
+  joinSportGroupApi() {
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: `${BASE_URL}/user-join-group?uid=${this.data.openid}`,
+        timeout: 10000,
+        method: "POST",
+        success: function (res) {
+          resolve(res.data);
+        },
+        fail: function (err) {
+          reject(err)
+        }
+      })
+    })
+  },
+  // 加入组局弹窗确认
+  joinSportGroup(e) {
+    const data = e.currentTarget.dataset.item;
+    Dialog.confirm({
+      title: data.tags[0],
+      message: '确定加入吗？',
+    })
+      .then(() => {
+        // on confirm
+        // Toast.success("加入完成")
+        wx.getUserProfile({
+          desc: '获取头像用于展示', 
+          success: (res) => {
+            console.log(res.userInfo.avatarUrl)
+          },
+          fail: (err) => {
+            console.log(err);
+          }
+        })
+      })
+      .catch(() => {
+        // on cancel
+        Toast.success("已取消")
+      });
+  },
+  // 打开地图
+  openMapAppDetailed(e) {
+    const data = e.currentTarget.dataset.item;
+    wx.openLocation({
+      latitude: Number(data.lat),  // 纬度
+      longitude: Number(data.lng), // 经度
+      address: data.addr+data.tags[0], // 地址（可选）
+      scale: 18,
+      success(res) {
+        console.log('打开成功');
+      },
+      fail(err) {
+        console.log('打开失败', err);
+      }
+    });
   },
   getAllSportsApi() {
     return new Promise((resolve, reject) => {
