@@ -11,6 +11,8 @@ import Dialog from '@vant/weapp/dialog/dialog';
 const md5 = require('../../utils/md5');
 Page({
   data: {
+    joinGroup: "⚡加入组局",
+    existsGroup: "⚡退出组局",
     isShowMsgBtn: false,
     sender_id: '',
     user_id: '',
@@ -91,33 +93,41 @@ Page({
     return new Promise((resolve, reject) => {
       wx.request({
         url: `${BASE_URL}/user-join-group?uid=${this.data.openid}`,
-        timeout: 10000,
+        timeout: 5000,
         method: "POST",
         data: data,
         success: function (res) {
+          console.log(res);
           if (res.statusCode != 200) {
-            reject({msg: '网络错误', code: 400});
+            reject({msg: '网络错误', code: 401});
             return
           }
           resolve(res.data);
         },
         fail: function (err) {
-          reject({msg: err, code: 400})
+          console.log(err);
+          reject({msg: err, code: 402})
         }
       })
     })
   },
-  // 加入组局弹窗确认
+  // 加入组局弹窗确认, 1:退出组局,2加入组局
   joinSportGroup(e) {
     const data = e.currentTarget.dataset.item;
     Dialog.confirm({
       title: data.tags[0],
-      message: '确定加入吗？',
+      message: data.hasJoined ? '确定退出吗？' : '确定加入吗？',
     })
       .then(async () => {
-        const fd = {group_id: data.id, user: this.data.openid, img: "https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_1.JPG"}; 
+        const fd = {
+          group_id: data.id, 
+          user: this.data.openid, 
+          img: "https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_1.JPG",
+          oi: data.hasJoined ? "1" : "2"
+        };
         try {
           const resp = await this.joinSportGroupApi(fd);
+          console.log(resp);
           if (resp.code == 1006) {
             Toast.fail(resp.msg)
             return;
@@ -797,8 +807,18 @@ Page({
           return item;
         })
       );
+      const processedList = newUL.map(item => {
+        const hasJoined = (item.join_users || []).some(user =>
+          user.group_id === item.id && user.user === this.data.openid
+        );
+        return {
+          ...item,       // 保留原来的字段
+          hasJoined      // 新增字段
+        };
+      });
+
       this.setData({
-        basketSquareFilterData: newUL,
+        basketSquareFilterData: processedList,
         isEmpty: false,
         isInput: false,
       });

@@ -56,13 +56,19 @@
           <van-tag round type="success"><van-icon name="friends" /> {{ item.online }}人在线</van-tag>
         </view>
         <view class="group-status">
-          <van-button round size="mini" type="warning" custom-style="width:170rpx" data-item="{{ item }}" bind:tap="joinSportGroup">⚡加入组局({{item.join_user_count}})</van-button>
-          <van-button round size="mini" custom-style="width:80rpx" data-item="{{ item }}" bindtap="chatRoot"><van-icon custom-class="van-icon-2" name="https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/join_chat_room.svg" /></van-button>
+          <!-- 组局 -->
+          <van-button round size="mini" type="{{ item.hasJoined ? 'info' : 'warning' }}" custom-style="width:170rpx" data-item="{{ item }}" bind:tap="joinSportGroup">
+            {{item.hasJoined ? '⚡退出组局' : '⚡加入组局'}}({{item.join_user_count}})
+          </van-button>
+          <!-- 聊天室按钮 -->
+          <van-button round size="mini" custom-style="width:80rpx" data-item="{{ item }}" bindtap="chatRoot">
+            <van-icon custom-class="van-icon-2" name="https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/join_chat_room.svg" />
+          </van-button>
         </view>
-        <!-- 假得用户头像 -->
+        <!-- 加入组局的用户头像 -->
         <view class="show-join-user" wx:if="{{ item.join_user_count > 0 }}">
-          <block wx:for="{{ item.join_users }}" wx:key="index" wx:for-item="item" wx:for-index="idx">
-            <view class="o-user" style="background-image: url({{item.img}});margin-right:-10px;">
+          <block wx:for="{{ item.join_users }}" wx:key="index" wx:for-item="item2" wx:for-index="idx">
+            <view class="o-user" style="background-image: url({{item2.img}});margin-right:-10px;">
               <text class="i-user"></text>
             </view>
           </block>
