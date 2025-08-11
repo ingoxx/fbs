@@ -4,6 +4,7 @@ const app = getApp();
 var QQMapWX = require('../../lib/qqmap-wx-jssdk.js');
 const { WSS_URL } = require('../../utils/http');
 const { BASE_URL } = require('../../utils/http');
+const { IMG_URL } = require('../../utils/http');
 import Notify from '@vant/weapp/notify/notify';
 import Toast from '@vant/weapp/toast/toast';
 const { generateUUID } = require('../../utils/util'); 
@@ -91,14 +92,15 @@ Page({
     try {
       const reqData = {file: avatarUrl, name: this.data.openid+".png"}
       const resp = await this.uploadFileApi(reqData);
-      if (resp.code != 1000) {
-        Toast.fail(resp.code);
+      
+      const fr = JSON.parse(resp);
+      console.log(fr);
+      if (fr.code != 1000) {
+        console.log(1111);
+        Toast.fail(fr.code);
       }
-      this.setData({
-        avatarUrl: `${BASE_URL}/static/${this.data.openid}.png`,
-      });
-    } catch (error) {
-      Toast.fail(error.code);
+    } catch (err) {
+      Toast.fail(err.code);
     }
   },
   // 文件上传api
