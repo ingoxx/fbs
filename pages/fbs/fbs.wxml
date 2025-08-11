@@ -15,6 +15,22 @@
       <van-icon name="location" custom-class="van-icon-l"/> <text class="coordinate" bind:tap="openMapApp">您现在的位置: 【{{ addr }}】</text> 
     </block>
   </view>
+  <!-- 用户个人信息 -->
+  <view class="userinfo">
+    <view class="user-img">
+      <button class="img-btn" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+        <image class="img-img" src="{{avatarUrl}}"></image>
+      </button>
+    </view>
+    <view class="user-name">
+      <view class="name">
+        <text>{{ openid }}</text>
+      </view>
+      <view class="time">
+        <view class="time-status"></view><text class="online">在线</text>
+      </view>
+    </view>
+  </view>
   <view class="search">
     <view class="s-p">
       <input class="s-p-1" disabled="{{ isInput }}" value="{{ inputValue }}" bindinput="getVal" placeholder="输入场地搜索"/>
@@ -38,55 +54,70 @@
   </view>
   <view class="card-1">
     <block wx:for="{{ basketSquareFilterData }}" wx:key="index" wx:for-item="item">
-      <view class="card-1-1">
-        <view class="online-status">
-          <van-icon color="{{ item.join_user_count > 0 ? '#ff6161': '#909090' }}" name="fire" />
-        </view>
-        <!-- <view class="img">
-          <van-image round fit="cover" width="150" height="150" src="https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/sport-3.png" />
-        </view> -->
-        <view class="addr" data-item="{{ item }}" bind:tap="openMapAppDetailed">
-          <text class="t-f">{{ item.addr }}</text>
-        </view>
-        <view class="distance">
-          <van-icon name="location" custom-class="van-icon-l"/> <text class="t-f">距您{{ item.distance }}公里</text>
-        </view>
-        <view class="online">
-          <!-- <van-tag round type="success" custom-class="{{ item.online == 0 ? 'van-tag-c': '' }}"><van-icon name="friends" /> {{ item.online }}人在线</van-tag> -->
-          <van-tag round type="success"><van-icon name="friends" /> {{ item.online }}人在线</van-tag>
-        </view>
-        <view class="group-status">
-          <!-- 组局 -->
-          <van-button round size="mini" type="{{ item.hasJoined ? 'info' : 'warning' }}" custom-style="width:170rpx" data-item="{{ item }}" bind:tap="joinSportGroup">
-            {{item.hasJoined ? '⚡退出组局' : '⚡加入组局'}}({{item.join_user_count}})
-          </van-button>
-          <!-- 聊天室按钮 -->
-          <van-button round size="mini" custom-style="width:80rpx" data-item="{{ item }}" bindtap="chatRoot">
-            <van-icon custom-class="van-icon-2" name="https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/join_chat_room.svg" />
-          </van-button>
-        </view>
-        <!-- 加入组局的用户头像 -->
-        <view class="show-join-user" wx:if="{{ item.join_user_count > 0 }}">
-          <block wx:for="{{ item.join_users }}" wx:key="index" wx:for-item="item2" wx:for-index="idx">
-            <view class="o-user" style="background-image: url({{item2.img}});margin-right:-10px;">
-              <text class="i-user"></text>
-            </view>
-          </block>
-        </view>
-        <view class="tags">
-          <block wx:for="{{ item.tags }}" wx:key="index" wx:for-item="item2">
-            <block wx:for="{{ all_sport_list }}" wx:key="index3" wx:for-item="item3">
-              <van-tag type="primary" wx:if="{{ defaultSportKey == item3.key }}">
-              {{ item3.icon }}{{ item2 }}
-            </van-tag>
+      <van-transition show="{{ isUse }}" custom-class="block">
+        <view class="card-1-1">
+          <view class="online-status">
+            <van-icon color="{{ item.join_user_count > 0 ? '#ff6161': '#909090' }}" name="fire" />
+          </view>
+          <view class="addr" data-item="{{ item }}" bind:tap="openMapAppDetailed">
+            <text class="t-f">{{ item.addr }}</text>
+          </view>
+          <view class="distance">
+            <van-icon name="location" custom-class="van-icon-l"/> <text class="t-f">距您{{ item.distance }}公里</text>
+          </view>
+          <view class="online">
+            <van-tag round type="success" custom-class="{{ item.online == 0 ? 'van-tag-c': '' }}"><van-icon name="friends" /> {{ item.online }}人在线</van-tag>
+            <!-- <van-tag round type="success"><van-icon name="friends" /> {{ item.online }}人在线</van-tag> -->
+          </view>
+          <!-- 用户对当前球场的评价 -->
+          <view class="evaluate" bind:tap="isShowEvaBoard">
+            <swiper autoplay="true" interval="3000" circular style="height: 60rpx;">
+              <swiper-item wx:for="{{evaluate_list}}" wx:key="index" wx:for-item="item2">
+                <view class="review-card">
+                  <view class="o-user" style="background-image: url({{item2.img}});margin-right:-7px;">
+                    <text class="i-user"></text>
+                  </view>
+                  <view class="user-evaluate">
+                    <text>{{item2.content}}</text>
+                  </view>
+                </view>
+              </swiper-item>
+            </swiper>
+          </view>
+          <view class="group-status">
+            <!-- 组局 -->
+            <van-button round size="mini" type="{{ item.hasJoined ? 'info' : 'warning' }}" custom-style="width:170rpx" data-item="{{ item }}" bind:tap="joinSportGroup">
+              {{item.hasJoined ? '⚡退出组局' : '⚡加入组局'}}({{item.join_user_count}})
+            </van-button>
+            <!-- 聊天室按钮 -->
+            <van-button round size="mini" custom-style="width:80rpx" data-item="{{ item }}" bindtap="chatRoot">
+              <van-icon custom-class="van-icon-2" name="https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/join_chat_room.svg" />
+            </van-button>
+          </view>
+          <!-- 加入组局的用户头像 -->
+          <view class="show-join-user" wx:if="{{ item.join_user_count > 0 }}">
+            <block wx:for="{{ item.join_users }}" wx:key="index" wx:for-item="item2" wx:for-index="idx">
+              <view class="o-user" style="background-image: url({{item2.img}});margin-right:-10px;">
+                <text class="i-user"></text>
+              </view>
             </block>
-          </block>
+          </view>
+          <view class="tags">
+            <block wx:for="{{ item.tags }}" wx:key="index" wx:for-item="item2">
+              <block wx:for="{{ all_sport_list }}" wx:key="index3" wx:for-item="item3">
+                <van-tag type="primary" wx:if="{{ defaultSportKey == item3.key }}">
+                {{ item3.icon }}{{ item2 }}
+              </van-tag>
+              </block>
+            </block>
+          </view>
         </view>
-      </view>
+      </van-transition>
     </block>
     <block wx:if="{{ isEmpty }}">
       <van-empty description="{{ isUse ? useNotice: '请先同意用户隐私协议' }}"></van-empty>
     </block>
+  
   </view>
   <!-- 客服 -->
   <view class="contact-us">
@@ -109,6 +140,16 @@
 </view>
 <!-- 一些第三放组件或者自定义的组件 -->
 <view>
+  <!-- 留言框 -->
+  <van-popup
+    wx:if="{{ showEvaBoard }}"
+    show="{{ showEvaBoard }}"
+    round
+    custom-style="height: 50%;width: 80%;"
+    bind:close="onCloseEvaBoard"
+  >
+    <eva-board></eva-board>
+  </van-popup>
   <!-- 聊天框 -->
   <van-popup
     wx:if="{{ showChatRoom }}"

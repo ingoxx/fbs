@@ -10,6 +10,7 @@
     height: 180rpx;
     background: #7880dd;
     padding: 0 20rpx;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.23);
     .coordinate {
       color: #ffffff;
       font-size: 25rpx;
@@ -19,18 +20,87 @@
       font-weight: 600;
     }
   }
+  .userinfo {
+    display: flex;
+    height: 80rpx;
+    align-items: center;
+    margin: 0 25rpx;
+    gap: 19rpx;
+    margin-top: 31rpx;
+    background: #7880dd;
+    border-radius: 10rpx;
+    padding: 10rpx;
+    .user-img {
+      .img-btn {
+        height: 80rpx;
+        width: 80rpx;
+        padding: 0;
+        border: none;
+        background: none;
+        .img-img {
+          display: block;
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+    .user-name {
+      font-size: 24rpx;
+      color: #ffff;
+      width: 160rpx;
+      .name {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      .time {
+        font-size: 21rpx;
+        .online {
+          color: #b9b9b9;
+        }
+      }
+      .time-status {
+        width: 21rpx;
+        height: 21rpx;
+        border-radius: 50%;
+        // background: #12ba82;
+        display: inline-block;
+        position: relative;
+        top: 6rpx;
+        margin-right: 7rpx;
+        /* 渐变背景 */
+        background: linear-gradient(90deg, #13c419, #919191);
+        background-size: 200% 200%; /* 放大背景，便于移动 */
+        /* 循环动画 */
+        animation: gradientMove 2s ease-in-out infinite;
+      }
+      /* 背景渐变动画关键帧 */
+      @keyframes gradientMove {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+    }
+  }
   .search {
     margin: 0 25rpx;
     margin-top: 30rpx;
     margin-bottom: 17rpx;
     background: #ffffff;
     border-radius: 16rpx;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.23);
     .se {
       padding: 0 0;
     }
     .s-p {
       width: 80%;
-      margin: 19rpx auto;
+      margin: 22rpx auto;
       padding-top: 20rpx;
       .s-p-1 {
         // flex: 1;
@@ -53,7 +123,6 @@
     justify-content: center;
     justify-items: center;
     flex-wrap: wrap;
-    // flex: 1;
     overflow-y: auto;
     box-sizing: border-box;
     .card-1-1 {
@@ -63,6 +132,7 @@
       border-radius: 10rpx;
       display: inline-grid;
       padding: 10rpx;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.23);
       .online-status {
         position: relative;
         bottom: 14rpx;
@@ -104,6 +174,37 @@
         .t-f {
           font-size: 20rpx;
           color: rgb(61, 61, 61);
+        }
+      }
+      .evaluate {
+        background: #e8e8e8;
+        border-radius: 10rpx;
+        margin: 10rpx 0;
+        .review-card {
+          display: flex;
+          gap: 31rpx;
+          align-items: center;
+          padding-top: 7rpx;
+          .o-user {
+            width: 49rpx;
+            height: 49rpx;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            background: #6b6ed4;
+            border-radius: 58%;
+            color: #fff;
+            background-size: cover;                  /* 等比例放大，覆盖元素 */
+            background-position: center;             /* 居中对齐 */
+            background-repeat: no-repeat;             /* 不平铺重复 */
+          }
+          .user-evaluate {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            font-size: 21rpx;
+            color: #333;
+          }
         }
       }
       .tags {

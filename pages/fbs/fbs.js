@@ -11,6 +11,8 @@ import Dialog from '@vant/weapp/dialog/dialog';
 const md5 = require('../../utils/md5');
 Page({
   data: {
+    showEvaBoard: false,
+    avatarUrl: "https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0",
     joinGroup: "⚡加入组局",
     existsGroup: "⚡退出组局",
     isShowMsgBtn: false,
@@ -61,13 +63,64 @@ Page({
     checkListData: [],
     basketSquareFilterData: [],
     basketSquareData: [],
-    join_users: [
-      // {user: 'user_aasdasdasdsad', img: 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_1.JPG'},
-      // {user: 'user_2sdjasdsadasd', img: 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_2.JPG'},
-      // {user: 'user_2sdjasdsadasd', img: 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_3.JPG'},
-      // {user: 'user_2sdjasdsadasd', img: 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_4.JPG'},
-      // {user: 'user_2sdjasdsadasd', img: 'https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_5.JPG'},
+    join_users: [],
+    evaluate_list: [
+      {groud_id: "aaa-bbb-ccc-ddd-eee", user: "aaa", content: "这里打球得掉层皮才能走", "img": "https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_1.JPG"},
+      {groud_id: "aaa-bbb-ccc-ddd-eee", user: "bbb", content: "打球5分钟，吵架10分钟", "img": "https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_3.JPG"},
+      {groud_id: "aaa-bbb-ccc-ddd-eee", user: "ccc", content: "打架为啥带个球？", "img": "https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_4.JPG"},
+      {groud_id: "aaa-bbb-ccc-ddd-eee", user: "ccc", content: "最文明的对局", "img": "https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0"},
     ],
+  },
+  // 场地评价弹窗
+  onCloseEvaBoard() {
+    this.setData({
+      showEvaBoard: false,
+    });
+  },
+  isShowEvaBoard() {
+    this.setData({
+      showEvaBoard: true,
+    });
+  },
+  // 头像选择
+  async onChooseAvatar(e) {
+    const { avatarUrl } = e.detail 
+    this.setData({
+      avatarUrl,
+    })
+    try {
+      const reqData = {file: avatarUrl, name: this.data.openid+".png"}
+      const resp = await this.uploadFileApi(reqData);
+      if (resp.code != 1000) {
+        Toast.fail(resp.code);
+      }
+      this.setData({
+        avatarUrl: `${BASE_URL}/static/${this.data.openid}.png`,
+      });
+    } catch (error) {
+      Toast.fail(error.code);
+    }
+  },
+  // 文件上传api
+  uploadFileApi(data) {
+    return new Promise((resolve, reject) => {
+      wx.uploadFile({
+        url: `${BASE_URL}/wx-upload?uid=${this.data.openid}&filename=${data.name}`,
+        timeout: 5000,
+        filePath: data.file,
+        name: 'file',
+        success: function (res) {
+          if (res.statusCode != 200) {
+            reject({msg: '网络错误', code: 401});
+            return
+          }
+          resolve(res.data);
+        },
+        fail: function (err) {
+          reject({msg: err, code: 402})
+        }
+      })
+    })
   },
   // 获取群组人数
   getGroupUsersApi(gid) {
@@ -97,7 +150,6 @@ Page({
         method: "POST",
         data: data,
         success: function (res) {
-          console.log(res);
           if (res.statusCode != 200) {
             reject({msg: '网络错误', code: 401});
             return
@@ -105,7 +157,6 @@ Page({
           resolve(res.data);
         },
         fail: function (err) {
-          console.log(err);
           reject({msg: err, code: 402})
         }
       })

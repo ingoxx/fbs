@@ -21,6 +21,7 @@
     "van-checkbox": "/miniprogram_npm/@vant/weapp/checkbox/index",
     "van-checkbox-group": "/miniprogram_npm/@vant/weapp/checkbox-group/index",
     "van-action-sheet": "/miniprogram_npm/@vant/weapp/action-sheet/index",
-    "chat-room": "/miniprogram_npm/chat/chat"
+    "chat-room": "/miniprogram_npm/chat/chat",
+    "eva-board": "/miniprogram_npm/cb/cb"
   }
 }
