@@ -152,15 +152,13 @@
         .o-user {
           width: 49rpx;
           height: 49rpx;
-          overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis;
           background: #6b6ed4;
-          border-radius: 58%;
+          border-radius: 50%;
+          overflow: hidden;
+          flex-shrink: 0;
           color: #fff;
-          background-size: cover;                  /* 等比例放大，覆盖元素 */
-          background-position: center;             /* 居中对齐 */
-          background-repeat: no-repeat;             /* 不平铺重复 */
         }
       }
       .addr {
@@ -191,12 +189,13 @@
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
-            background: #6b6ed4;
-            border-radius: 58%;
+            // background: #6b6ed4;
+            border-radius: 50%;
+            flex-shrink: 0;
             color: #fff;
-            background-size: cover;                  /* 等比例放大，覆盖元素 */
-            background-position: center;             /* 居中对齐 */
-            background-repeat: no-repeat;             /* 不平铺重复 */
+            // background-size: cover;                  /* 等比例放大，覆盖元素 */
+            // background-position: center;             /* 居中对齐 */
+            // background-repeat: no-repeat;             /* 不平铺重复 */
           }
           .user-evaluate {
             overflow: hidden;
@@ -355,4 +354,12 @@
   gap: 37rpx;
   flex-wrap: wrap;
   padding: 20rpx 20rpx;
+}
+.van-img-1 {
+  width: 80rpx;
+  height: 80rpx;
+}
+.van-img-2 {
+  width: 49rpx;
+  height: 49rpx;
 }

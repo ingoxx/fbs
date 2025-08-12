@@ -1,13 +1,8 @@
-const formatTime = date => {
-  const year = date.getFullYear()
-  const month = date.getMonth() + 1
-  const day = date.getDate()
-  const hour = date.getHours()
-  const minute = date.getMinutes()
-  const second = date.getSeconds()
-
-  return `${[year, month, day].map(formatNumber).join('/')} ${[hour, minute, second].map(formatNumber).join(':')}`
-}
+const getCurrentTime = (() => {
+  const now = new Date();
+  const time = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`
+  return time;
+})
 const generateUUID = (() => {
   let s = [];
   let hexDigits = "0123456789abcdef";
@@ -27,7 +22,7 @@ const formatNumber = n => {
 }
 
 module.exports = {
-  formatTime,
+  getCurrentTime,
   generateUUID
 }
 

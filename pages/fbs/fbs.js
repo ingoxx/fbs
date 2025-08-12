@@ -12,8 +12,9 @@ import Dialog from '@vant/weapp/dialog/dialog';
 const md5 = require('../../utils/md5');
 Page({
   data: {
+    userid: "",
     showEvaBoard: false,
-    avatarUrl: "https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0",
+    avatarUrl: "",
     joinGroup: "⚡加入组局",
     existsGroup: "⚡退出组局",
     isShowMsgBtn: false,
@@ -66,11 +67,37 @@ Page({
     basketSquareData: [],
     join_users: [],
     evaluate_list: [
-      {groud_id: "aaa-bbb-ccc-ddd-eee", user: "aaa", content: "这里打球得掉层皮才能走", "img": "https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_1.JPG"},
-      {groud_id: "aaa-bbb-ccc-ddd-eee", user: "bbb", content: "打球5分钟，吵架10分钟", "img": "https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_3.JPG"},
-      {groud_id: "aaa-bbb-ccc-ddd-eee", user: "ccc", content: "打架为啥带个球？", "img": "https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_4.JPG"},
-      {groud_id: "aaa-bbb-ccc-ddd-eee", user: "ccc", content: "最文明的对局", "img": "https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0"},
+      {group_id: "aaa-bbb-ccc-ddd-eee", user: "aaa", evaluate: "这里打球得掉层皮才能走", img: "https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_1.JPG"},
+      {group_id: "aaa-bbb-ccc-ddd-eee", user: "bbb", evaluate: "打球5分钟，吵架10分钟", img: "https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_3.JPG"},
+      {group_id: "aaa-bbb-ccc-ddd-eee", user: "ccc", evaluate: "打架为啥带个球？", img: "https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_4.JPG"},
+      {group_id: "aaa-bbb-ccc-ddd-eee", user: "ccc", evaluate: "热身运动一定要做足，篮底内线肉搏才能赢", img: "https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0"}
     ],
+    info_data: {},
+  },
+  // 生成随机的头像
+  generateImg(min, max) {
+    const num = Math.floor(Math.random() * (max - min + 1)) + min;
+    const img_url = `${IMG_URL}/${num}.png`;
+    return img_url;
+  },
+  // 获取某个场地的所有用户的评价Api
+  getAllEvaluateApi(gid) {
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: `${BASE_URL}/get-user-reviews?uid=${this.data.openid}&gid=${gid}&key=${this.data.defaultSportKey}`,
+        timeout: 10000,
+        success: (res) => {
+          if (res.statusCode == 200) {
+            resolve(res.data);
+          } else {
+            reject({msg: '网络错误', code: 400, path: 'get-user-reviews'});
+          }
+        },
+        fail: (err) => {
+          reject({msg: '网络错误', code: 401, path: 'get-user-reviews'});
+        }
+      })
+    });
   },
   // 场地评价弹窗
   onCloseEvaBoard() {
@@ -78,9 +105,18 @@ Page({
       showEvaBoard: false,
     });
   },
-  isShowEvaBoard() {
+  isShowEvaBoard(e) {
+    const data = e.currentTarget.dataset.item;
+    const fd = {
+      baseUrl: BASE_URL,
+      openid: this.data.openid,
+      img: this.data.avatarUrl,
+      group_id: data.id,
+    }
     this.setData({
       showEvaBoard: true,
+      evaluate_list: data.user_reviews,
+      info_data: fd
     });
   },
   // 头像选择
@@ -96,7 +132,6 @@ Page({
       const fr = JSON.parse(resp);
       console.log(fr);
       if (fr.code != 1000) {
-        console.log(1111);
         Toast.fail(fr.code);
       }
     } catch (err) {
@@ -517,7 +552,7 @@ Page({
   },
   async getBasketSquareFilter() {
     const newBsf = this.data.basketSquareFilter;
-    const updatedBsf = await Promise.all(
+    const updatadBsf = await Promise.all(
       newBsf.map(async (item) => {
         // const res = await app.login();
         if (item.customize == 3) {
@@ -529,7 +564,7 @@ Page({
       })
     );
     this.setData({
-      basketSquareFilter: updatedBsf,
+      basketSquareFilter: updatadBsf,
     })
   },
   refuseAddAddrReqApi(id, city) {
@@ -831,13 +866,13 @@ Page({
         basketSquareData: JSON.parse(allData.data),
       });
       const newList = this.data.basketSquareData;
-      const updatedList = newList.map((item) => {
+      const updatadList = newList.map((item) => {
           const res = this.getDistance(this.data.lat, this.data.lng, item.lat, item.lng);
           item.distance = res/1000;
           item.distance = item.distance.toFixed(1);
           return item;
       });
-      const disSortList = updatedList.sort((a, b) => a.distance - b.distance);
+      const disSortList = updatadList.sort((a, b) => a.distance - b.distance);
       const sliceDataList = disSortList.slice(0, this.data.showDataNumber);
       // 等待所有异步任务都完成
       const newUL = await Promise.all(
@@ -850,13 +885,23 @@ Page({
           item.online = online.data;
           const group_users = await this.getGroupUsersApi(item.id);
           if (group_users.code != 1000) {
-            Toast.fail("失败: ", online.code);
+            Toast.fail("group_users: ", online.code);
             return;
           }
           if (group_users.data.length > 0 ) {
             item.join_user_count = group_users.data.length;
           }
-          item.join_users = group_users.data.slice(-7);
+          item.join_users = group_users.data.slice(-this.data.showDataNumber);
+
+          const eva_data = await this.getAllEvaluateApi(item.id);
+          if (eva_data.code != 1000) {
+            Toast.fail("eva_data: ", eva_data.code);
+            return;
+          }
+          
+          item.user_reviews = eva_data.data;
+          item.user_reviews_count = eva_data.data.length;
+
           return item;
         })
       );
@@ -947,8 +992,13 @@ Page({
     let that = this;
     app.login().then(resp => {
       const openid = resp.openid || resp.data.data;
+      const img = resp.img || resp.data.data;
+      console.log("openid >>> ", openid);
+      console.log("img >>> ", img);
       that.setData({
-        openid: openid,
+        openid: openid.openid,
+        avatarUrl: img.img,
+        userid: "user_"+md5(openid),
       });
       that.isShowPrivacy();
     }).catch(err => {

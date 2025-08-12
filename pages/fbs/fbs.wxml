@@ -19,12 +19,13 @@
   <view class="userinfo">
     <view class="user-img">
       <button class="img-btn" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-        <image class="img-img" src="{{avatarUrl}}"></image>
+        <!-- <image class="img-img" src="{{avatarUrl}}"></image> -->
+        <van-image custom-class="van-img-1" src="{{avatarUrl}}" />
       </button>
     </view>
     <view class="user-name">
       <view class="name">
-        <text>{{ openid }}</text>
+        <text>{{ userid }}</text>
       </view>
       <view class="time">
         <view class="time-status"></view><text class="online">在线</text>
@@ -70,15 +71,17 @@
             <!-- <van-tag round type="success"><van-icon name="friends" /> {{ item.online }}人在线</van-tag> -->
           </view>
           <!-- 用户对当前球场的评价 -->
-          <view class="evaluate" bind:tap="isShowEvaBoard">
-            <swiper autoplay="true" interval="3000" circular style="height: 60rpx;">
-              <swiper-item wx:for="{{evaluate_list}}" wx:key="index" wx:for-item="item2">
+          <view class="evaluate" data-item="{{ item }}" bind:tap="isShowEvaBoard">
+            <swiper autoplay="true" interval="36000000" circular style="height: 60rpx;">
+              <swiper-item wx:for="{{item.user_reviews}}" wx:key="index" wx:for-item="item2">
                 <view class="review-card">
-                  <view class="o-user" style="background-image: url({{item2.img}});margin-right:-7px;">
-                    <text class="i-user"></text>
+                  <view class="o-user" style="margin-right:-7px;">
+                    <van-image width="100%"
+                    round
+                    height="100%"  fit="cover" src="{{item2.img}}" />
                   </view>
                   <view class="user-evaluate">
-                    <text>{{item2.content}}</text>
+                    <text>{{item2.evaluate}}</text>
                   </view>
                 </view>
               </swiper-item>
@@ -148,7 +151,7 @@
     custom-style="height: 50%;width: 80%;"
     bind:close="onCloseEvaBoard"
   >
-    <eva-board></eva-board>
+    <eva-board evaluate_list="{{evaluate_list}}" info_data="{{ info_data }}"></eva-board>
   </van-popup>
   <!-- 聊天框 -->
   <van-popup
