@@ -72,7 +72,7 @@
           </view>
           <!-- 用户对当前球场的评价 -->
           <view class="evaluate" data-item="{{ item }}" bind:tap="isShowEvaBoard">
-            <swiper autoplay="true" interval="36000000" circular style="height: 60rpx;">
+            <swiper autoplay="true" interval="5000" circular style="height: 60rpx;">
               <swiper-item wx:for="{{item.user_reviews}}" wx:key="index" wx:for-item="item2">
                 <view class="review-card">
                   <view class="o-user" style="margin-right:-7px;">
@@ -100,8 +100,11 @@
           <!-- 加入组局的用户头像 -->
           <view class="show-join-user" wx:if="{{ item.join_user_count > 0 }}">
             <block wx:for="{{ item.join_users }}" wx:key="index" wx:for-item="item2" wx:for-index="idx">
-              <view class="o-user" style="background-image: url({{item2.img}});margin-right:-10px;">
-                <text class="i-user"></text>
+              <view class="o-user" style="margin-right:-10px;">
+                <!-- <text class="i-user"></text> -->
+                <van-image width="100%"
+                    round
+                    height="100%"  fit="cover" src="{{item2.img}}" />
               </view>
             </block>
           </view>

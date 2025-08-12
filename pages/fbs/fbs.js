@@ -213,9 +213,9 @@ Page({
           img: this.data.avatarUrl,
           oi: data.hasJoined ? "1" : "2"
         };
+        console.log("fd >>> ", fd);
         try {
           const resp = await this.joinSportGroupApi(fd);
-          console.log(resp);
           if (resp.code == 1006) {
             Toast.fail(resp.msg)
             return;
@@ -991,14 +991,10 @@ Page({
   getOpenid() {
     let that = this;
     app.login().then(resp => {
-      const openid = resp.openid || resp.data.other_data;
-      const img = resp.img || resp.data.other_data;
-      console.log("openid >>> ", openid);
-      console.log("img >>> ", img);
       that.setData({
-        openid: openid.openid,
-        avatarUrl: img.img,
-        userid: "user_"+md5(openid),
+        openid: resp.openid,
+        avatarUrl: resp.img,
+        userid: "user_"+md5(resp.openid),
       });
       that.isShowPrivacy();
     }).catch(err => {

@@ -7,7 +7,8 @@
     display: flex;
     justify-content: center; /* 水平居中 */
     align-items: center;     /* 垂直居中 */
-    height: 180rpx;
+    min-height: 100rpx;
+    flex-shrink: 0;
     background: #7880dd;
     padding: 0 20rpx;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.23);
@@ -189,7 +190,6 @@
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
-            // background: #6b6ed4;
             border-radius: 50%;
             flex-shrink: 0;
             color: #fff;
