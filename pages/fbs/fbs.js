@@ -210,7 +210,7 @@ Page({
         const fd = {
           group_id: data.id, 
           user: this.data.openid, 
-          img: "https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_1.JPG",
+          img: this.data.avatarUrl,
           oi: data.hasJoined ? "1" : "2"
         };
         try {
@@ -991,8 +991,8 @@ Page({
   getOpenid() {
     let that = this;
     app.login().then(resp => {
-      const openid = resp.openid || resp.data.data;
-      const img = resp.img || resp.data.data;
+      const openid = resp.openid || resp.data.other_data;
+      const img = resp.img || resp.data.other_data;
       console.log("openid >>> ", openid);
       console.log("img >>> ", img);
       that.setData({
