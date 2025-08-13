@@ -214,7 +214,6 @@ Page({
           img: this.data.avatarUrl,
           oi: data.hasJoined ? "1" : "2"
         };
-        console.log("fd >>> ", fd);
         try {
           const resp = await this.joinSportGroupApi(fd);
           if (resp.code == 1006) {
@@ -226,7 +225,7 @@ Page({
             return;
           }
           this.getAddrDistance();
-          Toast.success("加入成功");
+          Toast.success(data.hasJoined ? '已退出' : '已加入');
         } catch (error) {
           Toast.fail(error.code);
         }
@@ -896,7 +895,6 @@ Page({
 
           // 获取某个场地id的所有用户评价
           const eva_data = await this.getAllEvaluateApi(item.id);
-          console.log(eva_data);
           if (eva_data.code != 1000) {
             Toast.fail("eva_data: ", eva_data.code);
             return;
