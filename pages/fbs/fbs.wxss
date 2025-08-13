@@ -32,12 +32,13 @@
   display: flex;
   height: 80rpx;
   align-items: center;
-  margin: 0 25rpx;
+  margin: 10rpx 25rpx;
   gap: 19rpx;
   margin-top: 31rpx;
   background: #7880dd;
   border-radius: 10rpx;
   padding: 10rpx;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.23);
 }
 
 .box .userinfo .user-img .img-btn {
@@ -104,10 +105,8 @@
 }
 
 .box .search {
-  margin: 0 25rpx;
-  margin-top: 30rpx;
-  margin-bottom: 17rpx;
-  background: #ffffff;
+  margin: 15rpx 25rpx;
+  background: #f9f9f9;
   border-radius: 16rpx;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.23);
 }
@@ -139,19 +138,20 @@
 
 .box .card-1 {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  /* justify-content: center ; */
   justify-items: center;
-  flex-wrap: wrap;
+  /* flex-wrap: wrap ; */
   overflow-y: auto;
   box-sizing: border-box;
+  margin: 6rpx 25rpx;
 }
 
 .box .card-1 .card-1-1 {
-  width: 310rpx;
   margin: 14rpx 14rpx;
   background: #ffff;
   border-radius: 10rpx;
-  display: inline-grid;
+  /* display: inline-grid ; */
   padding: 10rpx;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.23);
 }
@@ -170,11 +170,13 @@
 
 .box .card-1 .card-1-1 .group-status {
   gap: 16rpx;
-  padding: 10rpx;
+  padding: 3rpx;
+  margin-top: 17rpx;
 }
 
 .box .card-1 .card-1-1 .show-join-user {
   justify-content: flex-start;
+  margin-top: 23rpx;
 }
 
 .box .card-1 .card-1-1 .show-join-user .o-user {
@@ -189,10 +191,38 @@
   color: #fff;
 }
 
-.box .card-1 .card-1-1 .addr .t-f {
+.box .card-1 .card-1-1 .show-join-user .join-users {
+  font-size: 20rpx;
+  color: #333;
+  margin-left: 31rpx;
+}
+
+.box .card-1 .card-1-1 .addr {
+  justify-content: left;
+  gap: 24rpx;
+  margin-top: 10rpx;
+  padding: 0 5rpx;
+}
+
+.box .card-1 .card-1-1 .addr .sport-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 12rpx;
+  background: #667eea;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.box .card-1 .card-1-1 .addr .sport-addr .t-f {
   font-size: 28rpx;
   font-weight: 700;
   color: #3d3d3d;
+}
+
+.box .card-1 .card-1-1 .distance {
+  margin-top: 9rpx;
 }
 
 .box .card-1 .card-1-1 .distance .t-f {
@@ -200,20 +230,39 @@
   color: #3d3d3d;
 }
 
-.box .card-1 .card-1-1 .evaluate {
-  background: #e8e8e8;
-  border-radius: 10rpx;
-  margin: 10rpx 0;
+.box .card-1 .card-1-1 .distance .t-f-1 {
+  font-size: 20rpx;
+  color: #686868;
+  padding-left: 12rpx;
 }
 
-.box .card-1 .card-1-1 .evaluate .review-card {
+.box .card-1 .card-1-1 .evaluate-top {
+  display: flex;
+  justify-content: center;
+  margin-top: 7rpx;
+}
+
+.box .card-1 .card-1-1 .evaluate-top .view-sign {
+  display: flex;
+  align-items: center;
+  margin-left: 10rpx;
+}
+
+.box .card-1 .card-1-1 .evaluate-top .evaluate {
+  background: #e8e8e8;
+  border-radius: 10rpx;
+  width: 300rpx;
+  padding: 0 10rpx;
+}
+
+.box .card-1 .card-1-1 .evaluate-top .evaluate .review-card {
   display: flex;
   gap: 31rpx;
   align-items: center;
   padding-top: 7rpx;
 }
 
-.box .card-1 .card-1-1 .evaluate .review-card .o-user {
+.box .card-1 .card-1-1 .evaluate-top .evaluate .review-card .o-user {
   width: 49rpx;
   height: 49rpx;
   overflow: hidden;
@@ -224,7 +273,7 @@
   color: #fff;
 }
 
-.box .card-1 .card-1-1 .evaluate .review-card .user-evaluate {
+.box .card-1 .card-1-1 .evaluate-top .evaluate .review-card .user-evaluate {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -234,6 +283,7 @@
 
 .box .card-1 .card-1-1 .tags {
   gap: 20rpx;
+  margin: 10rpx 0;
 }
 
 .box .basket {
@@ -287,7 +337,16 @@
   color: #ffffff !important;
 }
 
+.van-tag-c-1 {
+  position: relative;
+  left: 16rpx;
+  bottom: 10rpx;
+}
+
 .van-tag-c {
+  position: relative;
+  left: 16rpx;
+  bottom: 10rpx;
   background: #909090 !important;
 }
 
@@ -373,6 +432,10 @@
   font-size: 28rpx;
 }
 
+.privacy-center .privacy-content .privacy-detail-important {
+  font-weight: 700;
+}
+
 .privacy-center .privacy-status {
   display: flex;
   justify-content: center;
@@ -393,6 +456,12 @@
   top: 4rpx;
 }
 
+.van-icon-3 {
+  position: relative;
+  bottom: 8rpx;
+  color: #ff6161;
+}
+
 .sports-list-box {
   display: flex;
   flex-direction: inherit;
@@ -411,4 +480,8 @@
 .van-img-2 {
   width: 49rpx;
   height: 49rpx;
+}
+
+.van-btn-1 {
+  background: #f9f9f9 !important;
 }

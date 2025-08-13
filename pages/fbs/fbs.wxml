@@ -1,4 +1,5 @@
 <view class="box">
+  <!-- 提醒事项 -->
   <view class="notice">
     <van-notice-bar
       scrollable
@@ -7,6 +8,7 @@
       text="{{ notice }}"
     />
   </view>
+  <!-- 定位 -->
   <view class="location">
     <block wx:if="{{ addr == '未获取位置' }}">
       <van-icon name="location" custom-class="van-icon-l"/> <text class="coordinate" >{{ addr }}</text>
@@ -28,10 +30,11 @@
         <text>{{ userid }}</text>
       </view>
       <view class="time">
-        <view class="time-status"></view><text class="online">在线</text>
+        <view class="time-status"></view><text class="online">运动狂人</text>
       </view>
     </view>
   </view>
+  <!-- 搜索场地 -->
   <view class="search">
     <view class="s-p">
       <input class="s-p-1" disabled="{{ isInput }}" value="{{ inputValue }}" bindinput="getVal" placeholder="输入场地搜索"/>
@@ -45,7 +48,7 @@
       <van-row gutter="8">
         <block wx:for="{{ basketSquareFilter }}" wx:key="index" wx:for-item="item">
           <van-col span="{{item.customize == 1 ? 10 : 8}}" custom-class="van-c" wx:if="{{ item.disable }}">
-            <van-button round size="small" disabled="{{ item.isDisable }}" custom-style="{{ item.customize == 1 ? 'width:220rpx' : 'width:170rpx'  }}" data-id="{{item.id}}" custom-class="{{ currentSquareSelected === item.id ? 'van-b-isactive' : '' }}" bind:click="onSelected">
+            <van-button round size="small" disabled="{{ item.isDisable }}" custom-class="van-btn-1" custom-style="{{ item.customize == 1 ? 'width:220rpx' : 'width:170rpx'  }}"  data-id="{{item.id}}" custom-class="{{ currentSquareSelected === item.id ? 'van-b-isactive' : '' }}" bind:click="onSelected">
               <van-icon name="{{ item.icon }}" /> {{ item.name }}
             </van-button>
           </van-col>
@@ -53,6 +56,7 @@
       </van-row>
     </view>
   </view>
+  <!-- 展示附近场地 -->
   <view class="card-1">
     <block wx:for="{{ basketSquareFilterData }}" wx:key="index" wx:for-item="item">
       <van-transition show="{{ isUse }}" custom-class="block">
@@ -60,58 +64,71 @@
           <view class="online-status">
             <van-icon color="{{ item.join_user_count > 0 ? '#ff6161': '#909090' }}" name="fire" />
           </view>
+          <!-- 场地地址 -->
           <view class="addr" data-item="{{ item }}" bind:tap="openMapAppDetailed">
-            <text class="t-f">{{ item.addr }}</text>
+            <view class="sport-icon">
+              <block wx:for="{{ all_sport_list }}" wx:key="index3" wx:for-item="item3">
+                <text wx:if="{{ defaultSportKey == item3.key }}">{{ item3.icon }}</text>
+              </block>
+            </view>
+            <view class="sport-addr">
+              <text class="t-f">{{ item.addr }}</text>
+            </view>
           </view>
-          <view class="distance">
-            <van-icon name="location" custom-class="van-icon-l"/> <text class="t-f">距您{{ item.distance }}公里</text>
-          </view>
-          <view class="online">
-            <van-tag round type="success" custom-class="{{ item.online == 0 ? 'van-tag-c': '' }}"><van-icon name="friends" /> {{ item.online }}人在线</van-tag>
-            <!-- <van-tag round type="success"><van-icon name="friends" /> {{ item.online }}人在线</van-tag> -->
+          <!-- 场地距离 -->
+          <view class="distance" data-item="{{ item }}" bind:tap="openMapAppDetailed">
+            <van-icon name="location" custom-class="van-icon-3"/> <text class="t-f">距您{{ item.distance }}公里, </text><text class="t-f-1">点击导航</text>
+            <van-tag round type="success" custom-class="{{ item.online == 0 ? 'van-tag-c': 'van-tag-c-1' }}"><van-icon name="friends" /> {{ item.online }}人在线</van-tag>
           </view>
           <!-- 用户对当前球场的评价 -->
-          <view class="evaluate" data-item="{{ item }}" bind:tap="isShowEvaBoard">
-            <swiper autoplay="true" interval="5000" circular style="height: 60rpx;">
-              <swiper-item wx:for="{{item.user_reviews}}" wx:key="index" wx:for-item="item2">
-                <view class="review-card">
-                  <view class="o-user" style="margin-right:-7px;">
-                    <van-image width="100%"
-                    round
-                    height="100%"  fit="cover" src="{{item2.img}}" />
+          <view class="evaluate-top" >
+            <view class="evaluate" data-item="{{ item }}" bind:tap="isShowEvaBoard">
+              <swiper autoplay="true" interval="3000" circular style="height: 60rpx;">
+                <swiper-item wx:for="{{item.user_reviews}}" wx:key="index" wx:for-item="item2">
+                  <view class="review-card">
+                    <view class="o-user" style="margin-right:-7px;">
+                      <van-image width="100%"
+                      round
+                      height="100%"  fit="cover" src="{{item2.img}}" />
+                    </view>
+                    <view class="user-evaluate">
+                      <text>{{item2.evaluate}}</text>
+                    </view>
                   </view>
-                  <view class="user-evaluate">
-                    <text>{{item2.evaluate}}</text>
-                  </view>
-                </view>
-              </swiper-item>
-            </swiper>
+                </swiper-item>
+              </swiper>
+            </view>
+            <view class="view-sign" data-item="{{ item }}" bind:tap="isShowEvaBoard">
+              <van-icon name="https://ai.anythingai.online/static/profile3/view.svg" />
+            </view>
           </view>
+          <!-- 用户加入/退出组队 -->
           <view class="group-status">
-            <!-- 组局 -->
-            <van-button round size="mini" type="{{ item.hasJoined ? 'info' : 'warning' }}" custom-style="width:170rpx" data-item="{{ item }}" bind:tap="joinSportGroup">
-              {{item.hasJoined ? '⚡退出组局' : '⚡加入组局'}}({{item.join_user_count}})
+            <!-- 组队 -->
+            <van-button round size="small" type="{{ item.hasJoined ? 'info' : 'warning' }}" custom-style="width:218rpx" data-item="{{ item }}" bind:tap="joinSportGroup">
+              {{item.hasJoined ? '⚡退出组队' : '⚡加入组队'}}({{item.join_user_count}})
             </van-button>
             <!-- 聊天室按钮 -->
-            <van-button round size="mini" custom-style="width:80rpx" data-item="{{ item }}" bindtap="chatRoot">
-              <van-icon custom-class="van-icon-2" name="https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/join_chat_room.svg" />
+            <van-button round size="small" custom-style="width:100rpx" data-item="{{ item }}" bindtap="chatRoom">
+              <van-icon custom-class="van-icon-2" name="https://ai.anythingai.online/static/profile3/join_chat_room.svg" />
             </van-button>
           </view>
-          <!-- 加入组局的用户头像 -->
+          <!-- 加入组队的用户头像 -->
           <view class="show-join-user" wx:if="{{ item.join_user_count > 0 }}">
             <block wx:for="{{ item.join_users }}" wx:key="index" wx:for-item="item2" wx:for-index="idx">
               <view class="o-user" style="margin-right:-10px;">
-                <!-- <text class="i-user"></text> -->
-                <van-image width="100%"
-                    round
-                    height="100%"  fit="cover" src="{{item2.img}}" />
+                <van-image width="100%" round height="100%"  fit="cover" src="{{item2.img}}" />
               </view>
             </block>
+            <view class="join-users">
+              <text>{{item.join_user_count}}人加入组队</text>
+            </view>
           </view>
+          <!-- 场地简称 -->
           <view class="tags">
             <block wx:for="{{ item.tags }}" wx:key="index" wx:for-item="item2">
               <block wx:for="{{ all_sport_list }}" wx:key="index3" wx:for-item="item3">
-                <van-tag type="primary" wx:if="{{ defaultSportKey == item3.key }}">
+                <van-tag size="large" type="primary" wx:if="{{ defaultSportKey == item3.key }}">
                 {{ item3.icon }}{{ item2 }}
               </van-tag>
               </block>
@@ -127,20 +144,20 @@
   </view>
   <!-- 客服 -->
   <view class="contact-us">
-    <button size="mini"  open-type="contact" class="share-btn"><van-icon name="https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/service.svg" /></button>
+    <button size="mini"  open-type="contact" class="share-btn"><van-icon name="https://ai.anythingai.online/static/profile3/service.svg" /></button>
   </view>
   <!-- 页面刷新 -->
   <view class="flush-data" wx:if="{{isUse}}">
     <button size="mini" bind:tap="getOpenid" class="share-btn">
       <!-- <text>刷新</text> -->
-      <van-icon name="https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/flush-5.svg" />
+      <van-icon name="https://ai.anythingai.online/static/profile3/flush-5.svg" />
     </button>
   </view>
   <!-- 回复用户 -->
   <view class="message-reply" wx:if="{{isShowMsgBtn}}">
     <button size="mini" bind:tap="isShowChatRoom" class="share-btn">
       <!-- <text>刷新</text> -->
-      <van-icon name="https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/mr.svg" />
+      <van-icon name="https://ai.anythingai.online/static/profile3/mr.svg" />
     </button>
   </view>
 </view>
@@ -264,14 +281,15 @@
         <text class="privacy-detail">欢迎使用本小程序！为保障您的合法权益，请您在使用前仔细阅读并同意以下条款：</text>
         <text class="privacy-detail"><text class="privacy-item">1.</text>您需遵守国家法律法规，文明发言，禁止发布违法、违规、骚扰、攻击性或不实信息，违规行为将导致永久禁止您使用本小程序。</text> 
         <text class="privacy-detail"><text class="privacy-item">2.</text>您在本小程序中发布的信息及内容由您本人负责，如因内容引发的法律责任由用户自行承担。</text> 
-        <text class="privacy-detail"><text class="privacy-item">3.</text>本小程序不会永久保存用户的聊天记录，将定期清理，也不会收集用户的任何个人信息(仅从开放平台获取有限的信息)</text> 
+        <text class="privacy-detail"><text class="privacy-item">3.</text>本小程序不会永久保存用户的聊天记录，将定期清理，也不会收集用户的任何个人信息(仅从开放平台获取有限的信息)。</text> 
         <text class="privacy-detail"><text class="privacy-item">4.</text>您在使用过程中若遇到问题或发现违规行为，可通过小程序内提供的反馈渠道联系我们。</text> 
-        <text class="privacy-detail"><text class="privacy-item">5.</text>点击下方'同意协议'即表示您已阅读并同意本协议的全部内容，'拒绝协议'您将不能使用本小程序。</text> 
+        <text class="privacy-detail privacy-detail-important"><text class="privacy-item">5.</text>我们不提供场地预约的功能跟所有收费场地没有任何关系，纯粹就是展示您附近的运动场地，用户可自行发起组队。</text> 
+        <text class="privacy-detail"><text class="privacy-item">6.</text>点击下方'同意协议'即表示您已阅读并同意本协议的全部内容，'拒绝协议'您将不能使用本小程序。</text> 
         <text class="privacy-detail">感谢您的理解与配合，祝您使用愉快！</text> 
       </view>
       <view class="privacy-status">
-        <van-button custom-style="width: 170rpx" size="small" round type="info" data-item="1" bind:tap="iAacceptPrivacy">同意协议</van-button>
-        <van-button custom-style="width: 170rpx" size="small" round type="danger" data-item="2" bind:tap="iAacceptPrivacy">拒绝协议</van-button>
+        <van-button icon="https://ai.anythingai.online/static/profile3/smil.svg" custom-style="width: 170rpx" size="small" round type="info" data-item="1" bind:tap="iAacceptPrivacy">同意协议</van-button>
+        <van-button icon="https://ai.anythingai.online/static/profile3/cry.svg" custom-style="width: 170rpx" size="small" round type="danger" data-item="2" bind:tap="iAacceptPrivacy">拒绝协议</van-button>
       </view>
     </view>
   </van-action-sheet>

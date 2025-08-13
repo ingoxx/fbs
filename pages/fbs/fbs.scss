@@ -25,12 +25,13 @@
     display: flex;
     height: 80rpx;
     align-items: center;
-    margin: 0 25rpx;
+    margin: 10rpx 25rpx;
     gap: 19rpx;
     margin-top: 31rpx;
     background: #7880dd;
     border-radius: 10rpx;
     padding: 10rpx;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.23);
     .user-img {
       .img-btn {
         height: 80rpx;
@@ -90,10 +91,8 @@
     }
   }
   .search {
-    margin: 0 25rpx;
-    margin-top: 30rpx;
-    margin-bottom: 17rpx;
-    background: #ffffff;
+    margin: 15rpx 25rpx;
+    background: #f9f9f9;
     border-radius: 16rpx;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.23);
     .se {
@@ -121,19 +120,21 @@
   }
   .card-1 {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    /* justify-content: center ; */
     justify-items: center;
-    flex-wrap: wrap;
+    /* flex-wrap: wrap ; */
     overflow-y: auto;
     box-sizing: border-box;
+    margin: 6rpx 25rpx;
     .card-1-1 {
-      width: 310rpx;
-      margin: 14rpx 14rpx;
-      background: #ffff;
-      border-radius: 10rpx;
-      display: inline-grid;
-      padding: 10rpx;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.23);
+      // width: 310rpx ;
+    margin: 14rpx 14rpx;
+    background: #ffff;
+    border-radius: 10rpx;
+    /* display: inline-grid ; */
+    padding: 10rpx;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.23);
       .online-status {
         position: relative;
         bottom: 14rpx;
@@ -146,10 +147,13 @@
       }
       .group-status {
         gap: 16rpx;
-        padding: 10rpx;
+        padding: 3rpx;
+        margin-top: 17rpx;
       }
       .show-join-user {
         justify-content: flex-start;
+        // gap: 32rpx;
+        margin-top: 23rpx;
         .o-user {
           width: 49rpx;
           height: 49rpx;
@@ -161,53 +165,92 @@
           flex-shrink: 0;
           color: #fff;
         }
-      }
-      .addr {
-        .t-f {
-          font-size: 28rpx;
-          font-weight: 700;
-          color: rgb(61, 61, 61);
+        .join-users {
+          font-size: 20rpx;
+          color: #333;
+          margin-left: 31rpx;
         }
       }
+      .addr {
+        justify-content: left;
+        gap: 24rpx;
+        margin-top: 10rpx;
+        padding: 0 5rpx;
+        .sport-icon {
+          width: 80rpx;
+          height: 80rpx;
+          border-radius: 12rpx;
+          background: #667eea;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+        .sport-addr {
+          .t-f {
+            font-size: 28rpx;
+            font-weight: 700;
+            color: rgb(61, 61, 61);
+          }
+        }
+        
+      }
       .distance {
+        margin-top: 9rpx;
         .t-f {
           font-size: 20rpx;
           color: rgb(61, 61, 61);
         }
+        .t-f-1 {
+          font-size: 20rpx;
+          color: rgb(104, 104, 104);
+          padding-left: 12rpx;
+        }
       }
-      .evaluate {
-        background: #e8e8e8;
-        border-radius: 10rpx;
-        margin: 10rpx 0;
-        .review-card {
+      .evaluate-top {
+        display: flex;
+        justify-content: center;
+        margin-top: 7rpx;
+        .view-sign {
           display: flex;
-          gap: 31rpx;
           align-items: center;
-          padding-top: 7rpx;
-          .o-user {
-            width: 49rpx;
-            height: 49rpx;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            border-radius: 50%;
-            flex-shrink: 0;
-            color: #fff;
-            // background-size: cover;                  /* 等比例放大，覆盖元素 */
-            // background-position: center;             /* 居中对齐 */
-            // background-repeat: no-repeat;             /* 不平铺重复 */
-          }
-          .user-evaluate {
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            font-size: 21rpx;
-            color: #333;
+          margin-left: 10rpx;
+        }
+        .evaluate {
+          background: #e8e8e8;
+          border-radius: 10rpx;
+          width: 300rpx;
+          // margin: 7rpx auto;
+          padding: 0 10rpx;
+          .review-card {
+            display: flex;
+            gap: 31rpx;
+            align-items: center;
+            padding-top: 7rpx;
+            .o-user {
+              width: 49rpx;
+              height: 49rpx;
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+              border-radius: 50%;
+              flex-shrink: 0;
+              color: #fff;
+            }
+            .user-evaluate {
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+              font-size: 21rpx;
+              color: #333;
+            }
           }
         }
       }
+      
       .tags {
         gap: 20rpx;
+        margin: 10rpx 0;
       }
     }
   }
@@ -254,7 +297,15 @@
   background-color: #715dbc!important;
   color: #ffffff!important;
 }
+.van-tag-c-1 {
+  position: relative;
+  left: 16rpx;
+  bottom: 10rpx;
+}
 .van-tag-c {
+  position: relative;
+  left: 16rpx;
+  bottom: 10rpx;
   background: #909090!important;
 }
 .c-van-tag-online-status {
@@ -327,6 +378,9 @@
       padding: 10rpx 23rpx;
       font-size: 28rpx;
     }
+    .privacy-detail-important {
+      font-weight: 700;
+    }
   }
   .privacy-status {
     display: flex;
@@ -346,6 +400,11 @@
   position: relative;
   top: 4rpx;
 }
+.van-icon-3 {
+  position: relative;
+  bottom: 8rpx;
+  color: #ff6161;
+}
 .sports-list-box {
   display: flex;
   flex-direction: inherit;
@@ -362,4 +421,7 @@
 .van-img-2 {
   width: 49rpx;
   height: 49rpx;
+}
+.van-btn-1 {
+  background: #f9f9f9!important; 
 }

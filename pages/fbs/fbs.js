@@ -67,10 +67,10 @@ Page({
     basketSquareData: [],
     join_users: [],
     evaluate_list: [
-      {group_id: "aaa-bbb-ccc-ddd-eee", user: "aaa", evaluate: "这里打球得掉层皮才能走", img: "https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_1.JPG"},
-      {group_id: "aaa-bbb-ccc-ddd-eee", user: "bbb", evaluate: "打球5分钟，吵架10分钟", img: "https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_3.JPG"},
-      {group_id: "aaa-bbb-ccc-ddd-eee", user: "ccc", evaluate: "打架为啥带个球？", img: "https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_4.JPG"},
-      {group_id: "aaa-bbb-ccc-ddd-eee", user: "ccc", evaluate: "热身运动一定要做足，篮底内线肉搏才能赢", img: "https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0"}
+      // {like: 0, group_id: "aaa-bbb-ccc-ddd-eee", user: "aaa", evaluate: "这里打球得掉层皮才能走", img: "https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_1.JPG"},
+      // {like: 0, group_id: "aaa-bbb-ccc-ddd-eee", user: "bbb", evaluate: "打球5分钟，吵架10分钟", img: "https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_3.JPG"},
+      // {like: 0, group_id: "aaa-bbb-ccc-ddd-eee", user: "ccc", evaluate: "打架为啥带个球？", img: "https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_4.JPG"},
+      // {like: 0, group_id: "aaa-bbb-ccc-ddd-eee", user: "ccc", evaluate: "热身运动一定要做足，篮底内线肉搏才能赢", img: "https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0"}
     ],
     info_data: {},
   },
@@ -112,6 +112,7 @@ Page({
       openid: this.data.openid,
       img: this.data.avatarUrl,
       group_id: data.id,
+      sport_key: this.data.defaultSportKey
     }
     this.setData({
       showEvaBoard: true,
@@ -741,7 +742,7 @@ Page({
     });
 },
   // 进到群组
-  chatRoot(e) {
+  chatRoom(e) {
     const id = e.currentTarget.dataset.item;
     const img = this.data.all_sport_list.find(item => item.key == this.data.defaultSportKey);
     wx.navigateTo({
@@ -893,12 +894,13 @@ Page({
           }
           item.join_users = group_users.data.slice(-this.data.showDataNumber);
 
+          // 获取某个场地id的所有用户评价
           const eva_data = await this.getAllEvaluateApi(item.id);
+          console.log(eva_data);
           if (eva_data.code != 1000) {
             Toast.fail("eva_data: ", eva_data.code);
             return;
           }
-          
           item.user_reviews = eva_data.data;
           item.user_reviews_count = eva_data.data.length;
 
