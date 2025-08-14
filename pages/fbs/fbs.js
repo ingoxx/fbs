@@ -7,7 +7,7 @@ const { BASE_URL } = require('../../utils/http');
 const { IMG_URL } = require('../../utils/http');
 import Notify from '@vant/weapp/notify/notify';
 import Toast from '@vant/weapp/toast/toast';
-const { generateUUID } = require('../../utils/util'); 
+const { generateUUID, stringToTimestamp } = require('../../utils/util'); 
 import Dialog from '@vant/weapp/dialog/dialog';
 const md5 = require('../../utils/md5');
 Page({
@@ -103,6 +103,11 @@ Page({
   onCloseEvaBoard() {
     this.setData({
       showEvaBoard: false,
+    }, () => {
+      // 此时弹窗已从视图上消失（至少已完成一次渲染）
+      if (this.data.isUse) {
+        this.getAddrDistance();
+      }
     });
   },
   isShowEvaBoard(e) {
@@ -112,6 +117,7 @@ Page({
       openid: this.data.openid,
       img: this.data.avatarUrl,
       group_id: data.id,
+      addr: data.tags[0],
       sport_key: this.data.defaultSportKey
     }
     this.setData({
@@ -698,7 +704,6 @@ Page({
       sport_key: this.data.defaultSportKey,
       tags: val2 ? val2 : this.data.defaultSportSquare,
     }
-    console.log("ad >>> ", ad);
    const resp = await this.userAddAddrReqApi(ad);
    if (resp.code != 1000) {
       const msg = resp.msg ? resp.msg : "添加地址失败, 请联系管理员";
@@ -899,7 +904,17 @@ Page({
             Toast.fail("eva_data: ", eva_data.code);
             return;
           }
-          item.user_reviews = eva_data.data;
+          const dl = eva_data.data;
+          dl.map((item) => {
+            if (item.like_users.length > 0) {
+              item.is_like = item.like_users.includes(this.data.openid);
+            }
+            return item;
+          })
+          dl.sort((a, b) => {
+            return stringToTimestamp(b.time) - stringToTimestamp(a.time);
+          });
+          item.user_reviews = dl;
           item.user_reviews_count = eva_data.data.length;
 
           return item;

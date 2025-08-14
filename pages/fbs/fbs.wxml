@@ -72,13 +72,50 @@
               </block>
             </view>
             <view class="sport-addr">
-              <text class="t-f">{{ item.addr }}</text>
+              <!-- <text class="t-f">{{ item.addr }}</text> -->
+              <view class="sport-addr-name">
+                <text class="t-f">{{ item.addr }}</text>
+              </view>
+              <view class="sport-addr-tag">
+                <block wx:for="{{ item.tags }}" wx:key="index" wx:for-item="item2">
+                  <block wx:for="{{ all_sport_list }}" wx:key="index3" wx:for-item="item3">
+                    <van-tag  size="mini" type="success" wx:if="{{ defaultSportKey == item3.key }}">
+                      {{ item3.icon }}{{ item2 }}
+                    </van-tag>
+                  </block>
+                </block>
+                <text class="nav">点击导航</text>
+              </view>
             </view>
           </view>
           <!-- 场地距离 -->
           <view class="distance" data-item="{{ item }}" bind:tap="openMapAppDetailed">
-            <van-icon name="location" custom-class="van-icon-3"/> <text class="t-f">距您{{ item.distance }}公里, </text><text class="t-f-1">点击导航</text>
-            <van-tag round type="success" custom-class="{{ item.online == 0 ? 'van-tag-c': 'van-tag-c-1' }}"><van-icon name="friends" /> {{ item.online }}人在线</van-tag>
+            <!-- <van-icon name="location" custom-class="van-icon-3"/> <text class="t-f">距您{{ item.distance }}公里, </text><text class="t-f-1">点击导航</text>
+            <van-tag round type="success" custom-class="{{ item.online == 0 ? 'van-tag-c': 'van-tag-c-1' }}"><van-icon name="friends" /> {{ item.online }}人在线</van-tag> -->
+            <view class="online-users">
+              <view class="num">
+                <text>{{ item.online }}</text>
+              </view>
+              <view class="title">
+                <van-icon name="friends-o" /><text>活跃人数</text>
+              </view>
+            </view>
+            <view class="users-reviews">
+              <view class="num">
+                <text>{{ item.user_reviews_count }}</text>
+              </view>
+              <view class="title">
+                <van-icon name="like-o" /><text>用户赞美</text>
+              </view>
+            </view>
+            <view class="square-distance">
+              <view class="num">
+                <text>{{ item.distance }}km</text>
+              </view>
+              <view class="title">
+                <van-icon name="location-o" /><text>离您距离</text>
+              </view>
+            </view>
           </view>
           <!-- 用户对当前球场的评价 -->
           <view class="evaluate-top" >
@@ -109,7 +146,7 @@
               {{item.hasJoined ? '⚡退出组队' : '⚡加入组队'}}({{item.join_user_count}})
             </van-button>
             <!-- 聊天室按钮 -->
-            <van-button round size="small" custom-style="width:100rpx" data-item="{{ item }}" bindtap="chatRoom">
+            <van-button round size="small" custom-style="width:218rpx" data-item="{{ item }}"  bindtap="chatRoom">
               <van-icon custom-class="van-icon-2" name="https://ai.anythingai.online/static/profile3/join_chat_room.svg" />
             </van-button>
           </view>
@@ -123,16 +160,6 @@
             <view class="join-users">
               <text>{{item.join_user_count}}人加入组队</text>
             </view>
-          </view>
-          <!-- 场地简称 -->
-          <view class="tags">
-            <block wx:for="{{ item.tags }}" wx:key="index" wx:for-item="item2">
-              <block wx:for="{{ all_sport_list }}" wx:key="index3" wx:for-item="item3">
-                <van-tag size="large" type="primary" wx:if="{{ defaultSportKey == item3.key }}">
-                {{ item3.icon }}{{ item2 }}
-              </van-tag>
-              </block>
-            </block>
           </view>
         </view>
       </van-transition>
@@ -279,7 +306,7 @@
     <view class="privacy-center">
       <view class="privacy-content">
         <text class="privacy-detail">欢迎使用本小程序！为保障您的合法权益，请您在使用前仔细阅读并同意以下条款：</text>
-        <text class="privacy-detail"><text class="privacy-item">1.</text>您需遵守国家法律法规，文明发言，禁止发布违法、违规、骚扰、攻击性或不实信息，违规行为将导致永久禁止您使用本小程序。</text> 
+        <text class="privacy-detail"><text class="privacy-item">1.</text>您需遵守国家法律法规，禁止发布违法、违规、骚扰、攻击性或不实信息，违规行为将导致永久禁止您使用本小程序。</text> 
         <text class="privacy-detail"><text class="privacy-item">2.</text>您在本小程序中发布的信息及内容由您本人负责，如因内容引发的法律责任由用户自行承担。</text> 
         <text class="privacy-detail"><text class="privacy-item">3.</text>本小程序不会永久保存用户的聊天记录，将定期清理，也不会收集用户的任何个人信息(仅从开放平台获取有限的信息)。</text> 
         <text class="privacy-detail"><text class="privacy-item">4.</text>您在使用过程中若遇到问题或发现违规行为，可通过小程序内提供的反馈渠道联系我们。</text> 

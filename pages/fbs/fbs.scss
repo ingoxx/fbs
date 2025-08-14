@@ -140,6 +140,7 @@
         bottom: 14rpx;
         width: 20rpx;
         height: 20rpx;
+        margin-top: 4rpx;
       }
       .img,.addr,.distance,.tags, .online, .group-status,.show-join-user {
         display: flex;
@@ -148,7 +149,7 @@
       .group-status {
         gap: 16rpx;
         padding: 3rpx;
-        margin-top: 17rpx;
+        margin-top: 20rpx;
       }
       .show-join-user {
         justify-content: flex-start;
@@ -192,11 +193,41 @@
             font-weight: 700;
             color: rgb(61, 61, 61);
           }
+          .sport-addr-tag {
+            .nav {
+              font-size: 16rpx;
+              color: #a5a5a5;
+              padding-left: 10rpx;
+            }
+          }
         }
-        
       }
       .distance {
-        margin-top: 9rpx;
+        height: 100rpx;
+        width: 473rpx;
+        background: #f8f9fc;
+        border-radius: 10rpx;
+        gap: 24rpx;
+        align-items: center;
+        margin: 0 auto;
+        margin-top: 20rpx;
+        .online-users,.users-reviews,.square-distance {
+          text-align: center;
+          .num {
+            font-size: 27rpx;
+            font-weight: 700;
+          }
+          .title {
+            font-size: 27rpx;
+            color: #99a4a5;
+          }
+        }
+        // .users-reviews {
+
+        // }
+        // .square-distance {
+
+        // }
         .t-f {
           font-size: 20rpx;
           color: rgb(61, 61, 61);
@@ -210,16 +241,17 @@
       .evaluate-top {
         display: flex;
         justify-content: center;
-        margin-top: 7rpx;
+        margin-top: 20rpx;
         .view-sign {
           display: flex;
           align-items: center;
           margin-left: 10rpx;
         }
         .evaluate {
-          background: #e8e8e8;
+          // background: #e8e8e8;
+          background: #f8f9fc;
           border-radius: 10rpx;
-          width: 300rpx;
+          width: 412rpx;
           // margin: 7rpx auto;
           padding: 0 10rpx;
           .review-card {

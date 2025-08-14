@@ -161,6 +161,7 @@
   bottom: 14rpx;
   width: 20rpx;
   height: 20rpx;
+  margin-top: 4rpx;
 }
 
 .box .card-1 .card-1-1 .img, .box .card-1 .card-1-1 .addr, .box .card-1 .card-1-1 .distance, .box .card-1 .card-1-1 .tags, .box .card-1 .card-1-1 .online, .box .card-1 .card-1-1 .group-status, .box .card-1 .card-1-1 .show-join-user {
@@ -171,7 +172,7 @@
 .box .card-1 .card-1-1 .group-status {
   gap: 16rpx;
   padding: 3rpx;
-  margin-top: 17rpx;
+  margin-top: 20rpx;
 }
 
 .box .card-1 .card-1-1 .show-join-user {
@@ -221,8 +222,35 @@
   color: #3d3d3d;
 }
 
+.box .card-1 .card-1-1 .addr .sport-addr .sport-addr-tag .nav {
+  font-size: 16rpx;
+  color: #a5a5a5;
+  padding-left: 10rpx;
+}
+
 .box .card-1 .card-1-1 .distance {
-  margin-top: 9rpx;
+  height: 100rpx;
+  width: 473rpx;
+  background: #f8f9fc;
+  border-radius: 10rpx;
+  gap: 24rpx;
+  align-items: center;
+  margin: 0 auto;
+  margin-top: 20rpx;
+}
+
+.box .card-1 .card-1-1 .distance .online-users, .box .card-1 .card-1-1 .distance .users-reviews, .box .card-1 .card-1-1 .distance .square-distance {
+  text-align: center;
+}
+
+.box .card-1 .card-1-1 .distance .online-users .num, .box .card-1 .card-1-1 .distance .users-reviews .num, .box .card-1 .card-1-1 .distance .square-distance .num {
+  font-size: 27rpx;
+  font-weight: 700;
+}
+
+.box .card-1 .card-1-1 .distance .online-users .title, .box .card-1 .card-1-1 .distance .users-reviews .title, .box .card-1 .card-1-1 .distance .square-distance .title {
+  font-size: 27rpx;
+  color: #99a4a5;
 }
 
 .box .card-1 .card-1-1 .distance .t-f {
@@ -239,7 +267,7 @@
 .box .card-1 .card-1-1 .evaluate-top {
   display: flex;
   justify-content: center;
-  margin-top: 7rpx;
+  margin-top: 20rpx;
 }
 
 .box .card-1 .card-1-1 .evaluate-top .view-sign {
@@ -249,9 +277,9 @@
 }
 
 .box .card-1 .card-1-1 .evaluate-top .evaluate {
-  background: #e8e8e8;
+  background: #f8f9fc;
   border-radius: 10rpx;
-  width: 300rpx;
+  width: 412rpx;
   padding: 0 10rpx;
 }
 
