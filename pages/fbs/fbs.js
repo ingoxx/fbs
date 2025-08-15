@@ -12,6 +12,9 @@ import Dialog from '@vant/weapp/dialog/dialog';
 const md5 = require('../../utils/md5');
 Page({
   data: {
+    showReplyBtn: false,
+    showFlushBtn: false,
+    showServiceBtn: false,
     userid: "",
     showEvaBoard: false,
     avatarUrl: "",
@@ -32,6 +35,7 @@ Page({
     defaultSportKey: 'bks',
     showSportsList: false,
     result: [],
+    fileList: [],
     agreeCacheKey: 'is_agree',
     isShowPrivacyCacheKey: 'show_privacy',
     isUse: false,
@@ -73,6 +77,48 @@ Page({
       // {like: 0, group_id: "aaa-bbb-ccc-ddd-eee", user: "ccc", evaluate: "热身运动一定要做足，篮底内线肉搏才能赢", img: "https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0"}
     ],
     info_data: {},
+    images: [],
+  },
+  // 删除预览的图片
+  deleteImg(e) {
+    const id = e.detail.index;
+    const fileList = [...this.data.fileList];;
+    fileList.splice(id, 1);
+    this.setData({
+      fileList: fileList,
+    });
+  },
+  // 图片上传前校验
+  beforeRead(event) {
+    const { file, callback } = event.detail;
+    callback(file.type === 'image');
+  },
+  // 图片上传后回调
+  afterRead(event) {
+    const { file } = event.detail;
+    const newFiles = Array.isArray(file) ? file : [file];
+    this.setData({ fileList: this.data.fileList.concat(newFiles) });
+  },
+  // 点击放大图片
+  onPreviewImage(e) {
+    console.log(e);
+    const src = e.currentTarget.dataset.src;
+    var images = [src];
+    wx.previewImage({
+      current: src, // 当前显示的图片
+      // urls: this.data.images // 预览的图片数组
+      urls: images,
+    });
+  },
+  // 客服/刷新/聊天室的隐藏开关
+  onSwitchContactBtn(e) {
+    const id = e.currentTarget.dataset.id;
+    console.log(id);
+    const newData = {};
+    [{name: 'showServiceBtn', id: "1"}, {name: 'showFlushBtn', id: "2"}, {name: 'showReplyBtn', id: "3"}].forEach(k => {
+      newData[k.name] = (k.id === id) ? !this.data[k.name] : false;
+    });
+    this.setData(newData);
   },
   // 生成随机的头像
   generateImg(min, max) {
@@ -694,8 +740,9 @@ Page({
       return;
     }
     
+    const uuid = generateUUID();
     const ad = {
-      id: generateUUID(),
+      id: uuid,
       user_id: this.data.openid,
       addr: this.data.villageInfo,
       lat: respTx.lat,
@@ -703,6 +750,7 @@ Page({
       city: this.data.city,
       sport_key: this.data.defaultSportKey,
       tags: val2 ? val2 : this.data.defaultSportSquare,
+      // img: "",
     }
    const resp = await this.userAddAddrReqApi(ad);
    if (resp.code != 1000) {
@@ -713,7 +761,7 @@ Page({
     Notify({ type: 'success', message: "地址已提交,审核通过会更新到页面上", duration: 10000 });
   },
   onClose() {
-    this.setData({ addVillage: false, showCheckList: false, });
+    this.setData({ addVillage: false, showCheckList: false });
   },
   onClearInput(e) {
     if (e.currentTarget.dataset.value != "") {

@@ -30,13 +30,13 @@
     <block wx:for="{{chatData}}" wx:key="index" wx:for-item="item">
       <view id="chat-{{index}}" class="chat-content {{ item.sender_id == sender_id ? 'right my' : 'left others' }}">
         <view class="user chat-format">
-          <text class="user-name" user-select="true">user_{{ item.sender_id }}</text>
+          <van-icon name="manager" /><text class="user-name" user-select="true">user_{{ item.sender_id }}</text>
         </view>
         <view class="content chat-format" user-select="true">
           <text user-select="true">{{ item.content }}</text>
         </view>
         <view class="time chat-format" >
-          <text user-select="true">{{ item.time }}</text>
+          <van-icon name="clock" /><text user-select="true" class="time-1">{{ item.time }}</text>
         </view>
       </view>
     </block>

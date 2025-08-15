@@ -1,5 +1,5 @@
 $primary: #1f2937;
-$orange: #ff976a;
+$orange: #675094;
 $friendBg: #374151;
 .box {
   display: flex;
@@ -61,14 +61,26 @@ $friendBg: #374151;
         bottom: 5rpx;
       }
       .user, .time {
+        display: flex;
+        gap: 5rpx;
         color: #a5a5a5;
         font-size: 25rpx;
         padding: 14rpx 0;
         // overflow-wrap: break-word;
       }
       .user {
+        overflow: hidden;
+        white-space: normal;
+        text-overflow: ellipsis;
+        min-width: 200rpx;
         .user-name {
-          word-break: break-all;
+          // word-break: break-all;
+        }
+      }
+      .time {
+        .time-1 {
+          padding-left: 2rpx;
+          padding-bottom: 2rpx;
         }
       }
       &.left {
