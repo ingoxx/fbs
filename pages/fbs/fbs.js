@@ -98,8 +98,6 @@ Page({
     const { file } = event.detail;
     const newFiles = Array.isArray(file) ? file : [file];
     this.setData({ fileList: this.data.fileList.concat(newFiles) });
-    console.log("fileList >>> ", this.data.fileList);
-    
   },
   // 点击放大图片
   onPreviewImage(e) {
@@ -198,12 +196,12 @@ Page({
     return new Promise((resolve, reject) => {
       wx.uploadFile({
         url: `${BASE_URL}/wx-upload?uid=${this.data.openid}&filename=${data.name}`,
-        timeout: 5000,
+        timeout: 15000,
         filePath: data.file,
         name: 'file',
         success: function (res) {
           if (res.statusCode != 200) {
-            reject({msg: '网络错误', code: 401});
+            reject({msg: res.statusCode, code: 401});
             return
           }
           resolve(res.data);
@@ -750,14 +748,14 @@ Page({
       const filedata = {file: fileList[0].url, name: imgname};
       try {
         const resp = await this.uploadFileApi(filedata);
-        const nr = JSON.parse(resp)
+        const nr = JSON.parse(resp);
         if (nr.code == 1000) {
           url = `${IMG_URL}/${imgname}`;
         } else {
           Toast.fail("图片上传失败1");
         }
       } catch (err) {
-        Toast.fail("图片上传失败2");
+        Toast.fail(err.msg);
       }
     }
     const ad = {
