@@ -12,6 +12,7 @@ import Dialog from '@vant/weapp/dialog/dialog';
 const md5 = require('../../utils/md5');
 Page({
   data: {
+    img_url: "",
     showReplyBtn: false,
     showFlushBtn: false,
     showServiceBtn: false,
@@ -66,23 +67,22 @@ Page({
     ],
     all_sport_list: [
     ],
-    checkListData: [],
+    checkListData: [
+      {addr: "河源市紫金县义容镇沙梨园篮球场梨园篮球场", img: "https://ai.anythingai.online/static/profile3/main-bk.jpg", is_show: false},
+      {addr: "河源市紫金县义容镇沙梨园篮球场", img: "https://ai.anythingai.online/static/profile3/main-bk.jpg", is_show: false},
+      {addr: "河源市紫金县义容镇沙梨园篮球场", img: "https://ai.anythingai.online/static/profile3/main-bk.jpg", is_show: false},
+    ],
     basketSquareFilterData: [],
     basketSquareData: [],
     join_users: [],
-    evaluate_list: [
-      // {like: 0, group_id: "aaa-bbb-ccc-ddd-eee", user: "aaa", evaluate: "这里打球得掉层皮才能走", img: "https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_1.JPG"},
-      // {like: 0, group_id: "aaa-bbb-ccc-ddd-eee", user: "bbb", evaluate: "打球5分钟，吵架10分钟", img: "https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_3.JPG"},
-      // {like: 0, group_id: "aaa-bbb-ccc-ddd-eee", user: "ccc", evaluate: "打架为啥带个球？", img: "https://mp-578c2584-f82c-45e7-9d53-51332c711501.cdn.bspapp.com/wx-fbs/wx_4.JPG"},
-      // {like: 0, group_id: "aaa-bbb-ccc-ddd-eee", user: "ccc", evaluate: "热身运动一定要做足，篮底内线肉搏才能赢", img: "https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0"}
-    ],
+    evaluate_list: [],
     info_data: {},
     images: [],
   },
   // 删除预览的图片
   deleteImg(e) {
     const id = e.detail.index;
-    const fileList = [...this.data.fileList];;
+    const fileList = [...this.data.fileList];
     fileList.splice(id, 1);
     this.setData({
       fileList: fileList,
@@ -98,6 +98,8 @@ Page({
     const { file } = event.detail;
     const newFiles = Array.isArray(file) ? file : [file];
     this.setData({ fileList: this.data.fileList.concat(newFiles) });
+    console.log("fileList >>> ", this.data.fileList);
+    
   },
   // 点击放大图片
   onPreviewImage(e) {
@@ -553,7 +555,7 @@ Page({
       })
     })
   },
-  // 地址审核列表
+  // 地址审核列表Api
   getCheckListApi() {
     return new Promise((resolve, reject) => {
       wx.request({
@@ -741,6 +743,23 @@ Page({
     }
     
     const uuid = generateUUID();
+    const fileList = this.data.fileList;
+    var url = "";
+    if (fileList.length > 0) {
+      const imgname = uuid+".png";
+      const filedata = {file: fileList[0].url, name: imgname};
+      try {
+        const resp = await this.uploadFileApi(filedata);
+        const nr = JSON.parse(resp)
+        if (nr.code == 1000) {
+          url = `${IMG_URL}/${imgname}`;
+        } else {
+          Toast.fail("图片上传失败1");
+        }
+      } catch (err) {
+        Toast.fail("图片上传失败2");
+      }
+    }
     const ad = {
       id: uuid,
       user_id: this.data.openid,
@@ -750,7 +769,7 @@ Page({
       city: this.data.city,
       sport_key: this.data.defaultSportKey,
       tags: val2 ? val2 : this.data.defaultSportSquare,
-      // img: "",
+      img: url,
     }
    const resp = await this.userAddAddrReqApi(ad);
    if (resp.code != 1000) {

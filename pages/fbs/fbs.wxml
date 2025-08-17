@@ -70,10 +70,20 @@
           <!-- 场地地址 -->
           <view class="addr">
             <view class="sport-icon">
-              <block wx:for="{{ all_sport_list }}" wx:key="index3" wx:for-item="item3">
-                <!-- <text wx:if="{{ defaultSportKey == item3.key }}">{{ item3.img }}</text> -->
-                <van-image custom-class="van-img-1" radius="10" wx:if="{{ defaultSportKey == item3.key }}" fit="cover" src="{{item3.img}}" data-src="{{item3.img}}" bind:click="onPreviewImage" />
+              <!-- 真实场地图片 -->
+              <block wx:if="{{ item.img != '' }}">
+                <van-image custom-class="van-img-1" radius="10"  fit="cover" src="{{item.img}}" data-src="{{item.img}}" bind:click="onPreviewImage" />
               </block>
+              <!-- 没有就用其他代替 -->
+              <block wx:else>
+                <block wx:for="{{ all_sport_list }}" wx:key="index3" wx:for-item="item3" >
+                  <van-image custom-class="van-img-1" radius="10" wx:if="{{ defaultSportKey == item3.key }}" fit="cover" src="{{item3.img}}" data-src="{{item3.img}}" bind:click="onPreviewImage" />
+                </block>
+              </block>
+              
+              <!-- <block wx:for="{{ all_sport_list }}" wx:key="index3" wx:for-item="item3" >
+                <van-image custom-class="van-img-1" radius="10" wx:if="{{ defaultSportKey == item3.key }}" fit="cover" src="{{item3.img}}" data-src="{{item3.img}}" bind:click="onPreviewImage" />
+              </block> -->
             </view>
             <view class="sport-addr" data-item="{{ item }}" bind:tap="openMapAppDetailed">
               <view class="sport-addr-name">
@@ -278,8 +288,6 @@
           multiple
           preview-image
           deletable
-          use-before-read
-          bind:before-read="beforeRead"
           file-list="{{ fileList }}" 
           bind:after-read="afterRead" 
           bind:delete="deleteImg"
@@ -317,7 +325,22 @@
       confirm-button-open-type="getUserInfo"
       bind:close="onClose"
     >
-      <view class="check-list-box">
+      <view class="check-box">
+        <block wx:for="{{checkListData}}" wx:key="index" wx:for-item="item">
+          <view class="check-container" wx:if="{{ !item.is_show }}">
+            <view class="sport_addr"><text class="check-title">地址: </text><text class="check-content" selectable="true">{{ item.addr }}</text></view>
+            <view class="sport_key"><text class="check-title">类型: </text><text class="check-content">{{ defaultSportSquare }}</text></view>
+            <view class="sport_img">
+              <text class="check-title">图片: </text><van-image custom-class="van-img-1" radius="10" fit="cover" src="{{item.img}}" data-src="{{item.img}}" bind:click="onPreviewImage" />
+            </view>
+            <view class="check-btn">
+              <van-button bindtap="onAdd" data-value="{{ item }}" icon="https://ai.anythingai.online/static/profile3/smil.svg" custom-style="width: 170rpx" size="small" round type="info">通过</van-button>
+              <van-button bindtap="onDelete" data-value="{{ item }}" icon="https://ai.anythingai.online/static/profile3/cry.svg" custom-style="width: 170rpx" size="small" round type="danger">拒绝</van-button>
+            </view>
+          </view>
+        </block>
+      </view>
+      <!-- <view class="check-list-box">
         <block wx:for="{{checkListData}}" wx:key="index" wx:for-item="item">
           <view class="check-list-data" wx:if="{{ !item.is_show }}">
             <view class="check-addr addr-size">
@@ -332,7 +355,7 @@
             </view>
           </view>
         </block>
-      </view>
+      </view> -->
   </van-dialog>
   <!-- 隐私协议 -->
   <van-action-sheet 

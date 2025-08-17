@@ -532,3 +532,29 @@
     margin: 18rpx auto;
   }
 }
+.check-box {
+  height: 300rpx;
+  overflow-y: auto;
+  padding: 20rpx 20rpx;
+  .check-container {
+    margin: 10rpx 0;
+    border-top: 1rpx solid #d8d8d8;
+    .sport_addr {}
+    .sport_key {}
+    .sport_img {}
+    .check-btn {
+      margin-top: 17rpx;
+      display: flex;
+      justify-content: center;
+      gap: 37rpx;
+    }
+  }
+  .check-content {
+    font-size: 26rpx;
+    color: #333;
+  }
+  .check-title {
+    font-size: 29rpx;
+    font-weight: 700;
+  }
+}
