@@ -330,7 +330,8 @@
           <view class="check-container" wx:if="{{ !item.is_show }}">
             <view class="sport_addr"><text class="check-title">地址: </text><text class="check-content" selectable="true">{{ item.addr }}</text></view>
             <view class="sport_addr"><text class="check-title">简称: </text><text class="check-content" selectable="true">{{ item.tags }}</text></view>
-            <view class="sport_key"><text class="check-title">类型: </text><text class="check-content">{{ defaultSportSquare }}</text></view>
+            <view class="sport_key"><text class="check-title">类型: </text><text class="check-content">{{ item.sport_key }}</text></view>
+            <view class="sport_key"><text class="check-title">城市: </text><text class="check-content">{{ item.city }}</text></view>
             <view class="sport_img">
               <text class="check-title">图片: </text><van-image custom-class="van-img-1" radius="10" fit="cover" src="{{item.img}}" data-src="{{item.img}}" bind:click="onPreviewImage" />
             </view>
