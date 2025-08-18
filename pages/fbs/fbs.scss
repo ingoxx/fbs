@@ -141,13 +141,34 @@
     // background-size: cover;
     // background-repeat: no-repeat;
     // background-position: center;
-
+      .venue-img-update {
+        text-align: center;
+        margin: 0 31rpx;
+        // border-top: 1rpx solid #efefef;
+        
+        padding-top: 16rpx;
+        .title {
+          font-size: 20rpx;
+          color: #646566;
+        }
+        .img {
+          margin: 18rpx auto;
+        }
+      }
       .online-status {
         position: relative;
         bottom: 14rpx;
-        width: 20rpx;
-        height: 20rpx;
-        margin-top: 4rpx;
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+        height: 40rpx;
+        margin-top: 8rpx;
+        .venue-img {
+          font-size: 34rpx;
+          top: 7rpx;
+          position: relative;
+        }
       }
       .img,.addr,.distance,.tags, .online, .group-status,.show-join-user {
         display: flex;
@@ -301,7 +322,7 @@
     justify-content: space-between;
     align-items: center;
     position: fixed;
-    top: 56%;
+    top: 30%;
     .tran-2 {
       position: relative;
       right: 36rpx;
@@ -318,7 +339,7 @@
     justify-content: center;
     align-items: center;
     position: fixed;
-    top: 56%;
+    top: 38%;
     right: 0;
     .tran-2 {
       position: relative;
@@ -333,7 +354,7 @@
   }
   .message-reply {
     position: fixed;
-    top: 48%;
+    top: 30%;
     right: 0;
     display: flex;
     align-items: center;
@@ -520,10 +541,10 @@
 }
 .add-square-img {
   text-align: center;
-    margin: 0 31rpx;
-    border-top: 1rpx solid #efefef;
-    
-    padding-top: 16rpx;
+  margin: 0 31rpx;
+  border-top: 1rpx solid #efefef;
+  
+  padding-top: 16rpx;
   .title {
     font-size: 26rpx;
     color: #646566;
@@ -557,4 +578,15 @@
     font-size: 29rpx;
     font-weight: 700;
   }
+}
+.wx-nickname {
+  height: 80rpx;
+  border: 1rpx solid #d6d6d6;
+  margin: 30rpx;
+  border-radius: 10rpx;
+  padding: 0 18rpx;
+  font-size: 26rpx;
+}
+.van-search-1 {
+  border-radius: 10rpx;
 }

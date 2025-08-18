@@ -161,12 +161,36 @@
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.23);
 }
 
+.box .card-1 .card-1-1 .venue-img-update {
+  text-align: center;
+  margin: 0 31rpx;
+  padding-top: 16rpx;
+}
+
+.box .card-1 .card-1-1 .venue-img-update .title {
+  font-size: 20rpx;
+  color: #646566;
+}
+
+.box .card-1 .card-1-1 .venue-img-update .img {
+  margin: 18rpx auto;
+}
+
 .box .card-1 .card-1-1 .online-status {
   position: relative;
   bottom: 14rpx;
-  width: 20rpx;
-  height: 20rpx;
-  margin-top: 4rpx;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  height: 40rpx;
+  margin-top: 8rpx;
+}
+
+.box .card-1 .card-1-1 .online-status .venue-img {
+  font-size: 34rpx;
+  top: 7rpx;
+  position: relative;
 }
 
 .box .card-1 .card-1-1 .img, .box .card-1 .card-1-1 .addr, .box .card-1 .card-1-1 .distance, .box .card-1 .card-1-1 .tags, .box .card-1 .card-1-1 .online, .box .card-1 .card-1-1 .group-status, .box .card-1 .card-1-1 .show-join-user {
@@ -327,7 +351,7 @@
   justify-content: space-between;
   align-items: center;
   position: fixed;
-  top: 56%;
+  top: 30%;
 }
 
 .box .contact-us .tran-2 {
@@ -347,7 +371,7 @@
   justify-content: center;
   align-items: center;
   position: fixed;
-  top: 56%;
+  top: 38%;
   right: 0;
 }
 
@@ -365,7 +389,7 @@
 
 .box .message-reply {
   position: fixed;
-  top: 48%;
+  top: 30%;
   right: 0;
   display: flex;
   align-items: center;
@@ -618,4 +642,17 @@
 .check-box .check-title {
   font-size: 29rpx;
   font-weight: 700;
+}
+
+.wx-nickname {
+  height: 80rpx;
+  border: 1rpx solid #d6d6d6;
+  margin: 30rpx;
+  border-radius: 10rpx;
+  padding: 0 18rpx;
+  font-size: 26rpx;
+}
+
+.van-search-1 {
+  border-radius: 10rpx;
 }

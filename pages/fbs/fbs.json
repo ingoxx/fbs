@@ -23,6 +23,9 @@
     "van-action-sheet": "/miniprogram_npm/@vant/weapp/action-sheet/index",
     "chat-room": "/miniprogram_npm/chat/chat",
     "van-uploader": "/miniprogram_npm/@vant/weapp/uploader/index",
+    "van-search": "/miniprogram_npm/@vant/weapp/search/index",
+    "van-collapse": "/miniprogram_npm/@vant/weapp/collapse/index",
+    "van-collapse-item": "/miniprogram_npm/@vant/weapp/collapse-item/index",
     "eva-board": "/miniprogram_npm/cb/cb"
   }
 }

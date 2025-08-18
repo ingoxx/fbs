@@ -4,6 +4,7 @@
     <van-notice-bar
       scrollable
       mode="closeable"
+      speed="100"
       left-icon="volume-o"
       text="{{ notice }}"
     />
@@ -25,9 +26,10 @@
         <van-image custom-class="van-img-1" src="{{avatarUrl}}" />
       </button>
     </view>
-    <view class="user-name">
+    <view class="user-name" bind:tap="openNickName">
       <view class="name">
-        <text>{{ userid }}</text>
+        <text wx:if="{{nick_name != '' }}">{{ nick_name }}</text>
+        <text wx:else>{{ userid }}</text>
       </view>
       <view class="time">
         <view class="time-status"></view><text class="online">运动狂人</text>
@@ -40,12 +42,22 @@
   <!-- 搜索场地 -->
   <view class="search">
     <view class="s-p">
-      <input class="s-p-1" disabled="{{ isInput }}" value="{{ inputValue }}" bindinput="getVal" placeholder="输入场地搜索"/>
-      <block>
+      <!-- <input class="s-p-1" disabled="{{ isInput }}" value="{{ inputValue }}" bindinput="getVal" placeholder="输入场地搜索"/> -->
+      <van-search
+      custom-class="van-search-1"
+      value="{{ inputValue }}"
+      shape="round"
+      background="#7880dd"
+      placeholder="请输入搜索关键词"
+      bindchange="newGetVal"
+      clearable
+      disabled="{{ isInput }}"
+      />
+      <!-- <block>
         <van-transition show="{{ showCloseBtn }}" custom-class="van-transition-c" name="fade-left">
           <van-icon custom-class="van-icon-c-2" name="clear" data-value="{{ inputValue }}" bindtap="onClearInput" />
         </van-transition>
-      </block>
+      </block> -->
     </view>
     <view class="s-b">
       <van-row gutter="8">
@@ -64,8 +76,15 @@
     <block wx:for="{{ basketSquareFilterData }}" wx:key="index" wx:for-item="item">
       <van-transition show="{{ isUse }}" custom-class="block">
         <view class="card-1-1">
+          <!-- 当前场地活跃度 -->
           <view class="online-status">
-            <van-icon color="{{ item.join_user_count > 0 ? '#ff6161': '#909090' }}" name="fire" />
+            <!-- <van-icon color="{{ item.join_user_count > 0 ? '#ff6161': '#909090' }}" name="fire" /> -->
+            <view class="venue-hot">
+              <van-icon color="{{ item.join_user_count > 0 ? '#ff6161': '#909090' }}" name="fire" />
+            </view>
+            <view class="venue-img" data-index="{{index}}" bind:tap="toggleShowVenueImg">
+              <van-icon name="https://ai.anythingai.online/static/profile3/pic.svg" />
+            </view>
           </view>
           <!-- 场地地址 -->
           <view class="addr">
@@ -80,10 +99,6 @@
                   <van-image custom-class="van-img-1" radius="10" wx:if="{{ defaultSportKey == item3.key }}" fit="cover" src="{{item3.img}}" data-src="{{item3.img}}" bind:click="onPreviewImage" />
                 </block>
               </block>
-              
-              <!-- <block wx:for="{{ all_sport_list }}" wx:key="index3" wx:for-item="item3" >
-                <van-image custom-class="van-img-1" radius="10" wx:if="{{ defaultSportKey == item3.key }}" fit="cover" src="{{item3.img}}" data-src="{{item3.img}}" bind:click="onPreviewImage" />
-              </block> -->
             </view>
             <view class="sport-addr" data-item="{{ item }}" bind:tap="openMapAppDetailed">
               <view class="sport-addr-name">
@@ -101,6 +116,30 @@
               </view>
             </view>
           </view>
+          <!-- 场地图片更新 -->
+          <block>
+            <van-transition show="{{ item.is_show }}" custom-class="block">
+              <view class="venue-img-update">
+                <view class="title">
+                  <text>添加场地图片目前只能传1张</text>
+                </view>
+                <view class="img">
+                  <van-uploader 
+                  max-count="1"
+                  multiple
+                  preview-image
+                  deletable
+                  file-list="{{ fileList }}" 
+                  bind:after-read="afterRead" 
+                  bind:delete="deleteImg"
+                  />
+                </view>
+                <view class="submit-img">
+                  <van-button bind:tap="updateVenueImg" data-index="{{ index }}" data-item="{{ item }}" icon="https://ai.anythingai.online/static/profile3/smil.svg" custom-style="width: 170rpx" size="small" round type="info">上传</van-button>
+                </view>
+              </view>
+            </van-transition>
+          </block>
           <!-- 场地距离 -->
           <view class="distance" data-item="{{ item }}" bind:tap="openMapAppDetailed">
             <!-- <van-icon name="location" custom-class="van-icon-3"/> <text class="t-f">距您{{ item.distance }}公里, </text><text class="t-f-1">点击导航</text>
@@ -211,7 +250,7 @@
     <view class="tran-2" bind:tap="onSwitchContactBtn" data-id="3" bind:tap="onSwitchContactBtn">
       <van-icon size="90rpx" custom-class="van-icon-4" name="https://ai.anythingai.online/static/profile3/side-3.svg" />
     </view>
-    <van-transition show="{{ showReplyBtn }}" custom-class="block" name="slide-right" duration="0">
+    <van-transition show="{{ showReplyBtn }}" wx:if="{{showReplyBtn}}" custom-class="block" name="slide-right" duration="0">
       <view class="tran-1">
         <button size="mini" bind:tap="isShowChatRoom" class="share-btn">
           <van-icon name="https://ai.anythingai.online/static/profile3/mr.svg" />
@@ -222,6 +261,15 @@
 </view>
 <!-- 一些第三放组件或者自定义的组件 -->
 <view>
+  <!-- 昵称 -->
+  <van-popup
+    show="{{ showNickName }}"
+    position="bottom"
+    custom-style="height: 18%"
+    bind:close="onCloseNickName"
+  >
+    <input bind:change="chooseNickName" type="nickname" class="wx-nickname" placeholder="请输入昵称"/>
+  </van-popup>
   <!-- 留言框 -->
   <van-popup
     wx:if="{{ showEvaBoard }}"
@@ -239,11 +287,10 @@
     round
     custom-style="height: 40%;width: 80%; background:#374151"
     bind:close="onCloseChatRoom"
-
   >
     <chat-room wssUrl="{{ wssUrl }}" user_id="{{user_id}}" sender_id="{{sender_id}}" baseUrl="{{ baseUrl }}" class="com-chat-room"></chat-room>
   </van-popup>
-  <!-- 添加场地 -->
+  <!-- 用户添加场地 -->
   <van-dialog
     use-slot
     title="添加场地"
@@ -330,7 +377,8 @@
           <view class="check-container" wx:if="{{ !item.is_show }}">
             <view class="sport_addr"><text class="check-title">地址: </text><text class="check-content" selectable="true">{{ item.addr }}</text></view>
             <view class="sport_addr"><text class="check-title">简称: </text><text class="check-content" selectable="true">{{ item.tags }}</text></view>
-            <view class="sport_key"><text class="check-title">类型: </text><text class="check-content">{{ item.sport_key }}</text></view>
+            <view class="sport_key"><text class="check-title">运动: </text><text class="check-content">{{ item.sport_key }}</text></view>
+            <view class="sport_key"><text class="check-title">类型: </text><text class="check-content">{{ item.update_type == 1 ? '添加' : '更新' }}</text></view>
             <view class="sport_key"><text class="check-title">城市: </text><text class="check-content">{{ item.city }}</text></view>
             <view class="sport_img">
               <text class="check-title">图片: </text><van-image custom-class="van-img-1" radius="10" fit="cover" src="{{item.img}}" data-src="{{item.img}}" bind:click="onPreviewImage" />
@@ -342,22 +390,6 @@
           </view>
         </block>
       </view>
-      <!-- <view class="check-list-box">
-        <block wx:for="{{checkListData}}" wx:key="index" wx:for-item="item">
-          <view class="check-list-data" wx:if="{{ !item.is_show }}">
-            <view class="check-addr addr-size">
-              <text user-select="true">{{ item.addr }}</text>
-            </view>
-            <view class="check-addr addr-size">
-              <text user-select="true">{{ defaultSportSquare }}</text>
-            </view>
-            <view class="check-submit submit-flex">
-              <van-icon name="close" data-value="{{ item }}" color="#ee0a24" bindtap="onDelete" />
-              <van-icon name="passed" data-value="{{ item }}" color="#07c160" bindtap="onAdd" />
-            </view>
-          </view>
-        </block>
-      </view> -->
   </van-dialog>
   <!-- 隐私协议 -->
   <van-action-sheet 

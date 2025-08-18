@@ -12,6 +12,9 @@ import Dialog from '@vant/weapp/dialog/dialog';
 const md5 = require('../../utils/md5');
 Page({
   data: {
+    showVenueImg: false,
+    nick_name: "",
+    showNickName: false,
     img_url: "",
     showReplyBtn: false,
     showFlushBtn: false,
@@ -54,7 +57,7 @@ Page({
     showPrivacy: false,
     villageInfo: '',
     useNotice: "下拉小程序以获取附近运动场所地址",
-    notice: "本小程序致力于让运动爱好者无论身处何地，都能轻松找到运动搭子一起运动。您也可以随时添加新的运动场所位置，方便更多人加入。感谢您的支持，祝您身体健康，事事顺心！",
+    notice: "希望各位老板能更新场地图片（点击场地的右上角的相机图标）或者添加新的场地信息以便让更多人加入，感谢！",
     lat: 0,
     lng: 0,
     inputValue: "",
@@ -68,9 +71,9 @@ Page({
     all_sport_list: [
     ],
     checkListData: [
-      {addr: "河源市紫金县义容镇沙梨园篮球场梨园篮球场", img: "https://ai.anythingai.online/static/profile3/main-bk.jpg", is_show: false},
-      {addr: "河源市紫金县义容镇沙梨园篮球场", img: "https://ai.anythingai.online/static/profile3/main-bk.jpg", is_show: false},
-      {addr: "河源市紫金县义容镇沙梨园篮球场", img: "https://ai.anythingai.online/static/profile3/main-bk.jpg", is_show: false},
+      // {addr: "河源市紫金县义容镇沙梨园篮球场梨园篮球场", img: "https://ai.anythingai.online/static/profile3/main-bk.jpg", is_show: false},
+      // {addr: "河源市紫金县义容镇沙梨园篮球场", img: "https://ai.anythingai.online/static/profile3/main-bk.jpg", is_show: false},
+      // {addr: "河源市紫金县义容镇沙梨园篮球场", img: "https://ai.anythingai.online/static/profile3/main-bk.jpg", is_show: false},
     ],
     basketSquareFilterData: [],
     basketSquareData: [],
@@ -78,6 +81,120 @@ Page({
     evaluate_list: [],
     info_data: {},
     images: [],
+  },
+  // 提交给管理员审核
+  async updateVenueImg(e) {
+    const data = e.currentTarget.dataset.item;
+    const fileList = this.data.fileList;
+    var url = "";
+    if (fileList.length > 0) {
+      const imgname = data.id+".png";
+      const filedata = {file: fileList[0].url, name: imgname, is_user_upload: 2};
+      try {
+        const resp = await this.uploadFileApi(filedata);
+        const nr = JSON.parse(resp);
+        if (nr.code == 1000) {
+          url = `${IMG_URL}/${imgname}`;
+        } else {
+          Toast.fail("图片上传失败: 401");
+          return;
+        }
+      } catch (err) {
+        Toast.fail("图片上传失败: 402");
+        return;
+      }
+    }
+
+    const ad = {
+      id: data.id,
+      user_id: this.data.openid,
+      addr: data.addr,
+      lat: data.lat,
+      lng: data.lng,
+      city: this.data.city,
+      sport_key: this.data.defaultSportKey,
+      tags: data.tags[0],
+      img: url,
+      update_type: "2", // 表示用户更新了场地图片
+    }
+   const resp = await this.userAddAddrReqApi(ad);
+   if (resp.code != 1000) {
+      const msg = resp.msg ? resp.msg : "操作失败, 请联系管理员";
+      Notify({ type: 'danger', message: msg, duration: 20000 });
+      return;
+    }
+    Notify({type: "success", message: "非常感谢您做出的巨大贡献，图片生效需要几分钟", duration: 10000});
+    this.toggleShowVenueImg(e)
+  },
+  // 更新场地图片的弹窗
+  toggleShowVenueImg(e) {
+    const index = e.currentTarget.dataset.index;
+    const vd = this.data.basketSquareFilterData;
+
+    vd[index].is_show = !vd[index].is_show; // 切换状态
+    this.setData({
+      basketSquareFilterData: vd,
+    });
+  },
+  // 更新昵称api
+  userInfoUpdateApi(data) {
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: `${BASE_URL}/wx-user-info-update?uid=${this.data.openid}`,
+        timeout: 10000,
+        method: "POST",
+        data: data,
+        success: (res) => {
+          if (res.statusCode == 200) {
+            resolve(res.data);
+          } else {
+            reject({msg: '网络错误', code: 400, path: 'get-user-reviews'});
+          }
+        },
+        fail: (err) => {
+          reject({msg: '网络错误', code: 401, path: 'get-user-reviews'});
+        }
+      })
+    });
+  },
+  // 更新昵称
+  async chooseNickName(e) {
+    const nn = e.detail.value;
+    if (nn.length == 0) {
+      return;
+    }
+    this.setData({
+      nick_name: nn,
+    });
+    const data = {
+      openid: this.data.openid,
+      img: this.data.avatarUrl, 
+      nick_name: nn,
+    }
+    try {
+      const resp = await this.userInfoUpdateApi(data);
+      if (resp.code != 1000) {
+        Toast.fail("更改失败");
+        return;
+      }
+      wx.setStorageSync('openid', resp.data.openid);
+      wx.setStorageSync('img', resp.data.img);
+      wx.setStorageSync('nickname', resp.data.nick_name);
+    } catch (err) {
+      Toast.fail("更改失败");
+      return;
+    }
+  },
+  onCloseNickName() {
+    this.setData({
+      showNickName: false,
+    })
+  },
+  // 别名弹窗
+  openNickName() {
+    this.setData({
+      showNickName: true,
+    })
   },
   // 删除预览的图片
   deleteImg(e) {
@@ -101,7 +218,6 @@ Page({
   },
   // 点击放大图片
   onPreviewImage(e) {
-    console.log(e);
     const src = e.currentTarget.dataset.src;
     var images = [src];
     wx.previewImage({
@@ -164,6 +280,7 @@ Page({
       img: this.data.avatarUrl,
       group_id: data.id,
       addr: data.tags[0],
+      nickname: this.data.nick_name,
       sport_key: this.data.defaultSportKey
     }
     this.setData({
@@ -172,20 +289,26 @@ Page({
       info_data: fd
     });
   },
-  // 头像选择
+  // 头像选择,1：用户自行上传，2：系统随机生成，默认是2
   async onChooseAvatar(e) {
     const { avatarUrl } = e.detail 
     this.setData({
       avatarUrl,
     })
     try {
-      const reqData = {file: avatarUrl, name: this.data.openid+".png"}
+      const reqData = {file: avatarUrl, name: this.data.openid+".png", is_user_upload: 1}
       const resp = await this.uploadFileApi(reqData);
-      
       const fr = JSON.parse(resp);
-      console.log(fr);
       if (fr.code != 1000) {
         Toast.fail(fr.code);
+        return;
+      }
+      if (reqData.is_user_upload == 1) {
+        if (fr.other_data.openid && fr.other_data.img) {
+          wx.setStorageSync('openid', fr.other_data.openid);
+          wx.setStorageSync('img', fr.other_data.img);
+          wx.setStorageSync('nickname', fr.other_data.nick_name);
+        }
       }
     } catch (err) {
       Toast.fail(err.code);
@@ -195,7 +318,7 @@ Page({
   uploadFileApi(data) {
     return new Promise((resolve, reject) => {
       wx.uploadFile({
-        url: `${BASE_URL}/wx-upload?uid=${this.data.openid}&filename=${data.name}`,
+        url: `${BASE_URL}/wx-upload?uid=${this.data.openid}&filename=${data.name}&user_upload=${data.is_user_upload}&nick_name=${this.data.nick_name}`,
         timeout: 15000,
         filePath: data.file,
         name: 'file',
@@ -619,13 +742,13 @@ Page({
       basketSquareFilter: updatadBsf,
     })
   },
-  refuseAddAddrReqApi(id, city) {
+  refuseAddAddrReqApi(data) {
     return new Promise((resolve, reject) => {
       wx.request({
         url: `${BASE_URL}/add-square-refuse?uid=${this.data.openid}`,
         method: "POST",
         timeout: 10000,
-        data: JSON.stringify({id: id, city: city}),
+        data: JSON.stringify(data),
         success: function (res) {
           if (res.statusCode != 200) {
             Toast.fail("请求接口失败");
@@ -639,13 +762,13 @@ Page({
       })
     })
   },
-  passAddAddrReqApi(id, city) {
+  passAddAddrReqApi(data) {
     return new Promise((resolve, reject) => {
       wx.request({
         url: `${BASE_URL}/add-square-pass?uid=${this.data.openid}`,
         method: "POST",
         timeout: 10000,
-        data: JSON.stringify({id: id, city: city}),
+        data: JSON.stringify(data),
         success: function (res) {
           if (res.statusCode != 200) {
             Toast.fail("请求接口失败");
@@ -667,7 +790,12 @@ Page({
         title: '确认添加',
         message: `确认添加 '${addData.addr}' 吗？`
       });
-      const pdd = await this.passAddAddrReqApi(addData.id, addData.sport_key);
+      const fd = {id: addData.id, 
+        city: addData.sport_key, 
+        update_type: addData.update_type,
+        img: addData.img,
+      }
+      const pdd = await this.passAddAddrReqApi(fd);
       if (pdd.code != 1000) {
         Toast.fail("添加失败");
         return;
@@ -688,7 +816,12 @@ Page({
         title: '确认删除',
         message: `确认删除 '${delData.addr}' 吗？`
       });
-      const pdd = await this.refuseAddAddrReqApi(delData.id, delData.sport_key);
+      const fd = {id: addData.id, 
+        city: addData.sport_key, 
+        update_type: addData.update_type,
+        img: addData.img,
+      }
+      const pdd = await this.refuseAddAddrReqApi(fd);
       if (pdd.code != 1000) {
         Toast.fail("删除失败");
         return;
@@ -745,7 +878,7 @@ Page({
     var url = "";
     if (fileList.length > 0) {
       const imgname = uuid+".png";
-      const filedata = {file: fileList[0].url, name: imgname};
+      const filedata = {file: fileList[0].url, name: imgname, is_user_upload: 2};
       try {
         const resp = await this.uploadFileApi(filedata);
         const nr = JSON.parse(resp);
@@ -768,6 +901,7 @@ Page({
       sport_key: this.data.defaultSportKey,
       tags: val2 ? val2 : this.data.defaultSportSquare,
       img: url,
+      update_type: "1", // 表示用户手动添加了新的场地
     }
    const resp = await this.userAddAddrReqApi(ad);
    if (resp.code != 1000) {
@@ -785,6 +919,23 @@ Page({
       const data = {detail: {value: ""}};
       this.getVal(data);
     }
+  },
+  newGetVal(e) {
+    // console.log(e.detail);
+    const val = e.detail;
+    this.setData({
+      inputValue: val,
+    });
+    // var fd = this.data.basketSquareData.filter(item => item.addr.includes(val));
+    const fd = this.data.basketSquareData.filter(item => {
+      const addrMatch = item.addr.includes(val);
+      const tagsMatch = item.tags.some(tag => tag.includes(val));
+      return addrMatch || tagsMatch;
+    });
+    const disSortList = fd.sort((a, b) => a.distance - b.distance);
+    this.setData({
+      basketSquareFilterData: disSortList.slice(0, this.data.showDataNumber),
+    });
   },
   // 获取input值
   getVal(e) {
@@ -809,7 +960,7 @@ Page({
     this.setData({
       basketSquareFilterData: disSortList.slice(0, this.data.showDataNumber),
     });
-},
+  },
   // 进到群组
   chatRoom(e) {
     const id = e.currentTarget.dataset.item;
@@ -1075,7 +1226,9 @@ Page({
         openid: resp.openid,
         avatarUrl: resp.img,
         userid: "user_"+md5(resp.openid),
+        nick_name: resp.nickname,
       });
+      
       that.isShowPrivacy();
     }).catch(err => {
       console.error('登录失败:', err);
