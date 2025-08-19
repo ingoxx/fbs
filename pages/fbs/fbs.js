@@ -102,16 +102,15 @@ Page({
           url = `${IMG_URL}/${imgname}`;
         } else {
           Toast.fail("图片上传失败: 401");
-          Toast.clear();
+          // Toast.clear();
           return;
         }
       } catch (err) {
         Toast.fail("图片上传失败: 402");
-        Toast.clear();
+        // Toast.clear();
         return;
       }
     }
-
     const ad = {
       id: data.id,
       aid: data.aid,
@@ -131,7 +130,7 @@ Page({
       Toast.clear();
       return;
     }
-    Notify({type: "success", message: "非常感谢您做出的巨大贡献，图片生效需要几分钟", duration: 10000});
+    Notify({type: "success", message: "非常感谢您做出的巨大贡献，图片生效需要几分钟", duration: 3000});
     this.toggleShowVenueImg(e);
     Toast.clear();
   },
@@ -224,6 +223,20 @@ Page({
     const { file } = event.detail;
     const newFiles = Array.isArray(file) ? file : [file];
     this.setData({ fileList: this.data.fileList.concat(newFiles) });
+  },
+  // 场地图片
+  onPreviewVenueImage(e) {
+    const src = e.currentTarget.dataset.src;
+    const imgs =  e.currentTarget.dataset.imgs;
+    var images = [src];
+    if (imgs && imgs.length > 1) {
+      images=imgs;
+    }
+    wx.previewImage({
+      current: src, // 当前显示的图片
+      // urls: imgs, // 预览的图片数组
+      urls: images,
+    });
   },
   // 点击放大图片
   onPreviewImage(e) {
@@ -900,12 +913,12 @@ Page({
           url = `${IMG_URL}/${imgname}`;
         } else {
           Toast.fail("图片上传失败1");
-          Toast.clear();
+          // Toast.clear();
           return;
         }
       } catch (err) {
         Toast.fail(err.msg);
-        Toast.clear();
+        // Toast.clear();
         return;
       }
     }
@@ -1165,7 +1178,7 @@ Page({
           hasJoined      // 新增字段
         };
       });
-
+      console.log("processedList >>> ", processedList);
       this.setData({
         basketSquareFilterData: processedList,
         isEmpty: false,
