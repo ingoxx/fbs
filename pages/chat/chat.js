@@ -61,7 +61,7 @@ Page({
       title: this.data.connectText,
     });
     const socket = wx.connectSocket({
-      url: `${WSS_URL}/ws?uid=${app.globalData.openid}`,
+      url: `${WSS_URL}/ws?uid=${this.data.user_id}`,
       timeout: 10000,
     });
     this.data.socket = socket;
