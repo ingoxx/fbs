@@ -4,7 +4,7 @@
     <van-notice-bar
       scrollable
       mode="closeable"
-      speed="100"
+      speed="85"
       left-icon="volume-o"
       text="{{ notice }}"
     />
@@ -22,7 +22,6 @@
   <view class="userinfo">
     <view class="user-img">
       <button class="img-btn" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-        <!-- <image class="img-img" src="{{avatarUrl}}"></image> -->
         <van-image custom-class="van-img-1" src="{{avatarUrl}}" />
       </button>
     </view>
@@ -35,6 +34,9 @@
         <view class="time-status"></view><text class="online">运动狂人</text>
       </view>
     </view>
+    <!-- <view class="user-gif">
+      <van-image custom-class="van-img-1" image-class="van-img-3" src="https://ai.anythingai.online/static/profile3/wl.gif" />
+    </view> -->
     <view class="user-tag">
       <van-tag custom-class="van-tag-1" color="#ffe534" text-color="#333333"><van-icon name="https://ai.anythingai.online/static/profile3/star.svg" />{{defaultSportSquare}}</van-tag>
     </view>
@@ -141,7 +143,7 @@
             </van-transition>
           </block>
           <!-- 场地距离 -->
-          <view class="distance" data-item="{{ item }}" bind:tap="openMapAppDetailed">
+          <view class="distance" data-item="{{ item }}">
             <!-- <van-icon name="location" custom-class="van-icon-3"/> <text class="t-f">距您{{ item.distance }}公里, </text><text class="t-f-1">点击导航</text>
             <van-tag round type="success" custom-class="{{ item.online == 0 ? 'van-tag-c': 'van-tag-c-1' }}"><van-icon name="friends" /> {{ item.online }}人在线</van-tag> -->
             <view class="online-users">
@@ -368,9 +370,11 @@
       z-index="100"
       title="审核列表"
       show="{{ showCheckList }}"
-      show-cancel-button
+      show-confirm-button="{{false}}"  
+      show-cancel-button="{{true}}"     
       confirm-button-open-type="getUserInfo"
       bind:close="onClose"
+      custom-class="van-dialog-1"
     >
       <view class="check-box">
         <block wx:for="{{checkListData}}" wx:key="index" wx:for-item="item">
@@ -411,8 +415,8 @@
         <text class="privacy-detail">感谢您的理解与配合，祝您使用愉快！</text> 
       </view>
       <view class="privacy-status">
-        <van-button icon="https://ai.anythingai.online/static/profile3/smil.svg" custom-style="width: 170rpx" size="small" round type="info" data-item="1" bind:tap="iAacceptPrivacy">同意协议</van-button>
-        <van-button icon="https://ai.anythingai.online/static/profile3/cry.svg" custom-style="width: 170rpx" size="small" round type="danger" data-item="2" bind:tap="iAacceptPrivacy">拒绝协议</van-button>
+        <van-button icon="https://ai.anythingai.online/static/profile3/smil.svg" custom-style="width: 190rpx" size="small" round type="info" data-item="1" bind:tap="iAacceptPrivacy">同意协议</van-button>
+        <van-button icon="https://ai.anythingai.online/static/profile3/cry.svg" custom-style="width: 190rpx" size="small" round type="danger" data-item="2" bind:tap="iAacceptPrivacy">拒绝协议</van-button>
       </view>
     </view>
   </van-action-sheet>

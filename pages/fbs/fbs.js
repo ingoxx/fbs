@@ -57,7 +57,7 @@ Page({
     showPrivacy: false,
     villageInfo: '',
     useNotice: "下拉小程序以获取附近运动场所地址",
-    notice: "希望各位老板能更新场地图片（点击场地的右上角的相机图标）或者添加新的场地信息以便让更多人加入，感谢！",
+    notice: "希望各位老板可以更新场地图片（点击场地的右上角的相机图标）或者添加新的场地信息以便让更多人加入，感谢！",
     lat: 0,
     lng: 0,
     inputValue: "",
@@ -70,11 +70,7 @@ Page({
     ],
     all_sport_list: [
     ],
-    checkListData: [
-      // {addr: "河源市紫金县义容镇沙梨园篮球场梨园篮球场", img: "https://ai.anythingai.online/static/profile3/main-bk.jpg", is_show: false},
-      // {addr: "河源市紫金县义容镇沙梨园篮球场", img: "https://ai.anythingai.online/static/profile3/main-bk.jpg", is_show: false},
-      // {addr: "河源市紫金县义容镇沙梨园篮球场", img: "https://ai.anythingai.online/static/profile3/main-bk.jpg", is_show: false},
-    ],
+    checkListData: [],
     basketSquareFilterData: [],
     basketSquareData: [],
     join_users: [],
@@ -82,11 +78,20 @@ Page({
     info_data: {},
     images: [],
   },
-  // 提交给管理员审核
+  // 用户提交更新场地图片
   async updateVenueImg(e) {
     const data = e.currentTarget.dataset.item;
     const fileList = this.data.fileList;
     var url = "";
+
+    if (fileList.length == 0) {
+      Toast.fail("先选择图片");
+      return;
+    }    
+    Toast.loading({
+      message: '正在更新...',
+      forbidClick: true,
+    });
     if (fileList.length > 0) {
       const imgname = data.id+".png";
       const filedata = {file: fileList[0].url, name: imgname, is_user_upload: 2};
@@ -97,16 +102,19 @@ Page({
           url = `${IMG_URL}/${imgname}`;
         } else {
           Toast.fail("图片上传失败: 401");
+          Toast.clear();
           return;
         }
       } catch (err) {
         Toast.fail("图片上传失败: 402");
+        Toast.clear();
         return;
       }
     }
 
     const ad = {
       id: data.id,
+      aid: data.aid,
       user_id: this.data.openid,
       addr: data.addr,
       lat: data.lat,
@@ -119,12 +127,13 @@ Page({
     }
    const resp = await this.userAddAddrReqApi(ad);
    if (resp.code != 1000) {
-      const msg = resp.msg ? resp.msg : "操作失败, 请联系管理员";
-      Notify({ type: 'danger', message: msg, duration: 20000 });
+      Notify({ type: 'danger', message: resp.msg ? resp.msg : "操作失败, 请联系管理员", duration: 20000 });
+      Toast.clear();
       return;
     }
     Notify({type: "success", message: "非常感谢您做出的巨大贡献，图片生效需要几分钟", duration: 10000});
-    this.toggleShowVenueImg(e)
+    this.toggleShowVenueImg(e);
+    Toast.clear();
   },
   // 更新场地图片的弹窗
   toggleShowVenueImg(e) {
@@ -235,12 +244,6 @@ Page({
       newData[k.name] = (k.id === id) ? !this.data[k.name] : false;
     });
     this.setData(newData);
-  },
-  // 生成随机的头像
-  generateImg(min, max) {
-    const num = Math.floor(Math.random() * (max - min + 1)) + min;
-    const img_url = `${IMG_URL}/${num}.png`;
-    return img_url;
   },
   // 获取某个场地的所有用户的评价Api
   getAllEvaluateApi(gid) {
@@ -859,6 +862,7 @@ Page({
   async onConfirmAddPlace() {
     const val = this.data.villageInfo;
     const val2 = this.data.placeTag;
+    const fileList = this.data.fileList;
     if (val == "") {
       Toast.fail("地址不能为空");
       return;
@@ -867,6 +871,11 @@ Page({
       Toast.fail("简称不能为空");
       return;
     }
+    if (fileList.length == 0) {
+      Toast.fail("图片不能为空");
+      return;
+    }
+
     const respTx = await this.txMapSearchAddrApi(this.data.villageInfo);
     if (respTx.status != 1000) {
       Notify({type: 'danger', message: '输入的地址无效', duration: 30000});
@@ -874,8 +883,13 @@ Page({
     }
     
     const uuid = generateUUID();
-    const fileList = this.data.fileList;
+    
     var url = "";
+
+    Toast.loading({
+      message: '正在提交...',
+      forbidClick: true,
+    });
     if (fileList.length > 0) {
       const imgname = uuid+".png";
       const filedata = {file: fileList[0].url, name: imgname, is_user_upload: 2};
@@ -886,13 +900,18 @@ Page({
           url = `${IMG_URL}/${imgname}`;
         } else {
           Toast.fail("图片上传失败1");
+          Toast.clear();
+          return;
         }
       } catch (err) {
         Toast.fail(err.msg);
+        Toast.clear();
+        return;
       }
     }
     const ad = {
       id: uuid,
+      aid: uuid,
       user_id: this.data.openid,
       addr: this.data.villageInfo,
       lat: respTx.lat,
@@ -905,11 +924,12 @@ Page({
     }
    const resp = await this.userAddAddrReqApi(ad);
    if (resp.code != 1000) {
-      const msg = resp.msg ? resp.msg : "添加地址失败, 请联系管理员";
-      Notify({ type: 'danger', message: msg, duration: 20000 });
+      Notify({ type: 'danger', message:  resp.msg ? resp.msg : "添加地址失败, 请联系管理员", duration: 20000 });
+      Toast.clear();
       return;
     }
     Notify({ type: 'success', message: "地址已提交,审核通过会更新到页面上", duration: 10000 });
+    Toast.clear();
   },
   onClose() {
     this.setData({ addVillage: false, showCheckList: false });
@@ -1227,6 +1247,7 @@ Page({
         avatarUrl: resp.img,
         userid: "user_"+md5(resp.openid),
         nick_name: resp.nickname,
+        img_url: IMG_URL,
       });
       
       that.isShowPrivacy();

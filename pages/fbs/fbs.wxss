@@ -105,6 +105,10 @@
   }
 }
 
+.box .userinfo .user-gif {
+  border-radius: 10rpx;
+}
+
 .box .userinfo .user-tag {
   overflow: hidden;
   position: relative;
@@ -351,7 +355,7 @@
   justify-content: space-between;
   align-items: center;
   position: fixed;
-  top: 30%;
+  top: 32%;
 }
 
 .box .contact-us .tran-2 {
@@ -371,7 +375,7 @@
   justify-content: center;
   align-items: center;
   position: fixed;
-  top: 38%;
+  top: 32%;
   right: 0;
 }
 
@@ -389,7 +393,7 @@
 
 .box .message-reply {
   position: fixed;
-  top: 30%;
+  top: 23%;
   right: 0;
   display: flex;
   align-items: center;
@@ -571,6 +575,10 @@
   height: 49rpx;
 }
 
+.van-img-3 {
+  border-radius: 10rpx;
+}
+
 .van-btn-1 {
   background: #f9f9f9 !important;
 }
@@ -655,4 +663,8 @@
 
 .van-search-1 {
   border-radius: 10rpx;
+}
+
+.van-dialog-1 .van-dialog__footer {
+  text-align: center;
 }

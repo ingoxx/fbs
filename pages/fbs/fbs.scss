@@ -90,6 +90,9 @@
         }
       }
     }
+    .user-gif {
+      border-radius: 10rpx;
+    }
     .user-tag {
       overflow: hidden;
       position: relative;
@@ -322,7 +325,7 @@
     justify-content: space-between;
     align-items: center;
     position: fixed;
-    top: 30%;
+    top: 32%;
     .tran-2 {
       position: relative;
       right: 36rpx;
@@ -339,7 +342,7 @@
     justify-content: center;
     align-items: center;
     position: fixed;
-    top: 38%;
+    top: 32%;
     right: 0;
     .tran-2 {
       position: relative;
@@ -354,7 +357,7 @@
   }
   .message-reply {
     position: fixed;
-    top: 30%;
+    top: 23%;
     right: 0;
     display: flex;
     align-items: center;
@@ -506,10 +509,14 @@
 .van-img-1 {
   width: 80rpx;
   height: 80rpx;
+  
 }
 .van-img-2 {
   width: 49rpx;
   height: 49rpx;
+}
+.van-img-3 {
+  border-radius: 10rpx;
 }
 .van-btn-1 {
   background: #f9f9f9!important; 
@@ -560,9 +567,9 @@
   .check-container {
     margin: 10rpx 0;
     border-top: 1rpx solid #d8d8d8;
-    .sport_addr {}
-    .sport_key {}
-    .sport_img {}
+    // .sport_addr {}
+    // .sport_key {}
+    // .sport_img {}
     .check-btn {
       margin-top: 17rpx;
       display: flex;
@@ -589,4 +596,9 @@
 }
 .van-search-1 {
   border-radius: 10rpx;
+}
+.van-dialog-1 {
+  .van-dialog__footer {
+    text-align: center;
+  }
 }
