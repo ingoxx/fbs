@@ -31,7 +31,7 @@ Page({
     baseUrl: '',
     showChatRoom: false,
     openid: "",
-    showDataNumber: 8,
+    showDataNumber: 16,
     placeTag: "",
     sportSelectedCacheKey: 'selected_sport',
     sportsCacheKey: 'is_show_sports',
@@ -57,7 +57,7 @@ Page({
     showPrivacy: false,
     villageInfo: '',
     useNotice: "下拉小程序以获取附近运动场所地址",
-    notice: "希望各位老板可以更新场地图片（点击场地的右上角的相机图标）或者添加新的场地信息以便让更多人加入，感谢！",
+    notice: "恳求各位老板可以更新场地图片（点击场地的右上角的相机图标）或者添加新的场地信息以便让更多人加入，我自己也在努力尽量完善运动场地信息，感谢！",
     lat: 0,
     lng: 0,
     inputValue: "",
@@ -1117,7 +1117,8 @@ Page({
         return;
       }
       this.setData({
-        basketSquareData: JSON.parse(allData.data),
+        // basketSquareData: JSON.parse(allData.data),
+        basketSquareData: allData.other_data,
       });
       const newList = this.data.basketSquareData;
       const updatadList = newList.map((item) => {
@@ -1178,7 +1179,6 @@ Page({
           hasJoined      // 新增字段
         };
       });
-      console.log("processedList >>> ", processedList);
       this.setData({
         basketSquareFilterData: processedList,
         isEmpty: false,
