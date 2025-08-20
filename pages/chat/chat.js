@@ -23,6 +23,7 @@ Page({
     toView: '',
     group_id: 0,
     user_id: '',
+    nick_name: '',
     sender_id: '',
     sender_id: '',
     online: 0,
@@ -74,6 +75,7 @@ Page({
         time: this.getCurrentTime(),
         user_id: options.user_id,
         sender_id: options.sender_id,
+        nick_name: options.nick_name,
       };
       socket.send({ data: JSON.stringify(initMsg)});
     })
@@ -115,6 +117,7 @@ Page({
       content: content,
       time: this.getCurrentTime(),
       user_id: this.data.user_id,
+      nick_name: this.data.nick_name,
     };
     this.data.socket.send({ data: JSON.stringify(initMsg)});
     const data = {detail: {value: ""}};
@@ -218,6 +221,7 @@ Page({
       sender_id: options.sender_id,
       bkUrl: options.img,
       tag: options.tag,
+      nick_name: options.nick_name,
     });
     this.initWss(options);
   },

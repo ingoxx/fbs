@@ -999,7 +999,7 @@ Page({
     const id = e.currentTarget.dataset.item;
     const img = this.data.all_sport_list.find(item => item.key == this.data.defaultSportKey);
     wx.navigateTo({
-      url: `/pages/chat/chat?id=${id.id}&addr=${id.addr}&lat=${id.lat}&lng=${id.lng}&user_id=${this.data.openid}&sender_id=${md5(this.data.openid)}&img=${img.img}&tag=${id.tags[0]}`,
+      url: `/pages/chat/chat?id=${id.id}&nick_name=${this.data.nick_name}&addr=${id.addr}&lat=${id.lat}&lng=${id.lng}&user_id=${this.data.openid}&sender_id=${md5(this.data.openid)}&img=${img.img}&tag=${id.tags[0]}`,
     });
   },
   getBasketSquareData() {
