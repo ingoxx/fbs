@@ -1,0 +1,55 @@
+<view class="box">
+  <view class="title">
+    <text>{{addr}}</text>
+  </view>
+  <view class="input">
+    <textarea value="{{ value }}" class="cb-text" placeholder="请输入对当前场地的赞美" bindinput="onInput" />
+    <van-transition show="{{ showCloseBtn }}" custom-class="van-transition-c" name="fade-left" >
+      <van-icon name="clear" data-value="{{ value }}" bindtap="onClearInput" />
+    </van-transition>
+  </view>
+  <view class="send">
+    <view class="total-eva">
+      <text>{{total_evaluate}}条留言</text>
+    </view>
+    <view class="send-data">
+      <van-button type="info" size="small" custom-style="width: 130rpx" bind:tap="submitSquareEvaluate">
+        <van-icon name="like" custom-class="van-icon-1" />赞美
+      </van-button>
+    </view>
+  </view>
+  <!-- <scroll-view
+  scroll-y="true" 
+  scroll-with-animation 
+  scroll-into-view="{{toView}}"
+  >
+  </scroll-view> -->
+  <view class="content">
+    <block wx:for="{{ evaluate_list }}" wx:key="index" wx:for-item="item">
+      <view class="scroll">
+        <view class="img" style="background-image: url({{item.img}});margin-right:-10px;">
+          <van-image width="100%" round height="100%"  fit="cover" src="{{item.img}}" bind:click="onPreviewImage" data-src="{{item.img}}"/>
+        </view>
+        <view class="info">
+          <view class="user">
+            <view class="name-top">
+              <text class="name" wx:if="{{item.nick_name != ''}}">{{item.nick_name}}</text> 
+              <text class="name" wx:else>{{item.user}}</text> 
+            </view>
+            <view class="time-top">
+              <van-icon name="clock-o" custom-class="van-icon-3"/><text class="time">{{item.time}}</text>
+            </view>
+          </view>
+          <view class="user-eva">
+            <text>
+              {{item.evaluate}}
+            </text>
+          </view>
+          <view class="eva-status" data-item="{{item}}" data-id="{{item.group_id}}" data-index="{{index}}" bind:tap="toggleLike">
+            <van-icon name="like" color="{{ item.is_like ? '#e83f3f': '#585858' }}" /> <text class="good-num" wx:if="{{item.like > 0}}">{{item.like}}</text>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>

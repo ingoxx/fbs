@@ -269,6 +269,7 @@
     position="bottom"
     custom-style="height: 18%"
     bind:close="onCloseNickName"
+    round
   >
     <input bind:change="chooseNickName" type="nickname" class="wx-nickname" placeholder="请输入昵称"/>
   </van-popup>
