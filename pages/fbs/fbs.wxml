@@ -409,10 +409,8 @@
         <text class="privacy-detail">欢迎使用本小程序！为保障您的合法权益，请您在使用前仔细阅读并同意以下条款：</text>
         <text class="privacy-detail"><text class="privacy-item">1.</text>您需遵守国家法律法规，禁止发布违法、违规、骚扰、攻击性或不实信息，违规行为将导致永久禁止您使用本小程序。</text> 
         <text class="privacy-detail"><text class="privacy-item">2.</text>您在本小程序中发布的信息及内容由您本人负责，如因内容引发的法律责任由用户自行承担。</text> 
-        <text class="privacy-detail"><text class="privacy-item">3.</text>本小程序不会永久保存用户的聊天记录，将定期清理，也不会收集用户的任何个人信息(仅从开放平台获取有限的信息)。</text> 
-        <text class="privacy-detail"><text class="privacy-item">4.</text>您在使用过程中若遇到问题或发现违规行为，可通过小程序内提供的反馈渠道联系我们。</text> 
-        <text class="privacy-detail privacy-detail-important"><text class="privacy-item">5.</text>我们不提供场地预约的功能跟所有收费场地没有任何关系，纯粹就是展示您附近的运动场地，用户可自行发起组队。</text> 
-        <text class="privacy-detail"><text class="privacy-item">6.</text>点击下方'同意协议'即表示您已阅读并同意本协议的全部内容，'拒绝协议'您将不能使用本小程序。</text> 
+        <text class="privacy-detail"><text class="privacy-item">3.</text>您在使用过程中若遇到问题或发现违规行为，可通过小程序内提供的反馈渠道联系我们。</text> 
+        <text class="privacy-detail"><text class="privacy-item">4.</text>点击下方'同意协议'即表示您已阅读并同意本协议的全部内容，'拒绝协议'您将不能使用本小程序。</text> 
         <text class="privacy-detail">感谢您的理解与配合，祝您使用愉快！</text> 
       </view>
       <view class="privacy-status">
