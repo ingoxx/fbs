@@ -1050,6 +1050,7 @@ Page({
       basketSquareFilterData: fd,
     });
   },
+  // 用户当前坐标
   getUserLocation() {
     const qqmapsdk = new QQMapWX({
       key: 'YSRBZ-GSVY3-3P23L-RNWCE-OQB3V-T6BXG'
