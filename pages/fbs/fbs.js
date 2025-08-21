@@ -672,7 +672,7 @@ Page({
           showPrivacy: true,
           isUse: false,
         })
-      }, 5000)
+      }, 1000)
     }
   },
   // 提交添加地址的api
