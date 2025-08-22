@@ -31,6 +31,7 @@ Page({
     lat: 0,
     lng: 0,
     tag: '',
+    ava_img: '',
     inputValue: '',
     chatData: [],
   },
@@ -76,6 +77,7 @@ Page({
         user_id: options.user_id,
         sender_id: options.sender_id,
         nick_name: options.nick_name,
+        ava_img: options.ava_img,
       };
       socket.send({ data: JSON.stringify(initMsg)});
     })
@@ -118,6 +120,7 @@ Page({
       time: this.getCurrentTime(),
       user_id: this.data.user_id,
       nick_name: this.data.nick_name,
+      ava_img: this.data.ava_img,
     };
     this.data.socket.send({ data: JSON.stringify(initMsg)});
     const data = {detail: {value: ""}};
@@ -222,6 +225,7 @@ Page({
       bkUrl: options.img,
       tag: options.tag,
       nick_name: options.nick_name,
+      ava_img: options.ava_img
     });
     this.initWss(options);
   },

@@ -12,6 +12,8 @@ import Dialog from '@vant/weapp/dialog/dialog';
 const md5 = require('../../utils/md5');
 Page({
   data: {
+    showPrivacyContent: false,
+    privacyCheckedVal: false, 
     showVenueImg: false,
     nick_name: "",
     showNickName: false,
@@ -77,6 +79,22 @@ Page({
     evaluate_list: [],
     info_data: {},
     images: [],
+  },
+  privacyContentRead() {
+    this.setData({
+      showPrivacyContent: !this.data.showPrivacyContent,
+      privacyCheckedVal: true,
+    })
+  },
+  showUserPrivacyContent () {
+    this.setData({
+      showPrivacyContent: !this.data.showPrivacyContent,
+    });
+  }, 
+  onPrivacyCheckedChange() {
+    this.setData({
+      privacyCheckedVal: !this.data.privacyCheckedVal,
+    });
   },
   // 用户提交更新场地图片
   async updateVenueImg(e) {
@@ -643,6 +661,10 @@ Page({
   iAacceptPrivacy(e) {
     const res = e.currentTarget.dataset.item;
     if (res == 1) {
+      if (!this.data.privacyCheckedVal) {
+        Toast.fail("请勾选协议");
+        return;
+      }
       this.cusSetStorage(this.data.isShowPrivacyCacheKey, 1);
       this.setData({
         showPrivacy: false,
@@ -718,7 +740,7 @@ Page({
       checkListData: data.data,
     })
   },
-  // 拉取所有数据
+  // 拉取所有数据Api
   getAllDataApi() {
     return new Promise((resolve, reject) => {
       wx.request({
@@ -999,7 +1021,7 @@ Page({
     const id = e.currentTarget.dataset.item;
     const img = this.data.all_sport_list.find(item => item.key == this.data.defaultSportKey);
     wx.navigateTo({
-      url: `/pages/chat/chat?id=${id.id}&nick_name=${this.data.nick_name}&addr=${id.addr}&lat=${id.lat}&lng=${id.lng}&user_id=${this.data.openid}&sender_id=${md5(this.data.openid)}&img=${img.img}&tag=${id.tags[0]}`,
+      url: `/pages/chat/chat?id=${id.id}&ava_img=${this.data.avatarUrl}&nick_name=${this.data.nick_name}&addr=${id.addr}&lat=${id.lat}&lng=${id.lng}&user_id=${this.data.openid}&sender_id=${md5(this.data.openid)}&img=${img.img}&tag=${id.tags[0]}`,
     });
   },
   getBasketSquareData() {
@@ -1109,6 +1131,7 @@ Page({
       })
     })
   },
+  // 获取所有数据
   async getAddrDistance() {
     const resp = await this.getUserLocation();
     if (resp.latitude !== "" && resp.longitude !== "" && resp.city !== "") {
@@ -1118,44 +1141,14 @@ Page({
         return;
       }
       this.setData({
-        // basketSquareData: JSON.parse(allData.data),
         basketSquareData: allData.other_data,
       });
       const newList = this.data.basketSquareData;
-      const updatadList = newList.map((item) => {
-          const res = this.getDistance(this.data.lat, this.data.lng, item.lat, item.lng);
-          item.distance = res/1000;
-          item.distance = item.distance.toFixed(1);
-          return item;
-      });
-      const disSortList = updatadList.sort((a, b) => a.distance - b.distance);
-      const sliceDataList = disSortList.slice(0, this.data.showDataNumber);
+      const disSortList = newList.sort((a, b) => a.distance - b.distance);
       // 等待所有异步任务都完成
       const newUL = await Promise.all(
-        sliceDataList.map(async (item) => {
-          const online = await this.getGroupUserCountApi(item.id);
-          if (online.code != 1000) {
-            Toast.fail("失败: ", online.code);
-            return;
-          }
-          item.online = online.data;
-          const group_users = await this.getGroupUsersApi(item.id);
-          if (group_users.code != 1000) {
-            Toast.fail("group_users: ", online.code);
-            return;
-          }
-          if (group_users.data.length > 0 ) {
-            item.join_user_count = group_users.data.length;
-          }
-          item.join_users = group_users.data.slice(-this.data.showDataNumber);
-
-          // 获取某个场地id的所有用户评价
-          const eva_data = await this.getAllEvaluateApi(item.id);
-          if (eva_data.code != 1000) {
-            Toast.fail("eva_data: ", eva_data.code);
-            return;
-          }
-          const dl = eva_data.data;
+        disSortList.map(async (item) => {
+          const dl = item.user_reviews;
           dl.map((item) => {
             if (item.like_users.length > 0) {
               item.is_like = item.like_users.includes(this.data.openid);
@@ -1166,7 +1159,7 @@ Page({
             return stringToTimestamp(b.time) - stringToTimestamp(a.time);
           });
           item.user_reviews = dl;
-          item.user_reviews_count = eva_data.data.length;
+          item.user_reviews_count = dl.length;
 
           return item;
         })
@@ -1238,6 +1231,7 @@ Page({
       });
     });
   },
+  // 计算距离
   getDistance(lat1, lng1, lat2, lng2) {
     const rad = Math.PI / 180;
     const radLat1 = lat1 * rad;

@@ -405,9 +405,16 @@
       <text>用户隐私协议</text>
     </view>
     <view class="privacy-center">
-      <view class="privacy-content">
+      <view class="privacy-content-f">
+        <van-checkbox icon-size="14px" value="{{ privacyCheckedVal }}" shape="square" bind:change="onPrivacyCheckedChange"></van-checkbox>
+        <text>我已阅读并同意</text><text class="privacy-jump" bind:tap="showUserPrivacyContent">《用户隐私协议》</text>
+      </view>
+      <view class="privacy-agree">
+        <van-button custom-style="width: 190rpx" size="small" type="primary" data-item="1" bind:tap="iAacceptPrivacy">确认</van-button>
+      </view>
+      <!-- <view class="privacy-content">
         <text class="privacy-detail">欢迎使用本小程序！为保障您的合法权益，请您在使用前仔细阅读并同意以下条款：</text>
-        <text class="privacy-detail"><text class="privacy-item">1.</text>您需遵守国家法律法规，禁止发布违法、违规、骚扰、攻击性或不实信息，违规行为将导致永久禁止您使用本小程序。</text> 
+        <text class="privacy-detail"><text class="privacy-item">1.</text>您需遵守国家法律法规，禁止发布违法、违规、骚扰、攻击性等信息，违规行为将导致永久禁止您使用本小程序。</text> 
         <text class="privacy-detail"><text class="privacy-item">2.</text>您在本小程序中发布的信息及内容由您本人负责，如因内容引发的法律责任由用户自行承担。</text> 
         <text class="privacy-detail"><text class="privacy-item">3.</text>您在使用过程中若遇到问题或发现违规行为，可通过小程序内提供的反馈渠道联系我们。</text> 
         <text class="privacy-detail"><text class="privacy-item">4.</text>点击下方'同意协议'即表示您已阅读并同意本协议的全部内容，'拒绝协议'您将不能使用本小程序。</text> 
@@ -416,9 +423,31 @@
       <view class="privacy-status">
         <van-button icon="https://ai.anythingai.online/static/profile3/smil.svg" custom-style="width: 190rpx" size="small" round type="info" data-item="1" bind:tap="iAacceptPrivacy">同意协议</van-button>
         <van-button icon="https://ai.anythingai.online/static/profile3/cry.svg" custom-style="width: 190rpx" size="small" round type="danger" data-item="2" bind:tap="iAacceptPrivacy">拒绝协议</van-button>
-      </view>
+      </view> -->
     </view>
   </van-action-sheet>
+   <!-- 隐私协议内容 -->
+   <van-popup
+    show="{{ showPrivacyContent }}"
+    round
+    custom-style="height: 50%;width: 80%;"
+    bind:close="showUserPrivacyContent"
+  >
+    <view class="privacy-title">
+      <text>用户隐私协议</text>
+    </view>
+    <view class="privacy-center">
+      <view class="privacy-content">
+        <text class="privacy-detail">欢迎使用本小程序！为保障您的合法权益，请您在使用前仔细阅读并同意以下条款：</text>
+        <text class="privacy-detail"><text class="privacy-item">1.</text>您需遵守国家法律法规，禁止发布违法、违规、骚扰、攻击性等信息，违规行为将导致永久禁止您使用本小程序。</text> 
+        <text class="privacy-detail"><text class="privacy-item">2.</text>您在本小程序中发布的信息及内容由您本人负责，如因内容引发的法律责任由用户自行承担。</text> 
+        <text class="privacy-detail"><text class="privacy-item">3.</text>您在使用过程中若遇到问题或发现违规行为，可通过小程序内提供的反馈渠道联系我们。</text> 
+      </view>
+    </view>
+    <view class="privacy-read">
+      <van-button custom-style="width: 190rpx" size="small" type="default" data-item="1" bind:tap="privacyContentRead">已知晓</van-button>
+    </view>
+  </van-popup>
   <van-notify id="van-notify" />
   <van-toast id="van-toast" />
   <van-dialog id="van-dialog" />

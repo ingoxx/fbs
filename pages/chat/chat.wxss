@@ -78,6 +78,11 @@
   min-width: 200rpx;
 }
 
+.box .chat .chat-content .user .user-ava {
+  width: 40rpx;
+  height: 40rpx;
+}
+
 .box .chat .chat-content .time .time-1 {
   padding-left: 2rpx;
   padding-bottom: 2rpx;

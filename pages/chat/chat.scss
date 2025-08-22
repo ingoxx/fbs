@@ -73,6 +73,10 @@ $friendBg: #374151;
         white-space: normal;
         text-overflow: ellipsis;
         min-width: 200rpx;
+        .user-ava {
+          width: 40rpx;
+          height: 40rpx;
+        }
         .user-name {
           // word-break: break-all;
         }

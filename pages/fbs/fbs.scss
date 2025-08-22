@@ -455,6 +455,18 @@
     font-weight: 700;
 }
 .privacy-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .privacy-content-f {
+    display: flex;
+    align-items: center;
+    font-size: 26rpx;
+    margin-bottom: 19rpx;
+    .privacy-jump {
+      color: #07c160;
+    }
+  }
   .privacy-content {
     padding: 0 11rpx;
     .privacy-item {
@@ -477,6 +489,10 @@
     margin: 17rpx 0;
     gap: 68rpx;
   }
+}
+.privacy-read {
+  text-align: center;
+  margin: 12rpx 0;
 }
 .van-icon-l {
   position: relative;

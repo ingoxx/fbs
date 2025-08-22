@@ -31,7 +31,12 @@
       <view id="chat-{{index}}" class="chat-content {{ item.sender_id == sender_id ? 'right my' : 'left others' }}">
         <view class="user chat-format">
           <!-- <van-icon name="manager" /><text class="user-name" user-select="true">user_{{ item.sender_id }}</text> -->
-          <van-icon name="manager" /><text class="user-name" user-select="true">{{ item.nick_name }}</text>
+          <view class="user-ava">
+            <van-image height="100%" width="100%" round fit="cover" src="{{item.ava_img}}" /> 
+          </view>
+          <view class="user-name">
+            <text class="user-name" user-select="true">{{ item.nick_name }}</text>
+          </view>
         </view>
         <view class="content chat-format" user-select="true">
           <text user-select="true">{{ item.content }}</text>
