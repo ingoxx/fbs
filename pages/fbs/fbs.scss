@@ -320,7 +320,7 @@
   .basket {
     color: #ffffff;
   }
-  .contact-us {
+  .contact-us, .user-list {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -355,7 +355,7 @@
       font-size: 37rpx;
     }
   }
-  .message-reply {
+  .message-reply, .user-list {
     position: fixed;
     top: 23%;
     right: 0;
@@ -372,6 +372,9 @@
       color: #2d2c2c;
       font-size: 37rpx;
     }
+  }
+  .user-list {
+    top: 40%;
   }
 }
 .van-c {
@@ -617,4 +620,9 @@
   .van-dialog__footer {
     text-align: center;
   }
+}
+.user-num {
+  padding: 0 20rpx;
+  font-size: 20rpx;
+  color: #ababab;
 }

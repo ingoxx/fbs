@@ -12,6 +12,10 @@ import Dialog from '@vant/weapp/dialog/dialog';
 const md5 = require('../../utils/md5');
 Page({
   data: {
+    userCount: 0,
+    userVal: "",
+    showUsersBtn: false,
+    showUserList: false,
     showPrivacyContent: false,
     privacyCheckedVal: false, 
     showVenueImg: false,
@@ -26,7 +30,7 @@ Page({
     avatarUrl: "",
     joinGroup: "⚡加入组局",
     existsGroup: "⚡退出组局",
-    isShowMsgBtn: false,
+    isAdminShow: false,
     sender_id: '',
     user_id: '',
     wssUrl: '',
@@ -79,6 +83,73 @@ Page({
     evaluate_list: [],
     info_data: {},
     images: [],
+    user_list: [],
+    filter_user_list: [],
+  },
+  searchUser(e) {
+    const val = e.detail;
+    if (val == "") {
+      this.setData({
+        filter_user_list: this.data.user_list,
+      });
+      return;
+    }
+    this.setData({
+      userVal: val,
+    });
+    const fd = this.data.user_list.filter(item => {
+      const oidMatch = item.openid.includes(val);
+      const nnMatch = item.nick_name.includes(val);
+      return oidMatch || nnMatch;
+    });
+    this.setData({
+      filter_user_list: fd,
+    });
+  },
+  async getUserList() {
+    try {
+      const resp = await this.getUserListApi();
+      if (resp.code != 1000) {
+        Toast.fail("获取用户列表失败");
+        return
+      }
+      const fd = resp.data;
+      fd.sort((a, b) => {
+        return stringToTimestamp(b.time) - stringToTimestamp(a.time);
+      });
+      console.log("fd >>> ", fd);
+      this.setData({
+        user_list: fd,
+        showUserList: true,
+        userCount: fd.length,
+        filter_user_list: fd,
+      })
+    } catch (error) {
+      Toast.fail("获取用户列表失败");
+    }
+  },
+  getUserListApi() {
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: `${BASE_URL}/get-user-list?uid=${this.data.openid}`,
+        timeout: 10000,
+        success: (res) => {
+          if (res.statusCode == 200) {
+            resolve(res.data);
+          } else {
+            reject({msg: '网络错误', code: 400, path: 'get-user-reviews'});
+          }
+        },
+        fail: (err) => {
+          reject({msg: '网络错误', code: 401, path: 'get-user-reviews'});
+        }
+      })
+    });
+  },
+  onCloseUserList () {
+    this.setData({
+      showUserList: false,
+    })
   },
   privacyContentRead() {
     this.setData({
@@ -271,7 +342,7 @@ Page({
     const id = e.currentTarget.dataset.id;
     console.log(id);
     const newData = {};
-    [{name: 'showServiceBtn', id: "1"}, {name: 'showFlushBtn', id: "2"}, {name: 'showReplyBtn', id: "3"}].forEach(k => {
+    [{name: 'showServiceBtn', id: "1"}, {name: 'showFlushBtn', id: "2"}, {name: 'showReplyBtn', id: "3"}, {name: 'showUsersBtn', id: "4"}].forEach(k => {
       newData[k.name] = (k.id === id) ? !this.data[k.name] : false;
     });
     this.setData(newData);
@@ -631,7 +702,7 @@ Page({
           });
           if (this.data.openid == app.globalData.admin) {
             this.setData({
-              isShowMsgBtn: true,
+              isAdminShow: true,
             });
           }
           this.getAllSportsApi().then((resp) => {

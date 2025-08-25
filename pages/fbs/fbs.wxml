@@ -44,7 +44,6 @@
   <!-- 搜索场地 -->
   <view class="search">
     <view class="s-p">
-      <!-- <input class="s-p-1" disabled="{{ isInput }}" value="{{ inputValue }}" bindinput="getVal" placeholder="输入场地搜索"/> -->
       <van-search
       custom-class="van-search-1"
       value="{{ inputValue }}"
@@ -55,11 +54,6 @@
       clearable
       disabled="{{ isInput }}"
       />
-      <!-- <block>
-        <van-transition show="{{ showCloseBtn }}" custom-class="van-transition-c" name="fade-left">
-          <van-icon custom-class="van-icon-c-2" name="clear" data-value="{{ inputValue }}" bindtap="onClearInput" />
-        </van-transition>
-      </block> -->
     </view>
     <view class="s-b">
       <van-row gutter="8">
@@ -248,14 +242,27 @@
     </van-transition>
   </view>
   <!-- 回复用户 -->
-  <view class="message-reply" wx:if="{{isShowMsgBtn}}">
-    <view class="tran-2" bind:tap="onSwitchContactBtn" data-id="3" bind:tap="onSwitchContactBtn">
+  <view class="message-reply" wx:if="{{isAdminShow}}">
+    <view class="tran-2" data-id="3" bind:tap="onSwitchContactBtn">
       <van-icon size="90rpx" custom-class="van-icon-4" name="https://ai.anythingai.online/static/profile3/side-3.svg" />
     </view>
     <van-transition show="{{ showReplyBtn }}" wx:if="{{showReplyBtn}}" custom-class="block" name="slide-right" duration="0">
       <view class="tran-1">
         <button size="mini" bind:tap="isShowChatRoom" class="share-btn">
           <van-icon name="https://ai.anythingai.online/static/profile3/mr.svg" />
+        </button>
+      </view>
+    </van-transition>
+  </view>
+  <!-- 用户列表 -->
+  <view class="user-list" wx:if="{{isAdminShow}}">
+    <view class="tran-2" data-id="4" bind:tap="onSwitchContactBtn">
+      <van-icon size="90rpx" custom-class="van-icon-4" name="https://ai.anythingai.online/static/profile3/side-3.svg" />
+    </view>
+    <van-transition show="{{ showUsersBtn }}" wx:if="{{showUsersBtn}}" custom-class="block" name="slide-right" duration="0">
+      <view class="tran-1">
+        <button size="mini" bind:tap="getUserList" class="share-btn">
+          <van-icon name="https://ai.anythingai.online/static/profile3/user_list.svg" />
         </button>
       </view>
     </van-transition>
@@ -407,7 +414,7 @@
     <view class="privacy-center">
       <view class="privacy-content-f">
         <van-checkbox icon-size="17px" value="{{ privacyCheckedVal }}" shape="square" bind:change="onPrivacyCheckedChange"></van-checkbox>
-        <text>我已阅读并同意</text><text class="privacy-jump" bind:tap="showUserPrivacyContent">《用户隐私协议》</text>
+        <text bind:tap="onPrivacyCheckedChange">我已阅读并同意</text><text class="privacy-jump" bind:tap="showUserPrivacyContent">《用户隐私协议》</text>
       </view>
       <view class="privacy-agree">
         <van-button custom-style="width: 190rpx" size="small" type="primary" data-item="1" bind:tap="iAacceptPrivacy">确认</van-button>
@@ -436,6 +443,43 @@
       <van-button custom-style="width: 190rpx" size="small" type="default" data-item="1" bind:tap="privacyContentRead">已知晓</van-button>
     </view>
   </van-popup>
+  <!-- 用户列表 -->
+  <van-dialog
+      use-slot
+      cancel-button-text="关闭"
+      z-index="100"
+      title="用户列表"
+      show="{{ showUserList }}"
+      show-confirm-button="{{false}}"  
+      show-cancel-button="{{true}}"     
+      confirm-button-open-type="getUserInfo"
+      bind:close="onCloseUserList"
+      custom-class="van-dialog-1"
+    >
+      <view class="user-search">
+        <van-search
+          value="{{ userVal }}"
+          input-align="center"
+          placeholder="请输入搜索关键词"
+          bindchange="searchUser"
+        />
+      </view>
+      <view class="user-num">
+        <text>总{{userCount}}用户</text>
+      </view>
+      <view class="check-box">
+        <block wx:for="{{filter_user_list}}" wx:key="index" wx:for-item="item">
+          <view class="check-container">
+            <view class="sport_addr"><text class="check-title">用户: </text><text class="check-content" selectable="true">{{ item.openid }}</text></view>
+            <view class="sport_addr"><text class="check-title">昵称: </text><text class="check-content" selectable="true">{{ item.nick_name ? item.nick_name : "null" }}</text></view>
+            <view class="sport_addr"><text class="check-title">时间: </text><text class="check-content" selectable="true">{{ item.time }}</text></view>
+            <view class="sport_img">
+              <text class="check-title">头像: </text><van-image custom-class="van-img-1" radius="10" fit="cover" src="{{item.img}}" data-src="{{item.img}}" bind:click="onPreviewImage" />
+            </view>
+          </view>
+        </block>
+      </view>
+  </van-dialog>
   <van-notify id="van-notify" />
   <van-toast id="van-toast" />
   <van-dialog id="van-dialog" />

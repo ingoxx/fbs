@@ -43,10 +43,6 @@ const stringToTimestamp = ((timeStr, unit = 'ms') => {
   return unit === 's' ? Math.floor(ts / 1000) : ts;
 })
 
-module.exports = {
-  stringToTimestamp
-};
-
 const formatNumber = n => {
   n = n.toString()
   return n[1] ? n : `0${n}`
