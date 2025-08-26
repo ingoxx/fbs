@@ -581,6 +581,11 @@
   transform-origin: center;
 }
 
+.van-icon-5 {
+  position: relative;
+  top: 8rpx;
+}
+
 .sports-list-box {
   display: flex;
   flex-direction: inherit;

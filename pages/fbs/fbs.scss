@@ -507,6 +507,7 @@
   position: relative;
   top: 4rpx;
 }
+
 .van-icon-3 {
   position: relative;
   bottom: 8rpx;
@@ -515,6 +516,10 @@
 .van-icon-4 {
   transform: rotate(180deg);
   transform-origin: center;
+}
+.van-icon-5 {
+  position: relative;
+  top: 8rpx;
 }
 .sports-list-box {
   display: flex;

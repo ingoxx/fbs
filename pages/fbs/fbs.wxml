@@ -195,7 +195,7 @@
             </van-button>
             <!-- 聊天室按钮 -->
             <van-button round size="small" custom-style="width:218rpx" data-item="{{ item }}"  bindtap="chatRoom">
-              <van-icon custom-class="van-icon-2" name="https://ai.anythingai.online/static/profile3/join_chat_room.svg" />
+              <text class="group_title">💬群</text>
             </van-button>
           </view>
           <!-- 加入组队的用户头像 -->
