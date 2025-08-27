@@ -79,7 +79,7 @@
               <van-icon color="{{ item.join_user_count > 0 ? '#ff6161': '#909090' }}" name="fire" />
             </view>
             <view class="venue-img" data-index="{{index}}" bind:tap="toggleShowVenueImg">
-              <van-icon name="https://ai.anythingai.online/static/profile3/pic.svg" />
+              <van-icon color="#ff6161" name="https://ai.anythingai.online/static/profile3/pic.svg" />
             </view>
           </view>
           <!-- 场地地址 -->
@@ -194,9 +194,9 @@
               {{item.hasJoined ? '⚡退出组队' : '⚡加入组队'}}({{item.join_user_count}})
             </van-button>
             <!-- 聊天室按钮 -->
-            <van-button round size="small" custom-style="width:218rpx" data-item="{{ item }}"  bindtap="chatRoom">
+            <!-- <van-button round size="small" custom-style="width:218rpx" data-item="{{ item }}"  bindtap="chatRoom">
               <text class="group_title">💬群</text>
-            </van-button>
+            </van-button> -->
           </view>
           <!-- 加入组队的用户头像 -->
           <view class="show-join-user" wx:if="{{ item.join_user_count > 0 }}">

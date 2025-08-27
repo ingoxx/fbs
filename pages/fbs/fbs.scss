@@ -141,14 +141,9 @@
     border-radius: 10rpx;
     padding: 10rpx;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.23);
-    // background-size: cover;
-    // background-repeat: no-repeat;
-    // background-position: center;
       .venue-img-update {
         text-align: center;
         margin: 0 31rpx;
-        // border-top: 1rpx solid #efefef;
-        
         padding-top: 16rpx;
         .title {
           font-size: 20rpx;
@@ -166,7 +161,7 @@
         justify-content: space-between;
         align-items: center;
         height: 40rpx;
-        margin-top: 8rpx;
+        margin-top: 14rpx;
         .venue-img {
           font-size: 34rpx;
           top: 7rpx;
@@ -181,6 +176,7 @@
         gap: 16rpx;
         padding: 3rpx;
         margin-top: 20rpx;
+        margin-bottom: 11rpx;
       }
       .show-join-user {
         justify-content: flex-start;
