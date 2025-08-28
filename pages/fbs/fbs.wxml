@@ -19,7 +19,7 @@
     </block>
   </view>
   <!-- 用户个人信息 -->
-  <view class="userinfo">
+  <!-- <view class="userinfo">
     <view class="user-img">
       <button class="img-btn" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
         <van-image custom-class="van-img-1" src="{{avatarUrl}}" />
@@ -34,13 +34,10 @@
         <view class="time-status"></view><text class="online">运动狂人</text>
       </view>
     </view>
-    <!-- <view class="user-gif">
-      <van-image custom-class="van-img-1" image-class="van-img-3" src="https://ai.anythingai.online/static/profile3/wl.gif" />
-    </view> -->
     <view class="user-tag">
       <van-tag custom-class="van-tag-1" color="#ffe534" text-color="#333333"><van-icon name="https://ai.anythingai.online/static/profile3/star.svg" />{{defaultSportSquare}}</van-tag>
     </view>
-  </view>
+  </view> -->
   <!-- 搜索场地 -->
   <view class="search">
     <view class="s-p">
