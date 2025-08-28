@@ -198,9 +198,9 @@
               <van-icon size="30rpx" custom-class="van-icon-5" name="https://ai.anythingai.online/static/profile3/pic2.svg" /><text class="group_title">上传场地图片</text>
             </van-button>
             <!-- 组 -->
-            <van-button round size="small" custom-style="width:110rpx" data-item="{{ item }}"  bindtap="chatRoom">
+            <!-- <van-button round size="small" custom-style="width:110rpx" data-item="{{ item }}"  bindtap="chatRoom">
               <text class="group_title">💬</text>
-            </van-button>
+            </van-button> -->
           </view>
           <!-- 加入组队的用户头像 -->
           <view class="show-join-user" wx:if="{{ item.join_user_count > 0 }}">
