@@ -584,7 +584,7 @@
 
 .van-icon-5 {
   position: relative;
-  top: 8rpx;
+  top: 5rpx;
 }
 
 .sports-list-box {

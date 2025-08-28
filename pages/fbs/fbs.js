@@ -62,8 +62,8 @@ Page({
     showCloseBtn: false,
     showPrivacy: false,
     villageInfo: '',
-    useNotice: "下拉小程序以获取附近运动场所地址",
-    notice: "恳求各位靓仔靓女为了让更多人加入更新场地图片（点击场地的右上角的相机图标）或者添加新的场地信息以便，我自己也在努力尽量完善运动场地信息，感谢！",
+    useNotice: "下拉小程序以获取附近运动场地址",
+    notice: "恳求各位靓仔靓女为了让更多人加入可以更新场地图片或者添加新的场地信息，我自己也在努力尽量完善运动场地信息，感谢！",
     lat: 0,
     lng: 0,
     inputValue: "",
@@ -221,6 +221,7 @@ Page({
     }
     Notify({type: "success", message: "非常感谢您做出的巨大贡献，图片生效需要几分钟", duration: 3000});
     this.toggleShowVenueImg(e);
+    this.getAddrDistance();
     Toast.clear();
   },
   // 更新场地图片的弹窗
