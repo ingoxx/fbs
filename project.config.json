@@ -27,7 +27,7 @@
     "localPlugins": false,
     "disableUseStrict": false,
     "useCompilerPlugins": false,
-    "condition": false,
+    "condition": true,
     "swc": false,
     "disableSWC": true
   },
@@ -38,5 +38,8 @@
   },
   "appid": "wxbb1377eff3149db4",
   "useCompilerPlugins": [],
-  "simulatorPluginLibVersion": {}
+  "simulatorPluginLibVersion": {
+    "wxext14566970e7e9f62": "3.6.5-39"
+  },
+  "projectArchitecture": "multiPlatform"
 }

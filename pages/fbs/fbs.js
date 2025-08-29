@@ -12,6 +12,10 @@ import Dialog from '@vant/weapp/dialog/dialog';
 const md5 = require('../../utils/md5');
 Page({
   data: {
+    filter_user_list_two: [],
+    showGroupList: false,
+    userImgs: [],
+    showUserImg: false,
     userCount: 0,
     userVal: "",
     showUsersBtn: false,
@@ -63,7 +67,7 @@ Page({
     showPrivacy: false,
     villageInfo: '',
     useNotice: "下拉小程序以获取附近运动场地址",
-    notice: "恳求各位靓仔靓女为了让更多人加入可以更新场地图片或者添加新的场地信息，我自己也在努力尽量完善运动场地信息，感谢！",
+    notice: "上传/更新/添加场地图片，以帮助更多人了解场地信息，感谢！",
     lat: 0,
     lng: 0,
     inputValue: "",
@@ -85,6 +89,41 @@ Page({
     images: [],
     user_list: [],
     filter_user_list: [],
+  },
+  onCloseGroupList () {
+    this.setData({
+      showGroupList: false,
+    })
+  },
+  showUserImgShape(e) {
+    const data = e.currentTarget.dataset.item;
+    console.log(data);
+    this.setData({
+      showGroupList: !this.data.showGroupList,
+      filter_user_list_two: data,
+      // user_list: data,
+      userCount: this.data.filter_user_list_two.length,
+    });
+  },
+  searchJoinUser(e) {
+    const val = e.detail;
+    if (val == "") {
+      this.setData({
+        filter_user_list_two: this.data.user_list,
+      });
+      return;
+    }
+    this.setData({
+      userVal: val,
+    });
+    const fd = this.data.user_list.filter(item => {
+      const oidMatch = item.openid.includes(val);
+      const nnMatch = item.nick_name.includes(val);
+      return oidMatch || nnMatch;
+    });
+    this.setData({
+      filter_user_list_two: fd,
+    });
   },
   searchUser(e) {
     const val = e.detail;
@@ -493,6 +532,7 @@ Page({
           group_id: data.id, 
           user: this.data.openid, 
           img: this.data.avatarUrl,
+          nick_name: this.data.nick_name,
           oi: data.hasJoined ? "1" : "2"
         };
         try {
@@ -1047,8 +1087,8 @@ Page({
       this.getVal(data);
     }
   },
-  newGetVal(e) {
-    // console.log(e.detail);
+  // 搜索场地
+  async newGetVal(e) {
     const val = e.detail;
     this.setData({
       inputValue: val,
@@ -1060,8 +1100,38 @@ Page({
       return addrMatch || tagsMatch;
     });
     const disSortList = fd.sort((a, b) => a.distance - b.distance);
+     // 等待所有异步任务都完成
+     const newUL = await Promise.all(
+      disSortList.map(async (item) => {
+        const dl = item.user_reviews;
+        dl.map((item) => {
+          if (item.like_users.length > 0) {
+            item.is_like = item.like_users.includes(this.data.openid);
+          }
+          return item;
+        })
+        dl.sort((a, b) => {
+          return stringToTimestamp(b.time) - stringToTimestamp(a.time);
+        });
+        item.user_reviews = dl;
+        item.user_reviews_count = dl.length;
+
+        return item;
+      })
+    );
+    const processedList = newUL.map(item => {
+      const hasJoined = (item.join_users || []).some(user =>
+        user.group_id === item.id && user.user === this.data.openid
+      );
+      return {
+        ...item,       // 保留原来的字段
+        hasJoined      // 新增字段
+      };
+    });
+
+
     this.setData({
-      basketSquareFilterData: disSortList.slice(0, this.data.showDataNumber),
+      basketSquareFilterData: processedList,
     });
   },
   // 获取input值
@@ -1203,7 +1273,7 @@ Page({
       })
     })
   },
-  // 获取所有数据
+  // 所有场地数据
   async getAddrDistance() {
     const resp = await this.getUserLocation();
     if (resp.latitude !== "" && resp.longitude !== "" && resp.city !== "") {

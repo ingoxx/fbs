@@ -75,6 +75,11 @@
             <view class="venue-hot">
               <van-icon color="{{ item.join_user_count > 0 ? '#ff6161': '#909090' }}" name="fire" />
             </view>
+            <view class="user-tag">
+              <van-tag custom-class="van-tag-1" color="#ffe534" text-color="#333333">
+                <van-icon name="https://ai.anythingai.online/static/profile3/star.svg" /> <text class="sport-key">{{defaultSportSquare}}</text>
+              </van-tag>
+            </view>
             <!-- <view class="venue-img" data-index="{{index}}" bind:tap="toggleShowVenueImg">
               <van-icon color="#ff6161" name="https://ai.anythingai.online/static/profile3/pic.svg" />
             </view> -->
@@ -114,7 +119,7 @@
             <van-transition show="{{ item.is_show }}" custom-class="block">
               <view class="venue-img-update">
                 <view class="title">
-                  <text>添加场地图片目前只能传1张</text>
+                  <text>添加场地图片以帮助更多人</text>
                 </view>
                 <view class="img">
                   <van-uploader 
@@ -139,10 +144,10 @@
             <van-tag round type="success" custom-class="{{ item.online == 0 ? 'van-tag-c': 'van-tag-c-1' }}"><van-icon name="friends" /> {{ item.online }}人在线</van-tag> -->
             <view class="online-users">
               <view class="num">
-                <text>{{ item.online }}</text>
+                <text>{{ item.join_user_count }}</text>
               </view>
               <view class="title">
-                <van-icon name="friends-o" /><text class="title-name">活跃人数</text>
+                <van-icon name="friends-o" /><text class="title-name">组队人数</text>
               </view>
             </view>
             <view class="users-reviews">
@@ -200,7 +205,7 @@
             </van-button> -->
           </view>
           <!-- 加入组队的用户头像 -->
-          <view class="show-join-user" wx:if="{{ item.join_user_count > 0 }}">
+          <view class="show-join-user" wx:if="{{ item.join_user_count > 0 }}" data-item="{{item.join_users}}">
             <block wx:for="{{ item.join_users }}" wx:key="index" wx:for-item="item2" wx:for-index="idx">
               <view class="o-user" style="margin-right:-10px;">
                 <van-image width="100%" round height="100%"  fit="cover" src="{{item2.img}}" />
@@ -208,6 +213,11 @@
             </block>
             <view class="join-users">
               <text>{{item.join_user_count}}人加入组队</text>
+            </view>
+            <view class="join-users">
+              <van-button round type="info" size="mini" data-item="{{item.join_users}}" custom-style="width:150rpx" bind:tap="showUserImgShape">
+                <text class="group_title">⚡组队信息</text>
+              </van-button>
             </view>
           </view>
         </view>
@@ -477,6 +487,48 @@
             <view class="sport_img">
               <text class="check-title">头像: </text><van-image custom-class="van-img-1" radius="10" fit="cover" src="{{item.img}}" data-src="{{item.img}}" bind:click="onPreviewImage" />
             </view>
+          </view>
+        </block>
+      </view>
+  </van-dialog>
+  <!-- 组队列表 -->
+  <van-dialog
+      use-slot
+      cancel-button-text="关闭"
+      z-index="100"
+      title="组队列表"
+      show="{{ showGroupList }}"
+      show-confirm-button="{{false}}"  
+      show-cancel-button="{{true}}"     
+      confirm-button-open-type="getUserInfo"
+      bind:close="onCloseGroupList"
+      custom-class="van-dialog-1"
+    >
+      <view class="user-search">
+        <van-search
+          value="{{ userVal }}"
+          input-align="center"
+          placeholder="请输入搜索关键词"
+          bindchange="searchJoinUser"
+        />
+      </view>
+      <view class="user-num">
+        <text>组队人数{{userCount}}</text>
+      </view>
+      <view class="check-box">
+        <block wx:for="{{filter_user_list_two}}" wx:key="index" wx:for-item="item">
+          <view class="check-container">
+            <!-- <view class="sport_addr"><text class="check-title">用户: </text><text class="check-content" selectable="true">{{ item.openid }}</text></view> -->
+            <view class="sport_addr">
+              <text class="check-title">大名: </text><text class="check-content" selectable="true">{{ item.nick_name ? item.nick_name : "null" }}<text class="you">{{ item.user == user_id ? "你": "" }}</text></text>
+            </view>
+            <view class="sport_addr">
+              <text class="check-title">特长: </text> <van-tag custom-class="van-tag-1" color="#ffe534" text-color="#333333"><van-icon name="https://ai.anythingai.online/static/profile3/star.svg" />神射手</van-tag>
+            </view>
+            <view class="sport_img">
+              <text class="check-title">帅照: </text><van-image custom-class="van-img-1" radius="10" fit="cover" src="{{item.img}}" data-src="{{item.img}}" bind:click="onPreviewImage" />
+            </view>
+            <view class="sport_addr"><text class="check-title">时间: </text><text class="check-content" selectable="true">{{ item.time }}</text></view>
           </view>
         </block>
       </view>

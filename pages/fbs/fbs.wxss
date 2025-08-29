@@ -114,6 +114,10 @@
   position: relative;
 }
 
+.box .userinfo .user-tag .sport-key {
+  color: #7d7d7d;
+}
+
 .box .search {
   margin: 15rpx 25rpx;
   background: #f9f9f9;
@@ -213,6 +217,13 @@
 .box .card-1 .card-1-1 .show-join-user {
   justify-content: flex-start;
   margin-top: 23rpx;
+  border: 1px solid #e9d5ff;
+  height: 100rpx;
+  display: flex;
+  align-items: center;
+  padding: 0 10rpx;
+  border-radius: 10rpx;
+  background: #f9f5ff;
 }
 
 .box .card-1 .card-1-1 .show-join-user .o-user {
@@ -415,7 +426,7 @@
 }
 
 .box .user-list {
-  top: 40%;
+  top: 15%;
 }
 
 .van-c {
@@ -666,6 +677,20 @@
 .check-box .check-container {
   margin: 10rpx 0;
   border-top: 1rpx solid #d8d8d8;
+  background: #f7f8fa;
+  border-radius: 10rpx;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.23);
+  padding: 0 7rpx;
+}
+
+.check-box .check-container .sport_addr .you {
+  font-size: 21rpx;
+  padding-left: 12rpx;
+  color: #d2d2d2;
+}
+
+.check-box .check-container .sport_img {
+  margin-top: 8rpx;
 }
 
 .check-box .check-container .check-btn {
@@ -676,7 +701,7 @@
 }
 
 .check-box .check-content {
-  font-size: 26rpx;
+  font-size: 24rpx;
   color: #333;
 }
 
