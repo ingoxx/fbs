@@ -200,26 +200,38 @@
               <van-icon size="30rpx" custom-class="van-icon-5" name="https://ai.anythingai.online/static/profile3/pic2.svg" /><text class="group_title">上传场地图片</text>
             </van-button>
             <!-- 组 -->
-            <!-- <van-button round size="small" custom-style="width:110rpx" data-item="{{ item }}"  bindtap="chatRoom">
+            <!-- <van-button round size="small" custom-style="width:110rpx" data-item="{{ item }}"  bindtap="sendMsg">
               <text class="group_title">💬</text>
             </van-button> -->
           </view>
           <!-- 加入组队的用户头像 -->
-          <view class="show-join-user" wx:if="{{ item.join_user_count > 0 }}" data-item="{{item.join_users}}">
-            <block wx:for="{{ item.join_users }}" wx:key="index" wx:for-item="item2" wx:for-index="idx">
-              <view class="o-user" style="margin-right:-10px;">
-                <van-image width="100%" round height="100%"  fit="cover" src="{{item2.img}}" />
+          <van-transition show="{{ item.join_user_count > 0  }}" name="fade-right" >
+            <view class="join-user-box">
+              <!-- <view class="jut">
+                <van-icon name="https://ai.anythingai.online/static/profile3/user_list.svg" /> <text class="font-1">组队人数</text>
+              </view> -->
+              <view class="show-join-user" wx:if="{{ item.join_user_count > 0 }}" data-item="{{item.join_users}}">
+                <block wx:for="{{ item.join_users }}" wx:key="index" wx:for-item="item2" wx:for-index="idx">
+                  <view class="o-user" style="margin-right:-10px;">
+                    <van-image width="100%" round height="100%"  fit="cover" src="{{item2.img}}" />
+                  </view>
+                </block>
+                <view class="join-users">
+                  <text>{{item.join_user_count}}人加入组队</text>
+                </view>
+                <view class="join-users">
+                  <van-button round type="info" size="mini" data-item="{{item.join_users}}" data-val="{{item}}" custom-style="width:150rpx" bind:tap="showUserImgShape">
+                    <text class="group_title">⚡组队信息</text>
+                  </van-button>
+                </view>
+                <!-- <view class="join-users">
+                  <van-button round size="mini" custom-style="width:110rpx" data-item="{{ item }}"  bindtap="sendMsg">
+                    <text class="group_title">💬</text>
+                  </van-button>
+                </view> -->
               </view>
-            </block>
-            <view class="join-users">
-              <text>{{item.join_user_count}}人加入组队</text>
             </view>
-            <view class="join-users">
-              <van-button round type="info" size="mini" data-item="{{item.join_users}}" custom-style="width:150rpx" bind:tap="showUserImgShape">
-                <text class="group_title">⚡组队信息</text>
-              </van-button>
-            </view>
-          </view>
+          </van-transition>
         </view>
       </van-transition>
     </block>
@@ -496,7 +508,7 @@
       use-slot
       cancel-button-text="关闭"
       z-index="100"
-      title="组队列表"
+      title="{{bks_name}}"
       show="{{ showGroupList }}"
       show-confirm-button="{{false}}"  
       show-cancel-button="{{true}}"     
@@ -523,7 +535,7 @@
               <text class="check-title">大名: </text><text class="check-content" selectable="true">{{ item.nick_name ? item.nick_name : "null" }}<text class="you">{{ item.user == user_id ? "你": "" }}</text></text>
             </view>
             <view class="sport_addr">
-              <text class="check-title">特长: </text> <van-tag custom-class="van-tag-1" color="#ffe534" text-color="#333333"><van-icon name="https://ai.anythingai.online/static/profile3/star.svg" />神射手</van-tag>
+              <text class="check-title">特长: </text> <van-tag custom-class="van-tag-1" color="#ffe534" text-color="#333333"><van-icon name="https://ai.anythingai.online/static/profile3/star.svg" />{{item.skill ? item.skill : "篮板王"}}</van-tag>
             </view>
             <view class="sport_img">
               <text class="check-title">帅照: </text><van-image custom-class="van-img-1" radius="10" fit="cover" src="{{item.img}}" data-src="{{item.img}}" bind:click="onPreviewImage" />

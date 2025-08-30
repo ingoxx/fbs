@@ -12,6 +12,7 @@ import Dialog from '@vant/weapp/dialog/dialog';
 const md5 = require('../../utils/md5');
 Page({
   data: {
+    bks_name: "",
     filter_user_list_two: [],
     showGroupList: false,
     userImgs: [],
@@ -97,12 +98,14 @@ Page({
   },
   showUserImgShape(e) {
     const data = e.currentTarget.dataset.item;
+    const title = e.currentTarget.dataset.val.title
     console.log(data);
     this.setData({
       showGroupList: !this.data.showGroupList,
       filter_user_list_two: data,
-      // user_list: data,
-      userCount: this.data.filter_user_list_two.length,
+      user_list: data,
+      userCount: data.length,
+      bks_name: title,
     });
   },
   searchJoinUser(e) {
@@ -117,9 +120,9 @@ Page({
       userVal: val,
     });
     const fd = this.data.user_list.filter(item => {
-      const oidMatch = item.openid.includes(val);
+      const skdMatch = item.skill.includes(val);
       const nnMatch = item.nick_name.includes(val);
-      return oidMatch || nnMatch;
+      return skdMatch || nnMatch;
     });
     this.setData({
       filter_user_list_two: fd,
@@ -267,7 +270,7 @@ Page({
   toggleShowVenueImg(e) {
     const index = e.currentTarget.dataset.index;
     const vd = this.data.basketSquareFilterData;
-
+    console.log(e);
     vd[index].is_show = !vd[index].is_show; // 切换状态
     this.setData({
       basketSquareFilterData: vd,
@@ -1159,7 +1162,7 @@ Page({
     });
   },
   // 进到群组
-  chatRoom(e) {
+  sendMsg(e) {
     const id = e.currentTarget.dataset.item;
     const img = this.data.all_sport_list.find(item => item.key == this.data.defaultSportKey);
     wx.navigateTo({

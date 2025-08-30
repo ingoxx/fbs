@@ -214,19 +214,18 @@
   margin-bottom: 11rpx;
 }
 
-.box .card-1 .card-1-1 .show-join-user {
-  justify-content: flex-start;
-  margin-top: 23rpx;
-  border: 1px solid #e9d5ff;
-  height: 100rpx;
-  display: flex;
-  align-items: center;
-  padding: 0 10rpx;
-  border-radius: 10rpx;
-  background: #f9f5ff;
+.box .card-1 .card-1-1 .join-user-box .jut .font-1 {
+  font-size: 27rpx;
+  padding-left: 7rpx;
+  color: #333;
 }
 
-.box .card-1 .card-1-1 .show-join-user .o-user {
+.box .card-1 .card-1-1 .join-user-box .show-join-user {
+  justify-content: flex-start;
+  margin-top: 23rpx;
+}
+
+.box .card-1 .card-1-1 .join-user-box .show-join-user .o-user {
   width: 49rpx;
   height: 49rpx;
   white-space: nowrap;
@@ -238,7 +237,7 @@
   color: #fff;
 }
 
-.box .card-1 .card-1-1 .show-join-user .join-users {
+.box .card-1 .card-1-1 .join-user-box .show-join-user .join-users {
   font-size: 20rpx;
   color: #333;
   margin-left: 31rpx;
@@ -676,7 +675,6 @@
 
 .check-box .check-container {
   margin: 10rpx 0;
-  border-top: 1rpx solid #d8d8d8;
   background: #f7f8fa;
   border-radius: 10rpx;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.23);
