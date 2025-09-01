@@ -293,7 +293,7 @@
     </van-transition>
   </view>
   <!-- 回复用户 -->
-  <view class="message-reply" wx:if="{{isAdminShow}}">
+  <!-- <view class="message-reply" wx:if="{{isAdminShow}}">
     <view class="tran-2" data-id="3" bind:tap="onSwitchContactBtn">
       <van-icon size="90rpx" custom-class="van-icon-4" name="https://ai.anythingai.online/static/profile3/side-3.svg" />
     </view>
@@ -304,7 +304,7 @@
         </button>
       </view>
     </van-transition>
-  </view>
+  </view> -->
   <!-- 用户列表 -->
   <view class="user-list" wx:if="{{isAdminShow}}">
     <view class="tran-2" data-id="4" bind:tap="onSwitchContactBtn">

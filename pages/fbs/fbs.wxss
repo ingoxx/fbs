@@ -494,7 +494,7 @@
 }
 
 .box .user-list {
-  top: 15%;
+  top: 24%;
 }
 
 .van-c {

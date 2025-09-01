@@ -3,8 +3,7 @@
   "pages": [
     "pages/index/index",
     "pages/logs/logs",
-    "pages/fbs/fbs",
-    "pages/chat/chat"
+    "pages/fbs/fbs"
   ],
   "permission": {
     "scope.userLocation": {
