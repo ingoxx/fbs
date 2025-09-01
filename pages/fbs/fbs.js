@@ -7,11 +7,16 @@ const { BASE_URL } = require('../../utils/http');
 const { IMG_URL } = require('../../utils/http');
 import Notify from '@vant/weapp/notify/notify';
 import Toast from '@vant/weapp/toast/toast';
-const { generateUUID, stringToTimestamp } = require('../../utils/util'); 
+const { generateUUID, stringToTimestamp, getCurrentTime } = require('../../utils/util'); 
 import Dialog from '@vant/weapp/dialog/dialog';
 const md5 = require('../../utils/md5');
 Page({
   data: {
+
+    showUserUpdateList: false,
+    cbt_user_count: 0,
+    filter_cbt_users: [],
+    cbt_users: [],
     bks_name: "",
     filter_user_list_two: [],
     showGroupList: false,
@@ -91,9 +96,41 @@ Page({
     user_list: [],
     filter_user_list: [],
   },
+  searchUpdateLog(e) {
+    const val = e.detail;
+    if (val == "") {
+      this.setData({
+        filter_cbt_users: this.data.cbt_users,
+      });
+      return;
+    }
+    this.setData({
+      userVal: val,
+    });
+    const fd = this.data.cbt_users.filter(item => {
+      const nnMatch = item.nick_name.includes(val);
+      return nnMatch;
+    });
+    this.setData({
+      filter_cbt_users: fd,
+    });
+  },
+  showUserUpdateLog(e) {
+    const data = e.currentTarget.dataset.item;
+    if (data.venue_update_users_count > 0) {
+      this.setData({
+        filter_cbt_users: data.venue_update_users,
+        cbt_users: data.venue_update_users,
+        cbt_user_count: data.venue_update_users.length,
+        bks_name: data.title,
+        showUserUpdateList: true,
+      });
+    }
+  },
   onCloseGroupList () {
     this.setData({
       showGroupList: false,
+      showUserUpdateList: false,
     })
   },
   showUserImgShape(e) {
@@ -252,6 +289,10 @@ Page({
       city: this.data.city,
       sport_key: this.data.defaultSportKey,
       tags: data.tags[0],
+      nick_name: this.data.nick_name,
+      user_img: this.data.avatarUrl,
+      openid: this.data.openid,
+      content: "更新了该场地",
       img: url,
       update_type: "2", // 表示用户更新了场地图片
     }
@@ -269,11 +310,18 @@ Page({
   // 更新场地图片的弹窗
   toggleShowVenueImg(e) {
     const index = e.currentTarget.dataset.index;
+    const data = e.currentTarget.dataset.item;
     const vd = this.data.basketSquareFilterData;
-    console.log(e);
+    if (data.venue_update_users_count > 0) {
+      this.setData({
+        filter_cbt_users: data.venue_update_users,
+        cbt_users: data.venue_update_users,
+      });
+    }
     vd[index].is_show = !vd[index].is_show; // 切换状态
     this.setData({
       basketSquareFilterData: vd,
+      cbt_user_count: data.venue_update_users_count,
     });
   },
   // 更新昵称api
@@ -1031,11 +1079,8 @@ Page({
       Notify({type: 'danger', message: '输入的地址无效', duration: 30000});
       return;
     }
-    
     const uuid = generateUUID();
-    
     var url = "";
-
     Toast.loading({
       message: '正在提交...',
       forbidClick: true,
@@ -1069,7 +1114,12 @@ Page({
       city: this.data.city,
       sport_key: this.data.defaultSportKey,
       tags: val2 ? val2 : this.data.defaultSportSquare,
-      img: url,
+      img: url, // 场地图片
+      nick_name: this.data.nick_name,
+      user_img: this.data.avatarUrl,
+      openid: this.data.openid,
+      content: "添加了该场地",
+      change_time: getCurrentTime(),
       update_type: "1", // 表示用户手动添加了新的场地
     }
    const resp = await this.userAddAddrReqApi(ad);
@@ -1293,6 +1343,7 @@ Page({
       // 等待所有异步任务都完成
       const newUL = await Promise.all(
         disSortList.map(async (item) => {
+          // 用户对当前场地的评价
           const dl = item.user_reviews;
           dl.map((item) => {
             if (item.like_users.length > 0) {
@@ -1305,7 +1356,8 @@ Page({
           });
           item.user_reviews = dl;
           item.user_reviews_count = dl.length;
-
+          // 场地更新日志
+          
           return item;
         })
       );

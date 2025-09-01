@@ -149,6 +149,8 @@
         text-align: center;
         margin: 0 31rpx;
         padding-top: 16rpx;
+        border-top: 1rpx solid #d6d6d6;
+        margin-top: 27rpx;
         .title {
           font-size: 20rpx;
           color: #646566;
@@ -156,6 +158,61 @@
         .img {
           margin: 18rpx auto;
         }
+        .cbt {
+          margin-top: 25rpx;
+          border-top: 1rpx solid #d6d6d6;
+          border-bottom: 1rpx solid #d6d6d6;
+          .cbt-title {
+            display: flex;
+            gap: 16rpx;
+            align-items: center;
+            flex-shrink: 0;
+            margin: 10rpx auto;
+            .name {
+              font-size: 28rpx;
+              font-weight: 700;
+            }
+            .num {
+              width: 75rpx;
+              height: 48rpx;
+              font-size: 27rpx;
+              background: #f0f1f2;
+              border-radius: 27%;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              }
+            }
+            .cbt-user-info {
+              display: flex;
+              flex-shrink: 0;
+              margin: 18rpx auto;
+              .info {
+                .cbt-user-img {
+                  width: 49rpx;
+                  height: 49rpx;
+                  white-space: nowrap;
+                  text-overflow: ellipsis;
+                  background: #6b6ed4;
+                  border-radius: 50%;
+                  overflow: hidden;
+                  flex-shrink: 0;
+                  color: #fff;
+                }
+                .no-info {
+                  display: flex;
+                  .info-1 {
+                    font-size: 25rpx;
+                    color: #656565;
+                  }
+                }
+              }
+              .num,.log {
+                margin-left: 39rpx;
+                font-size: 25rpx;
+              }
+            }
+          }
       }
       .online-status {
         position: relative;
@@ -183,6 +240,8 @@
         margin-bottom: 11rpx;
       }
       .join-user-box {
+        border-top: 1rpx solid #dadada;
+        margin-top: 23rpx;
         // padding: 10rpx 10rpx;
         // border-radius: 10rpx;
         // background: #f8f9fc;
@@ -675,8 +734,8 @@
     background: #f7f8fa;
     border-radius: 10rpx;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.23);
-    padding: 0 7rpx;
-    .sport_addr {
+    padding: 14rpx 14rpx;
+    .sport_addr, .sport_img {
       .you {
         font-size: 21rpx;
         padding-left: 12rpx;
