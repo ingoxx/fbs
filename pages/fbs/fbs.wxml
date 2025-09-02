@@ -89,12 +89,12 @@
             <view class="sport-icon">
               <!-- 真实场地图片 -->
               <block wx:if="{{ item.img != '' }}">
-                <van-image custom-class="van-img-1" radius="10"  fit="cover" src="{{item.img}}" data-src="{{item.img}}" data-imgs="{{item.images}}" bind:click="onPreviewVenueImage" />
+                <van-image use-loading-slot custom-class="van-img-1" radius="10"  fit="cover" src="{{item.img}}" data-src="{{item.img}}" data-imgs="{{item.images}}" bind:click="onPreviewVenueImage"><van-loading slot="loading" type="spinner" size="20" vertical /></van-image>
               </block>
               <!-- 没有就用其他代替 -->
               <block wx:else>
                 <block wx:for="{{ all_sport_list }}" wx:key="index3" wx:for-item="item3" >
-                  <van-image data-src="{{item3.img}}" custom-class="van-img-1" radius="10" wx:if="{{ defaultSportKey == item3.key }}" fit="cover" src="{{item3.img}}" data-src="{{item3.img}}" bind:click="onPreviewImage" />
+                  <van-image use-loading-slot data-src="{{item3.img}}" custom-class="van-img-1" radius="10" wx:if="{{ defaultSportKey == item3.key }}" fit="cover" src="{{item3.img}}" data-src="{{item3.img}}" bind:click="onPreviewImage"><van-loading slot="loading" type="spinner" size="20" vertical /></van-image>
                 </block>
               </block>
             </view>
@@ -146,7 +146,9 @@
                       <view wx:if="{{item.venue_update_users_count > 0}}" class="info-t-1">
                         <block wx:for="{{ cbt_users }}" wx:key="index" wx:for-item="item4">
                           <view class="cbt-user-img" style="margin-right:-10px;">
-                            <van-image width="100%" round height="100%"  fit="cover" src="{{item4.user_img}}" />
+                            <van-image use-loading-slot width="100%" round height="100%"  fit="cover" src="{{item4.user_img}}">
+                              <van-loading slot="loading" type="spinner" size="20" vertical />
+                            </van-image>
                           </view>
                         </block>
                       </view>
@@ -203,9 +205,9 @@
                 <swiper-item wx:for="{{item.user_reviews}}" wx:key="index" wx:for-item="item2">
                   <view class="review-card">
                     <view class="o-user" style="margin-right:-7px;">
-                      <van-image width="100%"
-                      round
-                      height="100%"  fit="cover" src="{{item2.img}}" />
+                      <van-image use-loading-slot width="100%" round height="100%"  fit="cover" src="{{item2.img}}">
+                        <van-loading slot="loading" type="spinner" size="20" vertical />
+                      </van-image>
                     </view>
                     <view class="user-evaluate">
                       <text>{{item2.evaluate}}</text>
@@ -246,7 +248,9 @@
                 <view class="show-join-user" wx:if="{{ item.join_user_count > 0 }}" data-item="{{item.join_users}}">
                   <block wx:for="{{ item.join_users }}" wx:key="index" wx:for-item="item2" wx:for-index="idx">
                     <view class="o-user" style="margin-right:-10px;">
-                      <van-image width="100%" round height="100%"  fit="cover" src="{{item2.img}}" />
+                      <van-image use-loading-slot width="100%" round height="100%"  fit="cover" src="{{item2.img}}">
+                        <van-loading slot="loading" type="spinner" size="20" vertical />
+                      </van-image>
                     </view>
                   </block>
                   <view class="join-users">
@@ -450,7 +454,7 @@
             <view class="sport_key"><text class="check-title">城市: </text><text class="check-content">{{ item.city }}</text></view>
             <view class="sport_key"><text class="check-title">时间: </text><text class="check-content">{{ item.time }}</text></view>
             <view class="sport_img">
-              <text class="check-title">图片: </text><van-image custom-class="van-img-1" radius="10" fit="cover" src="{{item.img}}" data-src="{{item.img}}" bind:click="onPreviewImage" />
+              <text class="check-title">图片: </text><van-image use-loading-slot custom-class="van-img-1" radius="10" fit="cover" src="{{item.img}}" data-src="{{item.img}}" bind:click="onPreviewImage"><van-loading slot="loading" type="spinner" size="20" vertical /></van-image>
             </view>
             <view class="check-btn">
               <van-button bindtap="onAdd" data-value="{{ item }}" icon="https://ai.anythingai.online/static/profile3/smil.svg" custom-style="width: 170rpx" size="small" round type="info">通过</van-button>
@@ -532,7 +536,7 @@
             <view class="sport_addr"><text class="check-title">昵称: </text><text class="check-content" selectable="true">{{ item.nick_name ? item.nick_name : "null" }}</text></view>
             <view class="sport_addr"><text class="check-title">时间: </text><text class="check-content" selectable="true">{{ item.time }}</text></view>
             <view class="sport_img">
-              <text class="check-title">头像: </text><van-image custom-class="van-img-1" radius="10" fit="cover" src="{{item.img}}" data-src="{{item.img}}" bind:click="onPreviewImage" />
+              <text class="check-title">头像: </text><van-image use-loading-slot custom-class="van-img-1" radius="10" fit="cover" src="{{item.img}}" data-src="{{item.img}}" bind:click="onPreviewImage"><van-loading slot="loading" type="spinner" size="20" vertical /></van-image>
             </view>
           </view>
         </block>
@@ -572,7 +576,7 @@
               <text class="check-title">特长: </text> <van-tag custom-class="van-tag-1" color="#ffe534" text-color="#333333"><van-icon name="https://ai.anythingai.online/static/profile3/star.svg" />{{item.skill ? item.skill : "篮板王"}}</van-tag>
             </view>
             <view class="sport_img">
-              <text class="check-title">帅照: </text><van-image custom-class="van-img-1" radius="10" fit="cover" src="{{item.img}}" data-src="{{item.img}}" bind:click="onPreviewImage" /><text class="you">系统生成</text>
+              <text class="check-title">帅照: </text><van-image use-loading-slot custom-class="van-img-1" radius="10" fit="cover" src="{{item.img}}" data-src="{{item.img}}" bind:click="onPreviewImage"><van-loading slot="loading" type="spinner" size="20" vertical /></van-image><text class="you">系统生成</text>
             </view>
             <view class="sport_addr"><text class="check-title">时间: </text><text class="check-content" selectable="true">{{ item.time }}</text></view>
           </view>
@@ -610,10 +614,10 @@
               <text class="check-title">提交用户: </text><text class="check-content" selectable="true">{{ item.nick_name ? item.nick_name : "null" }}<text class="you">{{ item.user_id == user_id ? "你": "" }}</text></text>
             </view>
             <view class="sport_img">
-              <text class="check-title">用户靓照: </text><van-image custom-class="van-img-1" radius="10" fit="cover" src="{{item.user_img}}" data-src="{{item.user_img}}" bind:click="onPreviewImage" /><text class="you">系统生成</text>
+              <text class="check-title">用户靓照: </text><van-image use-loading-slot custom-class="van-img-1" radius="10" fit="cover" src="{{item.user_img}}" data-src="{{item.user_img}}" bind:click="onPreviewImage"><van-loading slot="loading" type="spinner" size="20" vertical /></van-image><text class="you">系统生成</text>
             </view>
             <view class="sport_img">
-              <text class="check-title">场地图片: </text><van-image custom-class="van-img-1" radius="10" fit="cover" src="{{item.img}}" data-src="{{item.img}}" bind:click="onPreviewImage" />
+              <text class="check-title">场地图片: </text><van-image use-loading-slot custom-class="van-img-1" radius="10" fit="cover" src="{{item.img}}" data-src="{{item.img}}" bind:click="onPreviewImage"><van-loading slot="loading" type="spinner" size="20" vertical /></van-image>
             </view>
             <view class="sport_addr">
               <text class="check-title">更新内容: </text><text class="check-content" selectable="true">{{ item.content }}</text>
