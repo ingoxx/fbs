@@ -223,6 +223,10 @@
   margin: 18rpx auto;
 }
 
+.box .card-1 .card-1-1 .venue-img-update .cbt .cbt-user-info .info .info-t-1 {
+  display: flex;
+}
+
 .box .card-1 .card-1-1 .venue-img-update .cbt .cbt-user-info .info .cbt-user-img {
   width: 49rpx;
   height: 49rpx;
@@ -278,23 +282,32 @@
   margin-bottom: 11rpx;
 }
 
-.box .card-1 .card-1-1 .join-user-box {
+.box .card-1 .card-1-1 .join-user-c {
   border-top: 1rpx solid #dadada;
   margin-top: 23rpx;
 }
 
-.box .card-1 .card-1-1 .join-user-box .jut .font-1 {
+.box .card-1 .card-1-1 .join-user-c .join-user-t {
+  margin-top: 12rpx;
+}
+
+.box .card-1 .card-1-1 .join-user-c .join-user-t .title {
+  font-size: 27rpx;
+  font-weight: 700;
+}
+
+.box .card-1 .card-1-1 .join-user-c .join-user-box .jut .font-1 {
   font-size: 27rpx;
   padding-left: 7rpx;
   color: #333;
 }
 
-.box .card-1 .card-1-1 .join-user-box .show-join-user {
+.box .card-1 .card-1-1 .join-user-c .join-user-box .show-join-user {
   justify-content: flex-start;
   margin-top: 23rpx;
 }
 
-.box .card-1 .card-1-1 .join-user-box .show-join-user .o-user {
+.box .card-1 .card-1-1 .join-user-c .join-user-box .show-join-user .o-user {
   width: 49rpx;
   height: 49rpx;
   white-space: nowrap;
@@ -306,7 +319,7 @@
   color: #fff;
 }
 
-.box .card-1 .card-1-1 .join-user-box .show-join-user .join-users {
+.box .card-1 .card-1-1 .join-user-c .join-user-box .show-join-user .join-users {
   font-size: 20rpx;
   color: #333;
   margin-left: 31rpx;
@@ -636,7 +649,7 @@
 
 .privacy-read {
   text-align: center;
-  margin: 12rpx 0;
+  margin: 25rpx 0;
 }
 
 .van-icon-l {
@@ -773,7 +786,7 @@
 }
 
 .check-box .check-title {
-  font-size: 29rpx;
+  font-size: 25rpx;
   font-weight: 700;
 }
 

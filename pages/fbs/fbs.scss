@@ -188,6 +188,9 @@
               flex-shrink: 0;
               margin: 18rpx auto;
               .info {
+                .info-t-1 {
+                  display: flex;
+                }
                 .cbt-user-img {
                   width: 49rpx;
                   height: 49rpx;
@@ -239,110 +242,46 @@
         margin-top: 20rpx;
         margin-bottom: 11rpx;
       }
-      .join-user-box {
+      .join-user-c {
         border-top: 1rpx solid #dadada;
         margin-top: 23rpx;
-        // padding: 10rpx 10rpx;
-        // border-radius: 10rpx;
-        // background: #f8f9fc;
-        // margin: 15rpx 0;
-        // border: 1px solid #e9d5ff;
-        // height: 119rpx;
-        // padding: 10rpx 10rpx;
-        // border-radius: 10rpx;
-        // background: #f9f5ff;
-        .jut {
-          .font-1 {
+        .join-user-t {
+          margin-top: 12rpx;
+          .title {
             font-size: 27rpx;
-            padding-left: 7rpx;
-            color: #333;
+            font-weight: 700;
           }
         }
-        .show-join-user {
-          justify-content: flex-start;
-          margin-top: 23rpx;
-          // border: 1px solid #e9d5ff;
-          // height: 100rpx;
-          // display: flex;
-          // align-items: center;
-          // padding: 0 10rpx;
-          // border-radius: 10rpx;
-          // background: #f9f5ff;
-          // .tran-show {
-          //   position: relative;
-          //   .avatar {
-          //     width: 51rpx;
-          //     height: 51rpx;
-          //     overflow: hidden;
-          //     transform: translate(-50%, -50%);
-          //     transition: transform 0.6s cubic-bezier(.18,.9,.2,1);
-          //   }
-          //   .avatar image {
-          //     width: 100%;
-          //     height: 100%;
-          //     border-radius: 50%;
-          //   }
-          // }
-          .o-user {
-            width: 49rpx;
-            height: 49rpx;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            background: #6b6ed4;
-            border-radius: 50%;
-            overflow: hidden;
-            flex-shrink: 0;
-            color: #fff;
+        .join-user-box {
+          .jut {
+            .font-1 {
+              font-size: 27rpx;
+              padding-left: 7rpx;
+              color: #333;
+            }
           }
-          .join-users {
-            font-size: 20rpx;
-            color: #333;
-            margin-left: 31rpx;
+          .show-join-user {
+            justify-content: flex-start;
+            margin-top: 23rpx;
+            .o-user {
+              width: 49rpx;
+              height: 49rpx;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+              background: #6b6ed4;
+              border-radius: 50%;
+              overflow: hidden;
+              flex-shrink: 0;
+              color: #fff;
+            }
+            .join-users {
+              font-size: 20rpx;
+              color: #333;
+              margin-left: 31rpx;
+            }
           }
         }
       }
-      // .show-join-user {
-      //   justify-content: flex-start;
-      //   margin-top: 23rpx;
-      //   // border: 1px solid #e9d5ff;
-      //   // height: 100rpx;
-      //   // display: flex;
-      //   // align-items: center;
-      //   // padding: 0 10rpx;
-      //   // border-radius: 10rpx;
-      //   // background: #f9f5ff;
-      //   // .tran-show {
-      //   //   position: relative;
-      //   //   .avatar {
-      //   //     width: 51rpx;
-      //   //     height: 51rpx;
-      //   //     overflow: hidden;
-      //   //     transform: translate(-50%, -50%);
-      //   //     transition: transform 0.6s cubic-bezier(.18,.9,.2,1);
-      //   //   }
-      //   //   .avatar image {
-      //   //     width: 100%;
-      //   //     height: 100%;
-      //   //     border-radius: 50%;
-      //   //   }
-      //   // }
-      //   .o-user {
-      //     width: 49rpx;
-      //     height: 49rpx;
-      //     white-space: nowrap;
-      //     text-overflow: ellipsis;
-      //     background: #6b6ed4;
-      //     border-radius: 50%;
-      //     overflow: hidden;
-      //     flex-shrink: 0;
-      //     color: #fff;
-      //   }
-      //   .join-users {
-      //     font-size: 20rpx;
-      //     color: #333;
-      //     margin-left: 31rpx;
-      //   }
-      // }
       .addr {
         justify-content: left;
         gap: 24rpx;
@@ -352,7 +291,6 @@
           width: 80rpx;
           height: 80rpx;
           border-radius: 12rpx;
-          // background: #667eea;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -635,7 +573,7 @@
 }
 .privacy-read {
   text-align: center;
-  margin: 12rpx 0;
+  margin: 25rpx 0;
 }
 .van-icon-l {
   position: relative;
@@ -758,7 +696,7 @@
     color: #333;
   }
   .check-title {
-    font-size: 29rpx;
+    font-size: 25rpx;
     font-weight: 700;
   }
 }

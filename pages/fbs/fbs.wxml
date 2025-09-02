@@ -110,7 +110,7 @@
                     </van-tag>
                   </block>
                 </block>
-                <text class="nav">点击导航</text>
+                <text class="nav">点击可展示导航路线</text>
               </view>
             </view>
           </view>
@@ -139,11 +139,11 @@
                 <view class="cbt">
                   <view class="cbt-title">
                     <view class="name"><van-icon name="like" color="red" custom-class="van-icon-1" />场地更新贡献用户 </view>
-                    <view class="num"><text class="cbt-num">{{cbt_user_count}}</text></view>
+                    <view class="num"><text class="cbt-num">{{item.venue_update_users_count}}</text></view>
                   </view>
                   <view class="cbt-user-info">
                     <view class="info">
-                      <view wx:if="{{item.venue_update_users_count > 0}}">
+                      <view wx:if="{{item.venue_update_users_count > 0}}" class="info-t-1">
                         <block wx:for="{{ cbt_users }}" wx:key="index" wx:for-item="item4">
                           <view class="cbt-user-img" style="margin-right:-10px;">
                             <van-image width="100%" round height="100%"  fit="cover" src="{{item4.user_img}}" />
@@ -155,10 +155,10 @@
                       </view>
                     </view>
                     <view class="num">
-                      <text>+{{cbt_user_count}}</text>
+                      <text>+{{item.venue_update_users_count}}</text>
                     </view>
                     <view class="log">
-                      <van-button round  size="mini" data-item="{{item}}" custom-style="width:190rpx" bind:tap="showUserUpdateLog" disabled="{{ item.venue_update_users_count == 0 }}">
+                      <van-button round  size="mini" data-item="{{item}}" custom-style="width:190rpx" bind:tap="showUserUpdateLog" wx:if="{{item.venue_update_users_count > 0}}">
                         <van-icon color="yellow" name="https://ai.anythingai.online/static/profile3/log.svg" /><text class="group_title">用户更新的日志</text>
                       </van-button>
                     </view>
@@ -235,29 +235,34 @@
           </view>
           <!-- 加入组队的用户头像 -->
           <van-transition show="{{ item.join_user_count > 0  }}" name="fade-right" >
-            <view class="join-user-box">
-              <!-- <view class="jut">
-                <van-icon name="https://ai.anythingai.online/static/profile3/user_list.svg" /> <text class="font-1">组队人数</text>
-              </view> -->
-              <view class="show-join-user" wx:if="{{ item.join_user_count > 0 }}" data-item="{{item.join_users}}">
-                <block wx:for="{{ item.join_users }}" wx:key="index" wx:for-item="item2" wx:for-index="idx">
-                  <view class="o-user" style="margin-right:-10px;">
-                    <van-image width="100%" round height="100%"  fit="cover" src="{{item2.img}}" />
-                  </view>
-                </block>
-                <view class="join-users">
-                  <text>{{item.join_user_count}}人加入组队</text>
-                </view>
-                <view class="join-users">
-                  <van-button round type="info" size="mini" data-item="{{item.join_users}}" data-val="{{item}}" custom-style="width:150rpx" bind:tap="showUserImgShape">
-                    <text class="group_title">⚡组队信息</text>
-                  </van-button>
-                </view>
-                <!-- <view class="join-users">
-                  <van-button round size="mini" custom-style="width:110rpx" data-item="{{ item }}"  bindtap="sendMsg">
-                    <text class="group_title">💬</text>
-                  </van-button>
+            <view class="join-user-c">
+              <view class="join-user-t">
+                <van-icon size="30rpx" custom-class="van-icon-5" name="https://ai.anythingai.online/static/profile3/user_list.svg" /><text class="title">组队信息</text>
+              </view>
+              <view class="join-user-box">
+                <!-- <view class="jut">
+                  <van-icon name="https://ai.anythingai.online/static/profile3/user_list.svg" /> <text class="font-1">组队人数</text>
                 </view> -->
+                <view class="show-join-user" wx:if="{{ item.join_user_count > 0 }}" data-item="{{item.join_users}}">
+                  <block wx:for="{{ item.join_users }}" wx:key="index" wx:for-item="item2" wx:for-index="idx">
+                    <view class="o-user" style="margin-right:-10px;">
+                      <van-image width="100%" round height="100%"  fit="cover" src="{{item2.img}}" />
+                    </view>
+                  </block>
+                  <view class="join-users">
+                    <text>{{item.join_user_count}}人加入组队</text>
+                  </view>
+                  <view class="join-users">
+                    <van-button round type="info" size="mini" data-item="{{item.join_users}}" data-val="{{item}}" custom-style="width:150rpx" bind:tap="showUserImgShape">
+                      <text class="group_title">⚡组队详情</text>
+                    </van-button>
+                  </view>
+                  <!-- <view class="join-users">
+                    <van-button round size="mini" custom-style="width:110rpx" data-item="{{ item }}"  bindtap="sendMsg">
+                      <text class="group_title">💬</text>
+                    </van-button>
+                  </view> -->
+                </view>
               </view>
             </view>
           </van-transition>
@@ -293,7 +298,7 @@
     </van-transition>
   </view>
   <!-- 回复用户 -->
-  <!-- <view class="message-reply" wx:if="{{isAdminShow}}">
+  <view class="message-reply" wx:if="{{isAdminShow}}">
     <view class="tran-2" data-id="3" bind:tap="onSwitchContactBtn">
       <van-icon size="90rpx" custom-class="van-icon-4" name="https://ai.anythingai.online/static/profile3/side-3.svg" />
     </view>
@@ -304,7 +309,7 @@
         </button>
       </view>
     </van-transition>
-  </view> -->
+  </view>
   <!-- 用户列表 -->
   <view class="user-list" wx:if="{{isAdminShow}}">
     <view class="tran-2" data-id="4" bind:tap="onSwitchContactBtn">
@@ -443,7 +448,7 @@
             <view class="sport_key"><text class="check-title">运动: </text><text class="check-content">{{ item.sport_key }}</text></view>
             <view class="sport_key"><text class="check-title">类型: </text><text class="check-content">{{ item.update_type == 1 ? '添加' : '更新' }}</text></view>
             <view class="sport_key"><text class="check-title">城市: </text><text class="check-content">{{ item.city }}</text></view>
-            <view class="sport_key"><text class="check-title">时间: </text><text class="check-content">{{ item.change_time }}</text></view>
+            <view class="sport_key"><text class="check-title">时间: </text><text class="check-content">{{ item.time }}</text></view>
             <view class="sport_img">
               <text class="check-title">图片: </text><van-image custom-class="van-img-1" radius="10" fit="cover" src="{{item.img}}" data-src="{{item.img}}" bind:click="onPreviewImage" />
             </view>
@@ -477,7 +482,7 @@
    <van-popup
     show="{{ showPrivacyContent }}"
     round
-    custom-style="height: 50%;width: 80%;"
+    custom-style="width: 80%;"
     bind:close="showUserPrivacyContent"
   >
     <view class="privacy-title">
@@ -486,9 +491,10 @@
     <view class="privacy-center">
       <view class="privacy-content">
         <text class="privacy-detail">欢迎使用本小程序！为保障您的合法权益，请您在使用前仔细阅读并同意以下条款：</text>
-        <text class="privacy-detail"><text class="privacy-item">1.</text>您需遵守国家法律法规，禁止发布违法、违规、骚扰、攻击性等信息，违规行为将导致永久禁止您使用本小程序。</text> 
-        <text class="privacy-detail"><text class="privacy-item">2.</text>您在本小程序中发布的信息及内容由您本人负责，如因内容引发的法律责任由用户自行承担。</text> 
-        <text class="privacy-detail"><text class="privacy-item">3.</text>您在使用过程中若遇到问题或发现违规行为，可通过小程序内提供的反馈渠道联系我们。</text> 
+        <text class="privacy-detail"><text class="privacy-item">1.</text>请遵守国家法律法规，不得利用本小程序从事任何违法或犯罪行为，做一个守法的好用户。</text> 
+        <text class="privacy-detail"><text class="privacy-item">2.</text>使用过程中如遇到问题，可通过小程序内客服随时联系我们，我们将及时为您提供帮助。</text> 
+        <text class="privacy-detail"><text class="privacy-item">3.</text>欢迎您提出宝贵意见和建议，帮助我们持续优化小程序体验。</text> 
+        <text class="privacy-detail">最后感谢您使用本小程序，祝您体验愉快!</text>
       </view>
     </view>
     <view class="privacy-read">
@@ -554,7 +560,7 @@
         />
       </view>
       <view class="user-num">
-        <text>组队人数{{userCount}}</text>
+        <text>组队人数：{{userCount}}</text>
       </view>
       <view class="check-box">
         <block wx:for="{{filter_user_list_two}}" wx:key="index" wx:for-item="item">
@@ -566,7 +572,7 @@
               <text class="check-title">特长: </text> <van-tag custom-class="van-tag-1" color="#ffe534" text-color="#333333"><van-icon name="https://ai.anythingai.online/static/profile3/star.svg" />{{item.skill ? item.skill : "篮板王"}}</van-tag>
             </view>
             <view class="sport_img">
-              <text class="check-title">帅照: </text><van-image custom-class="van-img-1" radius="10" fit="cover" src="{{item.img}}" data-src="{{item.img}}" bind:click="onPreviewImage" />
+              <text class="check-title">帅照: </text><van-image custom-class="van-img-1" radius="10" fit="cover" src="{{item.img}}" data-src="{{item.img}}" bind:click="onPreviewImage" /><text class="you">系统生成</text>
             </view>
             <view class="sport_addr"><text class="check-title">时间: </text><text class="check-content" selectable="true">{{ item.time }}</text></view>
           </view>

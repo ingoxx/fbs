@@ -12,7 +12,6 @@ import Dialog from '@vant/weapp/dialog/dialog';
 const md5 = require('../../utils/md5');
 Page({
   data: {
-
     showUserUpdateList: false,
     cbt_user_count: 0,
     filter_cbt_users: [],
@@ -136,7 +135,6 @@ Page({
   showUserImgShape(e) {
     const data = e.currentTarget.dataset.item;
     const title = e.currentTarget.dataset.val.title
-    console.log(data);
     this.setData({
       showGroupList: !this.data.showGroupList,
       filter_user_list_two: data,
@@ -196,7 +194,6 @@ Page({
       fd.sort((a, b) => {
         return stringToTimestamp(b.time) - stringToTimestamp(a.time);
       });
-      console.log("fd >>> ", fd);
       this.setData({
         user_list: fd,
         showUserList: true,
@@ -293,6 +290,7 @@ Page({
       user_img: this.data.avatarUrl,
       openid: this.data.openid,
       content: "更新了该场地",
+      time: getCurrentTime(),
       img: url,
       update_type: "2", // 表示用户更新了场地图片
     }
@@ -431,7 +429,6 @@ Page({
   // 客服/刷新/聊天室的隐藏开关
   onSwitchContactBtn(e) {
     const id = e.currentTarget.dataset.id;
-    console.log(id);
     const newData = {};
     [{name: 'showServiceBtn', id: "1"}, {name: 'showFlushBtn', id: "2"}, {name: 'showReplyBtn', id: "3"}, {name: 'showUsersBtn', id: "4"}].forEach(k => {
       newData[k.name] = (k.id === id) ? !this.data[k.name] : false;
@@ -746,7 +743,6 @@ Page({
       key: key,
       data: JSON.stringify(data),
       success(res) {
-        console.log(res.data);
       },
       fail(err) {
         Toast.fail("数据存储失败");
@@ -969,6 +965,9 @@ Page({
         url: `${BASE_URL}/add-square-pass?uid=${this.data.openid}`,
         method: "POST",
         timeout: 10000,
+        header: {
+          "Content-Type": "application/json", // 一定要加
+        },
         data: JSON.stringify(data),
         success: function (res) {
           if (res.statusCode != 200) {
@@ -986,17 +985,22 @@ Page({
   // 在审核页面提交通过审核的添加地址请求
   async onAdd(e) {
     const addData = e.currentTarget.dataset.value;
+    console.log("addData >>> ",addData);
     try {
       await Dialog.confirm({
         title: '确认添加',
         message: `确认添加 '${addData.addr}' 吗？`
       });
-      const fd = {id: addData.id, 
-        city: addData.sport_key, 
-        update_type: addData.update_type,
-        img: addData.img,
-      }
-      const pdd = await this.passAddAddrReqApi(fd);
+      // const fd = {
+      //   id: addData.id, 
+      //   city: addData.sport_key, 
+      //   update_type: addData.update_type,
+      //   img: addData.img,
+      //   sport_key: addData.sport_key,
+      //   tags: addData.tags,
+      // }
+      const pdd = await this.passAddAddrReqApi(addData);
+      console.log("pdd >>> ", pdd);
       if (pdd.code != 1000) {
         Toast.fail("添加失败");
         return;
@@ -1017,10 +1021,11 @@ Page({
         title: '确认删除',
         message: `确认删除 '${delData.addr}' 吗？`
       });
-      const fd = {id: addData.id, 
-        city: addData.sport_key, 
-        update_type: addData.update_type,
-        img: addData.img,
+      const fd = {
+        id: delData.id, 
+        city: delData.sport_key, 
+        update_type: delData.update_type,
+        img: delData.img,
       }
       const pdd = await this.refuseAddAddrReqApi(fd);
       if (pdd.code != 1000) {
@@ -1119,11 +1124,11 @@ Page({
       user_img: this.data.avatarUrl,
       openid: this.data.openid,
       content: "添加了该场地",
-      change_time: getCurrentTime(),
+      time: getCurrentTime(),
       update_type: "1", // 表示用户手动添加了新的场地
     }
-   const resp = await this.userAddAddrReqApi(ad);
-   if (resp.code != 1000) {
+    const resp = await this.userAddAddrReqApi(ad);
+    if (resp.code != 1000) {
       Notify({ type: 'danger', message:  resp.msg ? resp.msg : "添加地址失败, 请联系管理员", duration: 20000 });
       Toast.clear();
       return;
@@ -1317,7 +1322,6 @@ Page({
         },
         fail: locErr => {
           Notify({ type: 'danger', message: '无法获取定位', duration: 0 });
-          console.log(locErr);
           wx.stopPullDownRefresh();
           // wx.hideLoading();
           Toast.clear();
