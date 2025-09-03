@@ -151,6 +151,11 @@
         padding-top: 16rpx;
         border-top: 1rpx solid #d6d6d6;
         margin-top: 27rpx;
+        .submit-img-container {
+          display: flex;
+          justify-content: center;
+          gap: 23rpx;
+        }
         .title {
           font-size: 20rpx;
           color: #646566;
@@ -435,7 +440,7 @@
   }
   .message-reply, .user-list {
     position: fixed;
-    top: 23%;
+    top: 14%;
     right: 0;
     display: flex;
     align-items: center;
@@ -720,4 +725,29 @@
   padding: 0 20rpx;
   font-size: 20rpx;
   color: #ababab;
+}
+.pop-box {
+  padding: 14rpx;
+  .pop-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .p-c {
+      .p-c-icon {
+        text-align: center;
+      }
+      .p-c-content {
+        font-size: 24rpx;
+      }
+    }
+  }
+}
+.dialog-btn {
+  display: flex;
+  justify-content: space-evenly;
+  margin: 20rpx 0;
+}
+.dialog-btn-a {
+  border-top: 1rpx solid #d0d0d0;
+  padding-top: 26rpx;
 }

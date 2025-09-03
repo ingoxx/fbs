@@ -15,6 +15,43 @@ const generateUUID = (() => {
 
   return s.join("");
 })
+const checkUpdate = (() => {
+  if (wx.canIUse('getUpdateManager')) {
+    const updateManager = wx.getUpdateManager();
+
+    // 检查新版本
+    updateManager.onCheckForUpdate(function (res) {
+      console.log("是否有新版本: ", res.hasUpdate);
+    });
+
+    // 新版本下载完成
+    updateManager.onUpdateReady(function () {
+      wx.showModal({
+        title: '更新提示',
+        content: '发现新版本，是否立即使用？',
+        success(res) {
+          if (res.confirm) {
+            updateManager.applyUpdate();
+          }
+        }
+      });
+    });
+    // 新版本下载失败
+    updateManager.onUpdateFailed(function () {
+      wx.showModal({
+        title: '更新提示',
+        content: '新版本下载失败，请删除小程序后重新打开。',
+        showCancel: false
+      });
+    });
+  } else {
+    wx.showModal({
+      title: '提示',
+      content: '当前微信版本过低，无法使用更新功能，请升级微信后重试。',
+      showCancel: false
+    });
+  }
+})
 
 /**
  * 将字符串时间转换为时间戳
@@ -52,5 +89,6 @@ module.exports = {
   getCurrentTime,
   generateUUID,
   stringToTimestamp,
+  checkUpdate,
 }
 

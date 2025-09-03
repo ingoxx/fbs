@@ -80,9 +80,6 @@
                 <van-icon name="https://ai.anythingai.online/static/profile3/star.svg" /> <text class="sport-key">{{defaultSportSquare}}</text>
               </van-tag>
             </view>
-            <!-- <view class="venue-img" data-index="{{index}}" bind:tap="toggleShowVenueImg">
-              <van-icon color="#ff6161" name="https://ai.anythingai.online/static/profile3/pic.svg" />
-            </view> -->
           </view>
           <!-- 场地地址 -->
           <view class="addr">
@@ -132,9 +129,18 @@
                   bind:delete="deleteImg"
                   />
                 </view>
-                <view class="submit-img">
-                  <van-button bind:tap="updateVenueImg" data-index="{{ index }}" data-item="{{ item }}" icon="https://ai.anythingai.online/static/profile3/smil.svg" custom-style="width: 170rpx" size="small" round type="info">上传</van-button>
+                <view class="submit-img-container">
+                  <view class="submit-img">
+                    <van-button bind:tap="updateVenueImg" data-index="{{ index }}" data-item="{{ item }}" icon="https://ai.anythingai.online/static/profile3/smil.svg" custom-style="width: 170rpx" size="small" round type="info">上传</van-button>
+                  </view>
+                  <view class="submit-img" wx:if="{{item.img == ''}}">
+                    <van-button round type="primary" bind:tap="getVenueImg" data-index="{{ index }}" data-item="{{ item }}" icon="https://ai.anythingai.online/static/profile3/smil.svg" custom-style="width: 220rpx" size="small">获取场地图片</van-button>
+                  </view>
                 </view>
+                <!-- <view class="submit-img">
+                  <van-button bind:tap="updateVenueImg" data-index="{{ index }}" data-item="{{ item }}" icon="https://ai.anythingai.online/static/profile3/smil.svg" custom-style="width: 170rpx" size="small" round type="info">上传</van-button>
+                </view> -->
+
                 <!-- 场地更新贡献者 -->
                 <view class="cbt">
                   <view class="cbt-title">
@@ -302,7 +308,7 @@
     </van-transition>
   </view>
   <!-- 回复用户 -->
-  <view class="message-reply" wx:if="{{isAdminShow}}">
+  <!-- <view class="message-reply" wx:if="{{isAdminShow}}">
     <view class="tran-2" data-id="3" bind:tap="onSwitchContactBtn">
       <van-icon size="90rpx" custom-class="van-icon-4" name="https://ai.anythingai.online/static/profile3/side-3.svg" />
     </view>
@@ -313,7 +319,7 @@
         </button>
       </view>
     </van-transition>
-  </view>
+  </view> -->
   <!-- 用户列表 -->
   <view class="user-list" wx:if="{{isAdminShow}}">
     <view class="tran-2" data-id="4" bind:tap="onSwitchContactBtn">
@@ -365,11 +371,12 @@
     use-slot
     title="添加场地"
     show="{{ addVillage }}"
-    show-cancel-button
     confirm-button-open-type="getUserInfo"
     bind:close="onClose"
     bind:confirm="onConfirmAddPlace"
     custom-class="van-dialog-c-1"
+    show-confirm-button="{{false}}"  
+    show-cancel-button="{{false}}"
   >
     <van-cell-group>
       <van-field
@@ -412,15 +419,27 @@
         </view>
       </view>
     </van-cell-group>
+    <view class="dialog-btn">
+      <view class="cancel">
+        <van-button round  data-index="{{index}}" custom-style="width:218rpx" bind:tap="onClose">
+          <text class="group_title">取消</text>
+        </van-button>
+      </view>
+      <view class="confirm" bind:tap="onConfirmAddPlace">
+        <van-button round custom-style="width:218rpx" >
+          <text class="group_title">确认</text>
+        </van-button>
+      </view>
+    </view>
   </van-dialog>
   <!-- 运动场地选择 -->
   <van-dialog
       use-slot
-      cancel-button-text="关闭"
       z-index="100"
       title="🏃运动场地选择"
       show="{{ showSportsList }}"
-      show-cancel-button
+      show-confirm-button="{{false}}"  
+      show-cancel-button="{{false}}"
       confirm-button-open-type="getUserInfo"
       bind:close="onClose"
       bind:confirm="onConfirmSportSelection"
@@ -430,6 +449,18 @@
           <van-checkbox value="{{ item.checked }}" data-item="{{ item }}" bind:change="onSportsChange">{{item.icon}}{{ item.name }}</van-checkbox>
         </block>
       </view>
+      <view class="dialog-btn dialog-btn-a">
+      <view class="cancel">
+        <van-button round  data-index="{{index}}" custom-style="width:218rpx" bind:tap="onClose">
+          <text class="group_title">关闭</text>
+        </van-button>
+      </view>
+      <view class="confirm" bind:tap="onConfirmSportSelection">
+        <van-button round custom-style="width:218rpx" >
+          <text class="group_title">确认</text>
+        </van-button>
+      </view>
+    </view>
   </van-dialog>
   <!-- 审核列表 -->
   <van-dialog
@@ -482,8 +513,8 @@
       </view>
     </view>
   </van-action-sheet>
-   <!-- 隐私协议内容 -->
-   <van-popup
+  <!-- 隐私协议内容 -->
+  <van-popup
     show="{{ showPrivacyContent }}"
     round
     custom-style="width: 80%;"
@@ -627,6 +658,8 @@
         </block>
       </view>
   </van-dialog>
+  <!-- 所有城市的场地地址 -->
+  
   <van-notify id="van-notify" />
   <van-toast id="van-toast" />
   <van-dialog id="van-dialog" />

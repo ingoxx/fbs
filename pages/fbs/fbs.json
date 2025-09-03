@@ -25,6 +25,8 @@
     "van-search": "/miniprogram_npm/@vant/weapp/search/index",
     "van-collapse": "/miniprogram_npm/@vant/weapp/collapse/index",
     "van-collapse-item": "/miniprogram_npm/@vant/weapp/collapse-item/index",
+    "van-tabbar": "/miniprogram_npm/@vant/weapp/tabbar/index",
+    "van-tabbar-item": "/miniprogram_npm/@vant/weapp/tabbar-item/index",
     "chat-room": "/components/chat/chat",
     "eva-board": "/components/cb/cb"
   }

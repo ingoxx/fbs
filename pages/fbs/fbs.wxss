@@ -178,6 +178,12 @@
   margin-top: 27rpx;
 }
 
+.box .card-1 .card-1-1 .venue-img-update .submit-img-container {
+  display: flex;
+  justify-content: center;
+  gap: 23rpx;
+}
+
 .box .card-1 .card-1-1 .venue-img-update .title {
   font-size: 20rpx;
   color: #646566;
@@ -487,7 +493,7 @@
 
 .box .message-reply, .box .user-list {
   position: fixed;
-  top: 23%;
+  top: 14%;
   right: 0;
   display: flex;
   align-items: center;
@@ -811,4 +817,33 @@
   padding: 0 20rpx;
   font-size: 20rpx;
   color: #ababab;
+}
+
+.pop-box {
+  padding: 14rpx;
+}
+
+.pop-box .pop-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pop-box .pop-container .p-c .p-c-icon {
+  text-align: center;
+}
+
+.pop-box .pop-container .p-c .p-c-content {
+  font-size: 24rpx;
+}
+
+.dialog-btn {
+  display: flex;
+  justify-content: space-evenly;
+  margin: 20rpx 0;
+}
+
+.dialog-btn-a {
+  border-top: 1rpx solid #d0d0d0;
+  padding-top: 26rpx;
 }

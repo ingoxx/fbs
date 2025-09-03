@@ -12,6 +12,7 @@ import Dialog from '@vant/weapp/dialog/dialog';
 const md5 = require('../../utils/md5');
 Page({
   data: {
+    showSettingCenter: false,
     showUserUpdateList: false,
     cbt_user_count: 0,
     filter_cbt_users: [],
@@ -95,6 +96,58 @@ Page({
     user_list: [],
     filter_user_list: [],
   },
+  getVenueImgApi(aid) {
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: `${BASE_URL}/get-venue-img?uid=${this.data.openid}&aid=${aid}&sport_key=${this.data.defaultSportKey}&city=${this.data.city}`,
+        timeout: 10000,
+        success: (res) => {
+          if (res.statusCode == 200) {
+            resolve(res.data);
+          } else {
+            reject({msg: '网络错误', code: 400, path: 'get-user-reviews'});
+          }
+        },
+        fail: (err) => {
+          reject({msg: '网络错误', code: 401, path: 'get-user-reviews'});
+        }
+      })
+    });
+  },
+  async getVenueImg(e) {
+    const data = e.currentTarget.dataset.item;
+    try {
+      await Dialog.confirm({
+        title: '',
+        message: `获取场地图片可能会失败, 确认获取吗？`
+      }).then(async () =>{
+        wx.showLoading({
+          title: '获取中...',
+        })
+        const pdd = await this.getVenueImgApi(data.id);
+        if (pdd.code != 1000) {
+          Toast.fail("失败了");
+          wx.hideLoading();
+          return;
+        }
+        this.setData({
+          checkListData: pdd.data,
+        });
+        Toast.success("成功了");
+        wx.hideLoading();
+        this.getAddrDistance();
+      }).catch(() => {
+        wx.hideLoading();
+      })
+      } catch (err) {
+        console.log('取消或失败:', err);
+      }
+  },
+  showDialogPopup() {
+    this.setData({
+      showSettingCenter: false,
+    });
+  },
   searchUpdateLog(e) {
     const val = e.detail;
     if (val == "") {
@@ -117,9 +170,13 @@ Page({
   showUserUpdateLog(e) {
     const data = e.currentTarget.dataset.item;
     if (data.venue_update_users_count > 0) {
+      const fcu = data.venue_update_users;
+      fcu.sort((a, b) => {
+        return stringToTimestamp(b.time) - stringToTimestamp(a.time);
+      });
       this.setData({
-        filter_cbt_users: data.venue_update_users,
-        cbt_users: data.venue_update_users,
+        filter_cbt_users: fcu,
+        cbt_users: fcu,
         cbt_user_count: data.venue_update_users.length,
         bks_name: data.title,
         showUserUpdateList: true,
@@ -135,6 +192,9 @@ Page({
   showUserImgShape(e) {
     const data = e.currentTarget.dataset.item;
     const title = e.currentTarget.dataset.val.title
+    data.sort((a, b) => {
+      return stringToTimestamp(b.time) - stringToTimestamp(a.time);
+    });
     this.setData({
       showGroupList: !this.data.showGroupList,
       filter_user_list_two: data,
@@ -305,15 +365,20 @@ Page({
     this.getAddrDistance();
     Toast.clear();
   },
-  // 更新场地图片的弹窗
+  // 场地更新日志
   toggleShowVenueImg(e) {
     const index = e.currentTarget.dataset.index;
     const data = e.currentTarget.dataset.item;
     const vd = this.data.basketSquareFilterData;
     if (data.venue_update_users_count > 0) {
+      const fcu = data.venue_update_users;
+      fcu.sort((a, b) => {
+        return stringToTimestamp(b.time) - stringToTimestamp(a.time);
+      });
+      console.log("fcu >>> ", fcu);
       this.setData({
-        filter_cbt_users: data.venue_update_users,
-        cbt_users: data.venue_update_users,
+        filter_cbt_users: fcu,
+        cbt_users: fcu,
       });
     }
     vd[index].is_show = !vd[index].is_show; // 切换状态
@@ -660,7 +725,8 @@ Page({
         duration: 0,
       });
       this.getAddrDistance();
-    } 
+    }
+    this.onClose();
   },
   async getSiteSelection() {
     try {
@@ -985,33 +1051,42 @@ Page({
   // 在审核页面提交通过审核的添加地址请求
   async onAdd(e) {
     const addData = e.currentTarget.dataset.value;
-    console.log("addData >>> ",addData);
     try {
       await Dialog.confirm({
         title: '确认添加',
         message: `确认添加 '${addData.addr}' 吗？`
-      });
-      // const fd = {
-      //   id: addData.id, 
-      //   city: addData.sport_key, 
-      //   update_type: addData.update_type,
-      //   img: addData.img,
-      //   sport_key: addData.sport_key,
-      //   tags: addData.tags,
+      }).then(async () =>{
+        wx.showLoading({
+          title: '添加中...',
+        })
+        const pdd = await this.passAddAddrReqApi(addData);
+        if (pdd.code != 1000) {
+          Toast.fail("添加失败");
+          wx.hideLoading();
+          return;
+        }
+        this.setData({
+          checkListData: pdd.data,
+        });
+        Toast.success("添加成功");
+        wx.hideLoading();
+      }).catch(() => {
+        wx.hideLoading();
+      })
+      
+      // const pdd = await this.passAddAddrReqApi(addData);
+      // if (pdd.code != 1000) {
+        
+      //   Toast.fail("添加失败");
+      //   return;
       // }
-      const pdd = await this.passAddAddrReqApi(addData);
-      console.log("pdd >>> ", pdd);
-      if (pdd.code != 1000) {
-        Toast.fail("添加失败");
-        return;
+      // this.setData({
+      //   checkListData: pdd.data,
+      // });
+      // Toast.success("添加成功");
+      } catch (err) {
+        console.log('取消或失败:', err);
       }
-      this.setData({
-        checkListData: pdd.data,
-      });
-      Toast.success("添加成功");
-    } catch (err) {
-      console.log('取消或失败:', err);
-    }
   },
   // 在审核页面审核不通过的加地址请求将会删除
   async onDelete(e) {
@@ -1067,14 +1142,17 @@ Page({
     const val2 = this.data.placeTag;
     const fileList = this.data.fileList;
     if (val == "") {
+      this.onClose();
       Toast.fail("地址不能为空");
       return;
     }
     if (val2 == "") {
+      this.onClose();
       Toast.fail("简称不能为空");
       return;
     }
     if (fileList.length == 0) {
+      this.onClose();
       Toast.fail("图片不能为空");
       return;
     }
@@ -1084,6 +1162,7 @@ Page({
       Notify({type: 'danger', message: '输入的地址无效', duration: 30000});
       return;
     }
+    this.onClose();
     const uuid = generateUUID();
     var url = "";
     Toast.loading({
@@ -1137,7 +1216,7 @@ Page({
     Toast.clear();
   },
   onClose() {
-    this.setData({ addVillage: false, showCheckList: false });
+    this.setData({ addVillage: false, showCheckList: false, showSportsList: false });
   },
   onClearInput(e) {
     if (e.currentTarget.dataset.value != "") {
