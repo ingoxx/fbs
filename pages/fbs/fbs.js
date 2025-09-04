@@ -12,6 +12,8 @@ import Dialog from '@vant/weapp/dialog/dialog';
 const md5 = require('../../utils/md5');
 Page({
   data: {
+    isShowAllData: false,
+    isShowGoodPage: false,
     totalData: 0,
     showSettingCenter: false,
     showUserUpdateList: false,
@@ -74,7 +76,7 @@ Page({
     showPrivacy: false,
     villageInfo: '',
     useNotice: "下拉小程序以获取附近运动场地址",
-    notice: "上传/更新/添加场地图片，以帮助更多人了解场地信息，感谢！",
+    notice: "以帮助更多人了解场地信息，感谢！",
     lat: 0,
     lng: 0,
     inputValue: "",
@@ -82,7 +84,8 @@ Page({
     currentSquareSelected: 2,
     basketSquareFilter: [
       {'id': 6, 'icon': 'medal','name': '运动场地选择', 'customize': 1, 'disable': true, 'isDisable': false, 'action': false},
-      {'id': 7, 'icon': 'add-square','name': '添加场地', 'customize': 1, 'disable': true, 'isDisable': false, 'action': false},
+      // {'id': 7, 'icon': 'add-square','name': '添加场地', 'customize': 3, 'disable': false, 'isDisable': false, 'action': false},
+      {'id': 7, 'icon': 'add-square','name': '添加场地', 'customize': 2, 'disable': false, 'isDisable': false, 'action': false},
       {'id': 5, 'icon': 'comment','name': '审核', 'customize': 3, 'disable': false, 'isDisable': false, 'action': false},
     ],
     all_sport_list: [
@@ -96,6 +99,18 @@ Page({
     images: [],
     user_list: [],
     filter_user_list: [],
+  },
+  showGoodBtn() {
+    const sport_key = this.data.defaultSportKey;
+    if (sport_key == "bks" || sport_key == "bms" || sport_key == "fbs" || sport_key == "sws") {
+      this.setData({
+        isShowGoodPage: true,
+      });
+    } else {
+      this.setData({
+        isShowGoodPage: false,
+      });
+    }
   },
   getVenueImgApi(aid) {
     return new Promise((resolve, reject) => {
@@ -1009,6 +1024,8 @@ Page({
         // const res = await app.login();
         if (item.customize == 3) {
           item.disable = this.data.openid == app.globalData.admin;
+        } if (item.customize == 2) {
+          item.disable = this.data.isShowAllData;
         } else {
           item.isDisable = false;
         }
@@ -1337,7 +1354,7 @@ Page({
   },
   filterBasketSquare(id) {
     if (!this.data.isUse) {
-      Toast.fail("请先同意协议");
+      Toast.fail("请先阅读用户须知内容");
       this.setData({
         showPrivacy: true,
       });
@@ -1428,6 +1445,7 @@ Page({
     const resp = await this.getUserLocation();
     if (resp.latitude !== "" && resp.longitude !== "" && resp.city !== "") {
       const allData = await this.getAllDataApi();
+
       if (allData.code != 1000) {
         Toast.fail(allData.code);
         return;
@@ -1472,7 +1490,9 @@ Page({
         isEmpty: false,
         isInput: false,
         totalData: processedList.length,
+        isShowAllData: allData.data,
       });
+      this.showGoodBtn();
       this.getBasketSquareFilter();
       wx.stopPullDownRefresh();
       // wx.hideLoading();

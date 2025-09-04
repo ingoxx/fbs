@@ -1,6 +1,6 @@
 <view class="box">
   <!-- 提醒事项 -->
-  <view class="notice">
+  <!-- <view class="notice">
     <van-notice-bar
       scrollable
       mode="closeable"
@@ -8,7 +8,7 @@
       left-icon="volume-o"
       text="{{ notice }}"
     />
-  </view>
+  </view> -->
   <!-- 定位 -->
   <view class="location">
     <block wx:if="{{ addr == '未获取位置' }}">
@@ -172,10 +172,10 @@
           <block>
             <van-transition show="{{ item.is_show }}" custom-class="block">
               <view class="venue-img-update">
-                <view class="title">
+                <view class="title" wx:if="{{isShowAllData}}">
                   <text>添加场地图片以帮助更多人, 跪谢</text>
                 </view>
-                <view class="img">
+                <view class="img" wx:if="{{isShowAllData}}">
                   <van-uploader 
                   max-count="1"
                   multiple
@@ -187,7 +187,7 @@
                   />
                 </view>
                 <view class="submit-img-container">
-                  <view class="submit-img">
+                  <view class="submit-img" wx:if="{{isShowAllData}}">
                     <van-button bind:tap="updateVenueImg" data-index="{{ index }}" data-item="{{ item }}" icon="https://ai.anythingai.online/static/profile3/smil.svg" custom-style="width: 170rpx" size="small" round type="info">上传</van-button>
                   </view>
                   <view class="submit-img" wx:if="{{item.img == ''}}">
@@ -195,7 +195,7 @@
                   </view>
                 </view>
                 <!-- 场地更新贡献者 -->
-                <view class="cbt">
+                <view class="cbt" wx:if="{{isShowAllData}}">
                   <view class="cbt-title">
                     <view class="name"><van-icon name="like" color="red" custom-class="van-icon-1" />场地更新贡献用户 </view>
                     <view class="num"><text class="cbt-num">{{item.venue_update_users_count}}</text></view>
@@ -264,7 +264,7 @@
                   <view class="join-users">
                     <text>{{item.join_user_count}}人加入组队</text>
                   </view>
-                  <view class="join-users">
+                  <view class="join-users" wx:if="{{isShowAllData}}">
                     <van-button round type="info" size="mini" data-item="{{item.join_users}}" data-val="{{item}}" custom-style="width:150rpx" bind:tap="showUserImgShape">
                       <text class="group_title">⚡组队详情</text>
                     </van-button>
@@ -282,7 +282,7 @@
       </van-transition>
     </block>
     <block wx:if="{{ isEmpty }}">
-      <van-empty description="{{ isUse ? useNotice: '请先同意用户隐私协议' }}"></van-empty>
+      <van-empty description="{{ isUse ? useNotice: '请先阅读注意事项' }}"></van-empty>
     </block>
   </view>
   <!-- 客服 -->
@@ -503,12 +503,12 @@
   close-on-click-overlay="false"
   >
     <view class="privacy-title">
-      <text>用户隐私协议</text>
+      <text>用户注意事项</text>
     </view>
     <view class="privacy-center">
       <view class="privacy-content-f">
         <van-checkbox icon-size="17px" value="{{ privacyCheckedVal }}" shape="square" bind:change="onPrivacyCheckedChange"></van-checkbox>
-        <text bind:tap="onPrivacyCheckedChange">我已阅读并同意</text><text class="privacy-jump" bind:tap="showUserPrivacyContent">《用户隐私协议》</text>
+        <text bind:tap="onPrivacyCheckedChange">我已阅读并知晓</text><text class="privacy-jump" bind:tap="showUserPrivacyContent">《用户注意事项》</text>
       </view>
       <view class="privacy-agree">
         <van-button custom-style="width: 190rpx" size="small" type="primary" data-item="1" bind:tap="iAacceptPrivacy">确认</van-button>
@@ -523,14 +523,13 @@
     bind:close="showUserPrivacyContent"
   >
     <view class="privacy-title">
-      <text>用户隐私协议</text>
+      <text>用户注意事项</text>
     </view>
     <view class="privacy-center">
       <view class="privacy-content">
-        <text class="privacy-detail">欢迎使用本小程序！为保障您的合法权益，请您在使用前仔细阅读并同意以下条款：</text>
+        <text class="privacy-detail">欢迎使用本小程序！请您在使用前仔细阅读并遵守以下条款：</text>
         <text class="privacy-detail"><text class="privacy-item">1.</text>请遵守国家法律法规，不得利用本小程序从事任何违法或犯罪行为，做一个守法的好用户。</text> 
         <text class="privacy-detail"><text class="privacy-item">2.</text>使用过程中如遇到问题，可通过小程序内客服随时联系我们，我们将及时为您提供帮助。</text> 
-        <text class="privacy-detail"><text class="privacy-item">3.</text>欢迎您提出宝贵意见和建议，帮助我们持续优化小程序体验。</text> 
         <text class="privacy-detail">最后感谢您使用本小程序，祝您体验愉快!</text>
       </view>
     </view>
