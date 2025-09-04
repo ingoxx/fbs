@@ -12,6 +12,7 @@ import Dialog from '@vant/weapp/dialog/dialog';
 const md5 = require('../../utils/md5');
 Page({
   data: {
+    totalData: 0,
     showSettingCenter: false,
     showUserUpdateList: false,
     cbt_user_count: 0,
@@ -150,21 +151,25 @@ Page({
   },
   searchUpdateLog(e) {
     const val = e.detail;
+    const cb_data = this.data.cbt_users;
     if (val == "") {
       this.setData({
-        filter_cbt_users: this.data.cbt_users,
+        filter_cbt_users: cb_data,
+        cbt_user_count: cb_data.length,
       });
       return;
     }
     this.setData({
       userVal: val,
     });
-    const fd = this.data.cbt_users.filter(item => {
+    const fd = cb_data.filter(item => {
       const nnMatch = item.nick_name.includes(val);
-      return nnMatch;
+      const cityMatch = item.city.includes(val);
+      return nnMatch || cityMatch;
     });
     this.setData({
       filter_cbt_users: fd,
+      cbt_user_count: fd.length,
     });
   },
   showUserUpdateLog(e) {
@@ -187,6 +192,7 @@ Page({
     this.setData({
       showGroupList: false,
       showUserUpdateList: false,
+      userVal: "",
     })
   },
   showUserImgShape(e) {
@@ -205,42 +211,49 @@ Page({
   },
   searchJoinUser(e) {
     const val = e.detail;
+    const user_data = this.data.user_list;
     if (val == "") {
       this.setData({
         filter_user_list_two: this.data.user_list,
+        userCount: user_data.length,
       });
       return;
     }
     this.setData({
       userVal: val,
     });
-    const fd = this.data.user_list.filter(item => {
+    const fd = user_data.filter(item => {
       const skdMatch = item.skill.includes(val);
       const nnMatch = item.nick_name.includes(val);
       return skdMatch || nnMatch;
     });
     this.setData({
       filter_user_list_two: fd,
+      userCount: fd.length,
     });
   },
   searchUser(e) {
     const val = e.detail;
+    const user_data = this.data.user_list;
     if (val == "") {
       this.setData({
-        filter_user_list: this.data.user_list,
+        filter_user_list: user_data,
+        userCount: user_data.length,
       });
       return;
     }
     this.setData({
       userVal: val,
     });
-    const fd = this.data.user_list.filter(item => {
+    const fd = user_data.filter(item => {
       const oidMatch = item.openid.includes(val);
       const nnMatch = item.nick_name.includes(val);
-      return oidMatch || nnMatch;
+      const cityMatch = item.city.includes(val);
+      return oidMatch || nnMatch || cityMatch;
     });
     this.setData({
       filter_user_list: fd,
+      userCount: fd.length,
     });
   },
   async getUserList() {
@@ -285,6 +298,7 @@ Page({
   onCloseUserList () {
     this.setData({
       showUserList: false,
+      userVal: "",
     })
   },
   privacyContentRead() {
@@ -1266,9 +1280,9 @@ Page({
       };
     });
 
-
     this.setData({
       basketSquareFilterData: processedList,
+      totalData: processedList.length,
     });
   },
   // 获取input值
@@ -1457,6 +1471,7 @@ Page({
         basketSquareFilterData: processedList,
         isEmpty: false,
         isInput: false,
+        totalData: processedList.length,
       });
       this.getBasketSquareFilter();
       wx.stopPullDownRefresh();

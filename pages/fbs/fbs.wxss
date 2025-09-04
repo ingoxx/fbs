@@ -151,6 +151,15 @@
   padding-bottom: 10rpx;
 }
 
+.box .data-num {
+  margin-left: 33rpx;
+}
+
+.box .data-num .num {
+  font-size: 23rpx;
+  color: #ffff;
+}
+
 .box .card-1 {
   display: flex;
   flex-direction: column;
@@ -846,4 +855,9 @@
 .dialog-btn-a {
   border-top: 1rpx solid #d0d0d0;
   padding-top: 26rpx;
+}
+
+.van-icon-6 {
+  position: relative;
+  top: 3rpx;
 }
