@@ -11,7 +11,7 @@
     flex-shrink: 0;
     background: #7880dd;
     padding: 0 20rpx;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.23);
+    // box-shadow: 0 8px 25px rgba(0, 0, 0, 0.23);
     .coordinate {
       color: #ffffff;
       font-size: 25rpx;
@@ -102,18 +102,18 @@
     }
   }
   .search {
-    margin: 15rpx 25rpx;
-    background: #f9f9f9;
+    margin: 0 0;
+    // background: #f9f9f9;
     border-radius: 16rpx;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.23);
-    margin-top: 37rpx;
+    // box-shadow: 0 8px 25px rgba(0, 0, 0, 0.23);
+    // margin-top: 18rpx;
     .se {
       padding: 0 0;
     }
     .s-p {
-      width: 80%;
-      margin: 22rpx auto;
-      padding-top: 20rpx;
+      // width: 80%;
+      // margin: 22rpx auto;
+      // padding-top: 20rpx;
       .s-p-1 {
         // flex: 1;
         height: 70rpx;
@@ -125,9 +125,15 @@
       }
     }
     .s-b {
-      width: 80%;
-      margin: 16rpx auto;
-      padding-bottom: 10rpx;
+      // width: 80%;
+      // margin: 16rpx auto;
+      // padding-bottom: 10rpx;
+    }
+  }
+  .venue-tab {
+    margin: 13rpx 0;
+    .venue-container {
+      margin: 0 32rpx;
     }
   }
   .data-num {
@@ -416,6 +422,7 @@
     align-items: center;
     position: fixed;
     top: 32%;
+    z-index: 100;
     .tran-2 {
       position: relative;
       right: 36rpx;
@@ -685,6 +692,45 @@
     border-radius: 10rpx;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.23);
     padding: 14rpx 14rpx;
+    .sport-img-container {
+      display: flex;
+      gap: 40rpx;
+      .sport_img {
+        margin-top: 8rpx;
+        .you {
+          padding-left: 0;
+        }
+      }
+      .n-box {
+        .m-box {
+          .m-container {
+            display: flex;
+            gap: 28rpx;
+            .sport_addr {
+              .check-content-1 {
+                color: #f9741b;
+                font-weight: 700;
+              }
+              .you {
+                padding-left: 7rpx;
+              }
+            }
+          }
+        }
+      }
+      .check-content-2 {
+        font-size: 21rpx;
+        color: #b3b3b3;
+      }
+      .check-content-3 {
+        color: #6d6d6d;
+      }
+      .sport_addr_f {
+        display: flex;
+        margin-top: 16rpx;
+        align-items: end;
+      }
+    }
     .sport_addr, .sport_img {
       .you {
         font-size: 21rpx;
@@ -701,6 +747,12 @@
       display: flex;
       justify-content: center;
       gap: 37rpx;
+    }
+    .sport_addr_f_2 {
+      width: 300rpx;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
   }
   .check-content {
@@ -722,6 +774,14 @@
 }
 .van-search-1 {
   border-radius: 10rpx;
+  .van-icon {
+    top: 11rpx!important;
+    font-size: 43rpx!important;
+    font-weight: 700!important;
+  }
+}
+.van-search-input-1 {
+  height: 68rpx!important;
 }
 .van-dialog-1 {
   .van-dialog__footer {
@@ -761,4 +821,18 @@
 .van-icon-6 {
   position: relative;
   top: 3rpx;
+}
+.van-icon-7 {
+  font-size: 21rpx!important;
+  color: #b3b3b3;
+}
+.van-tab-1 {
+  .van-tabs--line {
+    border-radius: 10rpx!important;
+  }
+  .van-tabs__line {
+    width: 125rpx!important;
+    height: 7rpx!important;
+    background: #f32d44!important;
+  }
 }

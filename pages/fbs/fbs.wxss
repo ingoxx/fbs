@@ -16,7 +16,6 @@
   flex-shrink: 0;
   background: #7880dd;
   padding: 0 20rpx;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.23);
 }
 
 .box .location .coordinate {
@@ -119,21 +118,12 @@
 }
 
 .box .search {
-  margin: 15rpx 25rpx;
-  background: #f9f9f9;
+  margin: 0 0;
   border-radius: 16rpx;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.23);
-  margin-top: 37rpx;
 }
 
 .box .search .se {
   padding: 0 0;
-}
-
-.box .search .s-p {
-  width: 80%;
-  margin: 22rpx auto;
-  padding-top: 20rpx;
 }
 
 .box .search .s-p .s-p-1 {
@@ -145,10 +135,12 @@
   padding-right: 60rpx;
 }
 
-.box .search .s-b {
-  width: 80%;
-  margin: 16rpx auto;
-  padding-bottom: 10rpx;
+.box .venue-tab {
+  margin: 13rpx 0;
+}
+
+.box .venue-tab .venue-container {
+  margin: 0 32rpx;
 }
 
 .box .data-num {
@@ -465,6 +457,7 @@
   align-items: center;
   position: fixed;
   top: 32%;
+  z-index: 100;
 }
 
 .box .contact-us .tran-2, .box .user-list .tran-2 {
@@ -778,6 +771,48 @@
   padding: 14rpx 14rpx;
 }
 
+.check-box .check-container .sport-img-container {
+  display: flex;
+  gap: 40rpx;
+}
+
+.check-box .check-container .sport-img-container .sport_img {
+  margin-top: 8rpx;
+}
+
+.check-box .check-container .sport-img-container .sport_img .you {
+  padding-left: 0;
+}
+
+.check-box .check-container .sport-img-container .n-box .m-box .m-container {
+  display: flex;
+  gap: 28rpx;
+}
+
+.check-box .check-container .sport-img-container .n-box .m-box .m-container .sport_addr .check-content-1 {
+  color: #f9741b;
+  font-weight: 700;
+}
+
+.check-box .check-container .sport-img-container .n-box .m-box .m-container .sport_addr .you {
+  padding-left: 7rpx;
+}
+
+.check-box .check-container .sport-img-container .check-content-2 {
+  font-size: 21rpx;
+  color: #b3b3b3;
+}
+
+.check-box .check-container .sport-img-container .check-content-3 {
+  color: #6d6d6d;
+}
+
+.check-box .check-container .sport-img-container .sport_addr_f {
+  display: flex;
+  margin-top: 16rpx;
+  align-items: end;
+}
+
 .check-box .check-container .sport_addr .you, .check-box .check-container .sport_img .you {
   font-size: 21rpx;
   padding-left: 12rpx;
@@ -793,6 +828,13 @@
   display: flex;
   justify-content: center;
   gap: 37rpx;
+}
+
+.check-box .check-container .sport_addr_f_2 {
+  width: 300rpx;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .check-box .check-content {
@@ -816,6 +858,16 @@
 
 .van-search-1 {
   border-radius: 10rpx;
+}
+
+.van-search-1 .van-icon {
+  top: 11rpx !important;
+  font-size: 43rpx !important;
+  font-weight: 700 !important;
+}
+
+.van-search-input-1 {
+  height: 68rpx !important;
 }
 
 .van-dialog-1 .van-dialog__footer {
@@ -860,4 +912,19 @@
 .van-icon-6 {
   position: relative;
   top: 3rpx;
+}
+
+.van-icon-7 {
+  font-size: 21rpx !important;
+  color: #b3b3b3;
+}
+
+.van-tab-1 .van-tabs--line {
+  border-radius: 10rpx !important;
+}
+
+.van-tab-1 .van-tabs__line {
+  width: 125rpx !important;
+  height: 7rpx !important;
+  background: #f32d44 !important;
 }

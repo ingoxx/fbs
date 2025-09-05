@@ -54,7 +54,7 @@ Page({
     placeTag: "",
     sportSelectedCacheKey: 'selected_sport',
     sportsCacheKey: 'is_show_sports',
-    defaultSportSquare: '篮球场',
+    defaultSportSquare: '🏀篮球场',
     defaultSportKey: 'bks',
     showSportsList: false,
     result: [],
@@ -83,10 +83,10 @@ Page({
     markers: [],
     currentSquareSelected: 2,
     basketSquareFilter: [
-      {'id': 6, 'icon': 'medal','name': '运动场地选择', 'customize': 1, 'disable': true, 'isDisable': false, 'action': false},
+      // {'id': 6, 'icon': 'medal','name': '运动场地选择', 'customize': 1, 'disable': true, 'isDisable': false, 'action': false},
       // {'id': 7, 'icon': 'add-square','name': '添加场地', 'customize': 3, 'disable': false, 'isDisable': false, 'action': false},
-      {'id': 7, 'icon': 'add-square','name': '添加场地', 'customize': 2, 'disable': false, 'isDisable': false, 'action': false},
-      {'id': 5, 'icon': 'comment','name': '审核', 'customize': 3, 'disable': false, 'isDisable': false, 'action': false},
+      // {'id': 7, 'icon': 'add-square','name': '添加场地', 'customize': 2, 'disable': false, 'isDisable': false, 'action': false},
+      // {'id': 5, 'icon': 'comment','name': '审核', 'customize': 3, 'disable': false, 'isDisable': false, 'action': false},
     ],
     all_sport_list: [
     ],
@@ -99,6 +99,30 @@ Page({
     images: [],
     user_list: [],
     filter_user_list: [],
+  },
+  openAddAddrPop() {
+    this.setData({ addVillage: true})
+  },
+  openCheckListPop() {
+    this.getCheckList();
+    this.setData({
+      showCheckList: true,
+    })
+  },
+  onConfirmSportSelection1(e) {
+    const data = e.detail;
+    this.setData({
+      defaultSportKey: data.name,
+      defaultSportSquare: data.title
+    })
+    if (this.data.isUse) {
+      Toast.loading({
+        message: this.data.loadText,
+        forbidClick: true,
+        duration: 0,
+      });
+      this.getAddrDistance();
+    }
   },
   showGoodBtn() {
     const sport_key = this.data.defaultSportKey;
@@ -378,10 +402,10 @@ Page({
       nick_name: this.data.nick_name,
       user_img: this.data.avatarUrl,
       openid: this.data.openid,
-      content: "更新了该场地",
+      content: "",
       time: getCurrentTime(),
       img: url,
-      update_type: "2", // 表示用户更新了场地图片
+      update_type: "2",
     }
    const resp = await this.userAddAddrReqApi(ad);
    if (resp.code != 1000) {
@@ -1233,9 +1257,9 @@ Page({
       nick_name: this.data.nick_name,
       user_img: this.data.avatarUrl,
       openid: this.data.openid,
-      content: "添加了该场地",
+      content: "",
       time: getCurrentTime(),
-      update_type: "1", // 表示用户手动添加了新的场地
+      update_type: "1",
     }
     const resp = await this.userAddAddrReqApi(ad);
     if (resp.code != 1000) {
