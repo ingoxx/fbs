@@ -3,6 +3,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  background: #efefef;
 }
 .title {
   margin: 10rpx 0;
@@ -18,7 +19,7 @@
 .cb-text {
   height: 100%;
   width: 100%;
-  border: 1rpx solid #e4e4e4;
+  border: 1rpx solid #bfbfbf;
   box-sizing: border-box;
   border-radius: 10rpx;
   font-size: 27rpx;
@@ -61,7 +62,7 @@
 .scroll {
   display: flex;
   gap: 22px;
-  border-top: 1rpx solid #e4e4e4;
+  border-top: 1rpx solid #bfbfbf;
   margin: 9rpx 19rpx;
 }
 .name {

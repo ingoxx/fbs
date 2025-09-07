@@ -52,7 +52,21 @@ const checkUpdate = (() => {
     });
   }
 })
-
+const storage = ((key, val) => {
+  try {
+    if (typeof val === "undefined") {
+      // 查询缓存
+      return wx.getStorageSync(key);
+    } else {
+      // 保存缓存
+      wx.setStorageSync(key, val);
+      return true;
+    }
+  } catch (e) {
+    console.error("Storage Error:", e);
+    return null;
+  }
+})
 /**
  * 将字符串时间转换为时间戳
  * @param {string} timeStr - 时间字符串（如 "2025-07-18 12:30:29"）
@@ -90,5 +104,6 @@ module.exports = {
   generateUUID,
   stringToTimestamp,
   checkUpdate,
+  storage,
 }
 

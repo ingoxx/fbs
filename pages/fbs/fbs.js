@@ -7,7 +7,7 @@ const { BASE_URL } = require('../../utils/http');
 const { IMG_URL } = require('../../utils/http');
 import Notify from '@vant/weapp/notify/notify';
 import Toast from '@vant/weapp/toast/toast';
-const { generateUUID, stringToTimestamp, getCurrentTime } = require('../../utils/util'); 
+const { generateUUID, stringToTimestamp, getCurrentTime, storage } = require('../../utils/util'); 
 import Dialog from '@vant/weapp/dialog/dialog';
 const md5 = require('../../utils/md5');
 Page({
@@ -100,6 +100,13 @@ Page({
     user_list: [],
     filter_user_list: [],
   },
+  onTabSportsChange(e) {
+    const data = e.currentTarget.dataset.item;
+    this.setData({
+      defaultSportKey: data.key,
+      defaultSportSquare: data.name,
+    });
+  },
   openAddAddrPop() {
     this.setData({ addVillage: true})
   },
@@ -110,10 +117,10 @@ Page({
     })
   },
   onConfirmSportSelection1(e) {
-    const data = e.detail;
+    const data = e.currentTarget.dataset.item;
     this.setData({
-      defaultSportKey: data.name,
-      defaultSportSquare: data.title
+      defaultSportKey: data.key,
+      defaultSportSquare: data.name,
     })
     if (this.data.isUse) {
       Toast.loading({
@@ -122,6 +129,7 @@ Page({
         duration: 0,
       });
       this.getAddrDistance();
+      storage("sport", {key: data.key, name: data.name});
     }
   },
   showGoodBtn() {
@@ -781,9 +789,19 @@ Page({
     }
     this.onClose();
   },
-  async getSiteSelection() {
+  getSportType() {
+    const data = storage("sport");
+    if (data) {
+      this.setData({
+        defaultSportKey: data.key,
+        defaultSportSquare: data.name,
+      });
+    }
+  },
+  getSiteSelection() {
     try {
-      const sss = await this.cusGetStorage(this.data.sportSelectedCacheKey);
+      // const sss = await this.cusGetStorage(this.data.sportSelectedCacheKey);
+      const sss = storage("sport");
       const nd = this.data.all_sport_list.map((item) => {
         if (item.key == sss.key) {
           item.checked = true;
@@ -791,12 +809,14 @@ Page({
           item.checked = false;
         }
         return item;
-      })
+      });
+      
       this.setData({
         all_sport_list: nd,
         defaultSportKey: sss.key,
         defaultSportSquare: sss.name,
       });
+      storage("sport", {key: sss.key, name: sss.name});
     } catch (error) {
       console.log("缓存失效");
     }
@@ -813,13 +833,13 @@ Page({
           });
         } else {
           this.setData({
-            showSportsList: true,
+            showSportsList: false,
           });
         }
       } catch (error) {
         this.cusSetStorage(this.data.sportsCacheKey, 2);
         this.setData({
-          showSportsList: true,
+          showSportsList: false,
         });
       }
       
@@ -841,7 +861,8 @@ Page({
       defaultSportKey: sd.key,
       defaultSportSquare: sd.name,
     });
-    this.cusSetStorage(this.data.sportSelectedCacheKey, sd);
+    // this.cusSetStorage(this.data.sportSelectedCacheKey, sd);
+    storage("sport", {key: sd.key, name: sd.name});
   },
   openMapApp() {
     wx.openLocation({
@@ -913,6 +934,7 @@ Page({
             });
           }
           this.getAllSportsApi().then((resp) => {
+            console.log("getAllSportsApi 1 >>> ", resp.data);
             if (resp.code == 1000) {
               this.setData({
                 all_sport_list: resp.data,
@@ -921,7 +943,12 @@ Page({
           }).catch((err) => {
             Toast.fail("502")
           });
-          this.isShowSportList();
+          // this.isShowSportList();
+          // Toast.loading({
+          //   message: this.data.loadText,
+          //   forbidClick: true,
+          //   duration: 0,
+          // });
           this.getAddrDistance();
         }
       }
@@ -933,7 +960,7 @@ Page({
         loadText: "首次加载数据会比较耗时",
       })
     }
-    this.getSiteSelection();
+    // this.getSiteSelection();
   },
   // 隐私协议， 1：同意，2：拒绝
   iAacceptPrivacy(e) {
@@ -951,12 +978,21 @@ Page({
       })
       setTimeout(()=>{
         this.getAllSportsApi().then((resp) => {
+          
           if (resp.code == 1000) {
             this.setData({
               all_sport_list: resp.data,
             });
+            Toast.loading({
+              message: this.data.loadText,
+              forbidClick: true,
+              duration: 0,
+            });
+            if (this.data.isUse) {
+              this.getAddrDistance();
+            }
           }
-          this.isShowSportList();
+          // this.isShowSportList();
         }).catch((err) => {
           Toast.fail("502")
         })
@@ -1606,7 +1642,7 @@ Page({
   setNavigatInfo() {
     wx.setNavigationBarColor({
       frontColor: "#ffffff",
-      backgroundColor: "#6a72d9",
+      backgroundColor: "#256d64",
     });
     wx.setNavigationBarTitle({
       title: app.globalData.title,
@@ -1618,6 +1654,7 @@ Page({
   onLoad(options) {
     this.setNavigatInfo();
     this.getOpenid();
+    this.getSportType();
   },
 
   /**

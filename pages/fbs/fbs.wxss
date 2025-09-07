@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #6a72d9;
+  background: #efefef;
 }
 
 .box .location {
@@ -14,7 +14,7 @@
   /* 垂直居中 */
   min-height: 100rpx;
   flex-shrink: 0;
-  background: #7880dd;
+  background: #256d64;
   padding: 0 20rpx;
 }
 
@@ -143,6 +143,52 @@
   margin: 0 32rpx;
 }
 
+.box .venue-tab .venue-container .tabs {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: #ffffff;
+  padding: 20rpx 0;
+  border-radius: 24rpx;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.05);
+}
+
+.box .venue-tab .venue-container .tabs .tab-label {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #adadad;
+  position: relative;
+  padding: 16rpx 0;
+  transition: color 0.3s;
+}
+
+.box .venue-tab .venue-container .tabs .tab-label {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #adadad;
+  position: relative;
+  padding: 16rpx 0;
+  transition: color 0.3s;
+}
+
+.box .venue-tab .venue-container .tabs .tab-label.active {
+  color: #256d64;
+  font-weight: 600;
+}
+
+.box .venue-tab .venue-container .tabs .tab-label.active::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 100%;
+  height: 6rpx;
+  background: #256d64;
+  border-radius: 4rpx;
+  transform: translateX(-50%) translateX(6rpx);
+  transition: all 0.3s;
+}
+
 .box .data-num {
   margin-left: 33rpx;
 }
@@ -150,6 +196,10 @@
 .box .data-num .num {
   font-size: 23rpx;
   color: #ffff;
+}
+
+.box .data-num .num .content {
+  color: #000000;
 }
 
 .box .card-1 {
@@ -165,17 +215,16 @@
 
 .box .card-1 .card-1-1 {
   margin: 14rpx 14rpx;
-  background: #ffff;
+  background: #dae2cb;
   border-radius: 10rpx;
   padding: 10rpx;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.23);
 }
 
 .box .card-1 .card-1-1 .venue-img-update {
   text-align: center;
   margin: 0 31rpx;
   padding-top: 16rpx;
-  border-top: 1rpx solid #d6d6d6;
+  border-top: 1rpx solid #bdbdbd;
   margin-top: 27rpx;
 }
 
@@ -196,8 +245,8 @@
 
 .box .card-1 .card-1-1 .venue-img-update .cbt {
   margin-top: 25rpx;
-  border-top: 1rpx solid #d6d6d6;
-  border-bottom: 1rpx solid #d6d6d6;
+  border-top: 1rpx solid #bdbdbd;
+  border-bottom: 1rpx solid #bdbdbd;
 }
 
 .box .card-1 .card-1-1 .venue-img-update .cbt .cbt-title {
@@ -290,7 +339,7 @@
 }
 
 .box .card-1 .card-1-1 .join-user-c {
-  border-top: 1rpx solid #dadada;
+  border-top: 1rpx solid #bdbdbd;
   margin-top: 23rpx;
 }
 
@@ -299,7 +348,7 @@
 }
 
 .box .card-1 .card-1-1 .join-user-c .join-user-t .title {
-  font-size: 27rpx;
+  font-size: 25rpx;
   font-weight: 700;
 }
 
@@ -364,7 +413,7 @@
 .box .card-1 .card-1-1 .distance {
   height: 100rpx;
   width: 473rpx;
-  background: #f8f9fc;
+  background: #efefef;
   border-radius: 10rpx;
   gap: 24rpx;
   align-items: center;
@@ -410,7 +459,7 @@
 }
 
 .box .card-1 .card-1-1 .evaluate-top .evaluate {
-  background: #f8f9fc;
+  background: #efefef;
   border-radius: 10rpx;
   width: 412rpx;
   padding: 0 10rpx;
@@ -462,7 +511,7 @@
 
 .box .contact-us .tran-2, .box .user-list .tran-2 {
   position: relative;
-  right: 36rpx;
+  right: 40rpx;
 }
 
 .box .contact-us .share-btn, .box .user-list .share-btn {
@@ -778,6 +827,7 @@
 
 .check-box .check-container .sport-img-container .sport_img {
   margin-top: 8rpx;
+  flex-shrink: 0;
 }
 
 .check-box .check-container .sport-img-container .sport_img .you {
@@ -919,12 +969,24 @@
   color: #b3b3b3;
 }
 
+.van-icon-8 {
+  font-size: 14px;
+  top: 8rpx;
+}
+
+.van-icon-9 {
+  position: relative !important;
+  font-size: 35rpx !important;
+  top: 8rpx !important;
+}
+
 .van-tab-1 .van-tabs--line {
   border-radius: 10rpx !important;
 }
 
 .van-tab-1 .van-tabs__line {
-  width: 125rpx !important;
+  width: 132rpx !important;
   height: 7rpx !important;
   background: #f32d44 !important;
+  margin-left: 10rpx;
 }
