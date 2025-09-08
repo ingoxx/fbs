@@ -150,16 +150,6 @@
   background: #ffffff;
   padding: 20rpx 0;
   border-radius: 24rpx;
-  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.05);
-}
-
-.box .venue-tab .venue-container .tabs .tab-label {
-  font-size: 30rpx;
-  font-weight: 700;
-  color: #adadad;
-  position: relative;
-  padding: 16rpx 0;
-  transition: color 0.3s;
 }
 
 .box .venue-tab .venue-container .tabs .tab-label {
@@ -516,9 +506,16 @@
 
 .box .contact-us .share-btn, .box .user-list .share-btn {
   opacity: 0.7;
-  width: 93rpx;
   color: #2d2c2c;
   font-size: 37rpx;
+}
+
+.box .contact-us .share-btn .b-c, .box .user-list .share-btn .b-c {
+  position: relative;
+  bottom: 3rpx;
+  left: 6rpx;
+  font-size: 25rpx;
+  font-weight: 300;
 }
 
 .box .flush-data {
@@ -816,7 +813,7 @@
   margin: 10rpx 0;
   background: #f7f8fa;
   border-radius: 10rpx;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.23);
+  border: 1rpx solid #efefef;
   padding: 14rpx 14rpx;
 }
 
@@ -989,4 +986,22 @@
   height: 7rpx !important;
   background: #f32d44 !important;
   margin-left: 10rpx;
+}
+
+.van-dialog-title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 25rpx 0;
+}
+
+.van-dialog-title .title-m {
+  font-weight: 700;
+}
+
+.van-dialog-title .title-n {
+  font-size: 22rpx;
+  color: #d0d0d0;
+  margin-top: 10rpx;
 }

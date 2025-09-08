@@ -141,15 +141,15 @@
         background: #ffffff;
         padding: 20rpx 0;
         border-radius: 24rpx;
-        box-shadow: 0 8rpx 24rpx rgba(0,0,0,0.05);
-        .tab-label {
-          font-size: 30rpx;
-          font-weight: 700;
-          color: #adadad;
-          position: relative;
-          padding: 16rpx 0;
-          transition: color 0.3s;
-        }
+        // box-shadow: 0 8rpx 24rpx rgba(0,0,0,0.05);
+        // .tab-label {
+        //   font-size: 30rpx;
+        //   font-weight: 700;
+        //   color: #adadad;
+        //   position: relative;
+        //   padding: 16rpx 0;
+        //   transition: color 0.3s;
+        // }
         .tab-label {
           font-size: 30rpx;
           font-weight: 700;
@@ -162,7 +162,7 @@
           color: #256d64;
           font-weight: 600;
         }
-      .tab-label.active::after {
+        .tab-label.active::after {
           content: "";
           position: absolute;
           left: 50%;
@@ -473,9 +473,16 @@
     }
     .share-btn {
       opacity: 0.7;
-      width: 93rpx;
+      // width: 93rpx;
       color: #2d2c2c;
       font-size: 37rpx;
+      .b-c {
+        position: relative;
+        bottom: 3rpx;
+        left: 6rpx;
+        font-size: 25rpx;
+        font-weight: 300;
+      }
     }
   }
   .flush-data {
@@ -734,7 +741,8 @@
     // border-top: 1rpx solid #d8d8d8;
     background: #f7f8fa;
     border-radius: 10rpx;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.23);
+    border: 1rpx solid #efefef;
+    // box-shadow: 0 8px 25px rgba(0, 0, 0, 0.23);
     padding: 14rpx 14rpx;
     .sport-img-container {
       display: flex;
@@ -890,5 +898,20 @@
     height: 7rpx!important;
     background: #f32d44!important;
     margin-left: 10rpx;
+  }
+}
+.van-dialog-title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 25rpx 0;
+  .title-m {
+    font-weight: 700;
+  }
+  .title-n {
+    font-size: 22rpx;
+    color: #d0d0d0;
+    margin-top: 10rpx;
   }
 }

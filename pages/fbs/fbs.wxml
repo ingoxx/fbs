@@ -70,12 +70,6 @@
           </view>
         </block>
       </view>
-
-      <!-- <van-tabs active="{{defaultSportKey}}" animated custom-class="van-tab-1" bind:change="onConfirmSportSelection1">
-        <block wx:for="{{all_sport_list}}" wx:key="index" wx:for-item="item">
-          <van-tab line-width="55px" line-height="6px" name="{{item.key}}" title="{{ item.name }}" title-style="font-weight: 700;color: {{ item.key == defaultSportKey ? '#000000' : '#a9a9a9' }};"></van-tab>
-        </block>
-      </van-tabs> -->
     </view>
   </view>
   <!-- 数据统计 -->
@@ -235,7 +229,7 @@
                     </view>
                     <view class="log">
                       <van-button round  size="mini" data-item="{{item}}" custom-style="width:190rpx" bind:tap="showUserUpdateLog" wx:if="{{item.venue_update_users_count > 0}}">
-                        <van-icon color="yellow" name="https://ai.anythingai.online/static/profile3/log.svg" /><text class="group_title">用户更新的日志</text>
+                        <van-icon color="yellow" name="https://ai.anythingai.online/static/profile3/log.svg" /><text class="group_title">场地更新详情</text>
                       </van-button>
                     </view>
                   </view>
@@ -304,31 +298,33 @@
   <view class="contact-us">
     <van-transition show="{{ showServiceBtn }}" custom-class="block" name="slide-left" duration="0">
       <view class="tran-1">
-        <button size="mini"  open-type="contact" class="share-btn"><van-icon name="https://ai.anythingai.online/static/profile3/service.svg" /></button>
+        <button size="mini"  open-type="contact" class="share-btn">
+          <van-icon size="25rpx" name="https://ai.anythingai.online/static/profile3/service.svg" /> <text class="b-c">客服</text>
+        </button>
       </view>
       <view class="tran-1" wx:if="{{isUse}}">
         <button size="mini" bind:tap="getOpenid" class="share-btn">
-          <van-icon name="https://ai.anythingai.online/static/profile3/flush-5.svg" />
+          <van-icon size="25rpx" name="https://ai.anythingai.online/static/profile3/flush-5.svg" /> <text class="b-c">刷新</text>
         </button>
       </view>
       <view class="tran-1" wx:if="{{isAdminShow}}">
         <button size="mini" bind:tap="getUserList" class="share-btn">
-          <van-icon name="https://ai.anythingai.online/static/profile3/user_list.svg" />
+          <van-icon size="25rpx" name="https://ai.anythingai.online/static/profile3/user_list.svg" /> <text class="b-c">用户</text>
         </button>
       </view>
       <view class="tran-1" wx:if="{{isAdminShow && isShowAllData}}">
         <button size="mini" bind:tap="openCheckListPop" class="share-btn">
-          <van-icon name="https://ai.anythingai.online/static/profile3/check_addr.svg" />
+          <van-icon size="25rpx" name="https://ai.anythingai.online/static/profile3/check_addr.svg" /> <text class="b-c">审核</text>
         </button>
       </view>
       <view class="tran-1" wx:if="{{isUse && isShowAllData}}">
         <button size="mini" bind:tap="openAddAddrPop" class="share-btn">
-          <van-icon name="https://ai.anythingai.online/static/profile3/add_addr.svg" />
+          <van-icon size="25rpx" name="https://ai.anythingai.online/static/profile3/add_addr.svg" /> <text class="b-c">添加</text>
         </button>
       </view>
       <view class="tran-1" wx:if="{{isAdminShow && isShowAllData}}">
         <button size="mini" bind:tap="isShowChatRoom" class="share-btn">
-          <van-icon name="https://ai.anythingai.online/static/profile3/mr.svg" />
+          <van-icon size="25rpx" name="https://ai.anythingai.online/static/profile3/mr.svg" /> <text class="b-c">信息</text>
         </button>
       </view>
     </van-transition>
@@ -583,7 +579,6 @@
       use-slot
       cancel-button-text="关闭"
       z-index="100"
-      title="{{bks_name}}"
       show="{{ showGroupList }}"
       show-confirm-button="{{false}}"  
       show-cancel-button="{{true}}"     
@@ -591,6 +586,14 @@
       bind:close="onCloseGroupList"
       custom-class="van-dialog-1"
     >
+      <view class="van-dialog-title">
+        <view class="title-m">
+          <text >{{bks_name}}</text>
+        </view>
+        <view  class="title-n">
+          <text>组队详情</text>
+        </view>
+      </view>
       <view class="user-search">
         <van-search
           value="{{ userVal }}"
@@ -629,7 +632,6 @@
       use-slot
       cancel-button-text="关闭"
       z-index="100"
-      title="{{bks_name}}"
       show="{{ showUserUpdateList}}"
       show-confirm-button="{{false}}"  
       show-cancel-button="{{true}}"     
@@ -637,6 +639,14 @@
       bind:close="onCloseGroupList"
       custom-class="van-dialog-1"
     >
+      <view class="van-dialog-title">
+        <view class="title-m">
+          <text >{{bks_name}}</text>
+        </view>
+        <view  class="title-n">
+          <text>场地更新详情</text>
+        </view>
+      </view>
       <view class="user-search">
         <van-search
           value="{{ userVal }}"
@@ -668,34 +678,6 @@
                 </view>
               </view>
             </view>
-
-            <!-- <view class="sport-img-container">
-              <view class="sport_img">
-                <van-image use-loading-slot custom-class="van-img-1" radius="10" fit="cover" src="{{item.user_img}}" data-src="{{item.user_img}}" bind:click="onPreviewImage"><van-loading slot="loading" type="spinner" size="20" vertical /></van-image>
-                <view class="you">系统生成</view>
-              </view>
-              <view class="n-box">
-                <view class="m-box">
-                  <view class="m-container">
-                    <view class="sport_addr">
-                      <text class="check-content check-content-1" selectable="true">{{ item.nick_name ? item.nick_name : "null" }}<text class="you">{{ item.user_id == user_id ? "你": "" }}</text></text>
-                    </view>
-                    <view class="sport_addr">
-                      <van-icon name="location" custom-class="van-icon-7"/><text class="check-content check-content-2" selectable="true">{{ item.city }}</text>
-                    </view>
-                  </view>
-                  <view class="sport_addr">
-                    <van-icon custom-class="van-icon-7" name="clock-o" /><text class="check-content check-content-2" selectable="true">{{ item.time }}</text>
-                  </view>
-                </view>
-                <view class="sport_addr sport_addr_f">
-                  <van-icon name="info" color="#ff6161"/><text class="check-content check-content-3" selectable="true">{{ item.content }}图片</text>
-                </view>
-                <view class="sport_img">
-                  <van-image use-loading-slot custom-class="van-img-1" radius="10" fit="cover" src="{{item.img}}" data-src="{{item.img}}" bind:click="onPreviewImage"><van-loading slot="loading" type="spinner" size="20" vertical /></van-image>
-                </view>
-              </view>
-            </view> -->
           </view>
         </block>
       </view>
