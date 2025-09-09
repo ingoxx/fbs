@@ -6,6 +6,19 @@
   background: #efefef;
 }
 
+.box .program-title {
+  background: #256d64;
+  padding-top: 111rpx;
+  color: #fff;
+  font-weight: 700;
+  font-size: 30rpx;
+  padding: 111rpx 10rpx 0 10rpx;
+}
+
+.box .program-title .title-name {
+  text-align: center;
+}
+
 .box .location {
   display: flex;
   justify-content: center;
@@ -118,7 +131,7 @@
 }
 
 .box .search {
-  margin: 0 0;
+  margin-top: 12rpx;
   border-radius: 16rpx;
 }
 

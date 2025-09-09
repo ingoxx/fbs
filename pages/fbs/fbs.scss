@@ -3,6 +3,17 @@
   flex-direction: column;
   height: 100vh;
   background: #efefef;
+  .program-title {
+    background: #256d64;
+    padding-top: 111rpx;
+    color: #fff;
+    font-weight: 700;
+    font-size: 30rpx;
+    padding: 111rpx 10rpx 0 10rpx;
+    .title-name {
+      text-align: center;
+    }
+  }
   .location {
     display: flex;
     justify-content: center; /* 水平居中 */
@@ -102,11 +113,8 @@
     }
   }
   .search {
-    margin: 0 0;
-    // background: #f9f9f9;
+    margin-top: 12rpx;
     border-radius: 16rpx;
-    // box-shadow: 0 8px 25px rgba(0, 0, 0, 0.23);
-    // margin-top: 18rpx;
     .se {
       padding: 0 0;
     }

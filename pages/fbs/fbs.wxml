@@ -1,4 +1,9 @@
 <view class="box">
+  <!-- <view class="program-title">
+    <view class="title-name">
+      <text>运动记录</text>
+    </view>
+  </view> -->
   <!-- 定位 -->
   <view class="location">
     <block wx:if="{{ addr == '未获取位置' }}">
@@ -150,7 +155,7 @@
             <van-transition show="{{ item.is_show }}" custom-class="block">
               <view class="venue-img-update">
                 <view class="title" wx:if="{{isShowAllData}}">
-                  <text>添加场地图片以帮助更多人, 跪谢</text>
+                  <text>添加最新的场地图片以帮助更多人, 磕头跪谢</text>
                 </view>
                 <view class="img" wx:if="{{isShowAllData}}">
                   <van-uploader 
@@ -163,8 +168,8 @@
                   bind:delete="deleteImg"
                   />
                 </view>
-                <view class="submit-img-container" wx:if="{{isShowAllData}}">
-                  <view class="submit-img">
+                <view class="submit-img-container">
+                  <view class="submit-img" wx:if="{{isShowAllData}}">
                     <van-button color="#256d64" bind:tap="updateVenueImg" data-index="{{ index }}" data-item="{{ item }}" icon="https://ai.anythingai.online/static/profile3/smil.svg" custom-style="width: 170rpx" size="small" round type="info">上传</van-button>
                   </view>
                   <view class="submit-img" wx:if="{{item.img == ''}}">
@@ -211,8 +216,8 @@
               <van-icon size="30rpx" custom-class="van-icon-5 van-icon-8" name="https://ai.anythingai.online/static/profile3/light.svg" />{{item.hasJoined ? '退出组队' : '加入组队'}}({{item.join_user_count}})
             </van-button>
             <!-- 拍照 -->
-            <van-button round color="#256d64" size="small" data-index="{{index}}" custom-style="width:218rpx" data-item="{{ item }}"  bindtap="toggleShowVenueImg">
-              <van-icon size="30rpx" custom-class="van-icon-5" name="https://ai.anythingai.online/static/profile3/click-3.svg" /><text class="group_title">场地更新日志</text>
+            <van-button round color="#256d64" size="small" data-index="{{index}}" custom-style="width:270rpx" data-item="{{ item }}"  bindtap="toggleShowVenueImg">
+              <van-icon size="30rpx" custom-class="van-icon-5" name="https://ai.anythingai.online/static/profile3/click-3.svg" /><text class="group_title">获取更多场地图片</text>
             </van-button>
           </view>
           <van-transition show="{{ item.join_user_count > 0  }}" name="fade-right" >
