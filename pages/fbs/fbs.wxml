@@ -173,10 +173,9 @@
                     <van-button color="#256d64" bind:tap="updateVenueImg" data-index="{{ index }}" data-item="{{ item }}" icon="https://ai.anythingai.online/static/profile3/smil.svg" custom-style="width: 170rpx" size="small" round type="info">上传</van-button>
                   </view>
                   <view class="submit-img" wx:if="{{item.img == ''}}">
-                    <van-button round type="primary" bind:tap="getVenueImg" data-index="{{ index }}" data-item="{{ item }}" icon="https://ai.anythingai.online/static/profile3/smil.svg" custom-style="width: 220rpx" size="small">获取场地图片</van-button>
+                    <van-button  color="#7c9d34" round type="primary" bind:tap="getVenueImg" data-index="{{ index }}" data-item="{{ item }}" icon="https://ai.anythingai.online/static/profile3/smil.svg" custom-style="width: 258rpx" size="small">获取最新场地图片</van-button>
                   </view>
                 </view>
-                <!-- 场地更新贡献者 -->
                 <view class="cbt" wx:if="{{isShowAllData}}">
                   <view class="cbt-title">
                     <view class="name"><van-icon name="like" color="red" custom-class="van-icon-1" />场地更新贡献用户 </view>

@@ -953,3 +953,9 @@
   background-color: #f1f5f8;
   border-radius: 10rpx!important;
 }
+.van-toast__text {
+  white-space: nowrap;      /* 不换行 */
+  overflow: hidden;         /* 超出隐藏 */
+  text-overflow: ellipsis;  /* 超出显示省略号 */
+  max-width: 80vw;          /* 限制宽度，否则会溢出屏幕 */
+}

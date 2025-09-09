@@ -458,6 +458,10 @@ Page({
     Toast.clear();
   },
   toggleShowVenueImg(e) {
+    if (!this.data.isShowAllData) {
+      Toast.fail("已是最新场地图片");
+      return;
+    }
     const index = e.currentTarget.dataset.index;
     const data = e.currentTarget.dataset.item;
     const vd = this.data.basketSquareFilterData;
