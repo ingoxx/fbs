@@ -8,26 +8,6 @@
       <van-icon name="location" custom-class="van-icon-l"/> <text class="coordinate" bind:tap="openMapApp">您现在的位置: 【{{ addr }}】</text> 
     </block>
   </view>
-  <!-- 用户个人信息 -->
-  <!-- <view class="userinfo">
-    <view class="user-img">
-      <button class="img-btn" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-        <van-image custom-class="van-img-1" src="{{avatarUrl}}" />
-      </button>
-    </view>
-    <view class="user-name" bind:tap="openNickName">
-      <view class="name">
-        <text wx:if="{{nick_name != '' }}">{{ nick_name }}</text>
-        <text wx:else>{{ userid }}</text>
-      </view>
-      <view class="time">
-        <view class="time-status"></view><text class="online">运动狂人</text>
-      </view>
-    </view>
-    <view class="user-tag">
-      <van-tag custom-class="van-tag-1" color="#ffe534" text-color="#333333"><van-icon name="https://ai.anythingai.online/static/profile3/star.svg" />{{defaultSportSquare}}</van-tag>
-    </view>
-  </view> -->
   <!-- 搜索场地 -->
   <view class="search">
     <view class="s-p">
@@ -43,17 +23,12 @@
       disabled="{{ isInput }}"
       />
     </view>
-    <!-- <view class="s-b">
-      <van-row gutter="8">
-        <block wx:for="{{ basketSquareFilter }}" wx:key="index" wx:for-item="item">
-          <van-col span="{{item.customize == 1 ? 10 : 8}}" custom-class="van-c" wx:if="{{ item.disable }}">
-            <van-button round size="small" disabled="{{ item.isDisable }}" custom-class="van-btn-1" custom-style="{{ item.customize == 1 ? 'width:220rpx' : 'width:170rpx'  }}"  data-id="{{item.id}}" custom-class="{{ currentSquareSelected === item.id ? 'van-b-isactive' : 'van-b-isnotactive' }}" bind:click="onSelected">
-              <van-icon name="{{ item.icon }}" /> {{ item.name }}
-            </van-button>
-          </van-col>
-        </block>
-      </van-row>
-    </view> -->
+  </view>
+  <!-- 筛选 -->
+  <view class="choose" bind:tap="openChoosePop">
+    <view class="container-c" wx:if="{{isShowAllData}}">
+      <text>筛选</text><van-icon custom-class="van-icon-9"  name="https://ai.anythingai.online/static/profile3/choose.svg" />
+    </view>
   </view>
   <!-- 场地选择 -->
   <view class="venue-tab">
@@ -83,7 +58,6 @@
     <block wx:for="{{ basketSquareFilterData }}" wx:key="index" wx:for-item="item">
       <van-transition show="{{ isUse }}" custom-class="block">
         <view class="card-1-1">
-          <!-- 当前场地活跃度 -->
           <view class="online-status">
             <!-- <van-icon color="{{ item.join_user_count > 0 ? '#ff6161': '#909090' }}" name="fire" /> -->
             <view class="venue-hot">
@@ -96,7 +70,6 @@
               </van-tag>
             </view>
           </view>
-          <!-- 场地地址 -->
           <view class="addr">
             <view class="sport-icon">
               <!-- 真实场地图片 -->
@@ -126,10 +99,7 @@
               </view>
             </view>
           </view>
-          <!-- 场地距离 -->
           <view class="distance" data-item="{{ item }}">
-            <!-- <van-icon name="location" custom-class="van-icon-3"/> <text class="t-f">距您{{ item.distance }}公里, </text><text class="t-f-1">点击导航</text>
-            <van-tag round type="success" custom-class="{{ item.online == 0 ? 'van-tag-c': 'van-tag-c-1' }}"><van-icon name="friends" /> {{ item.online }}人在线</van-tag> -->
             <view class="online-users">
               <view class="num">
                 <text>{{ item.join_user_count }}</text>
@@ -155,7 +125,6 @@
               </view>
             </view>
           </view>
-          <!-- 场地信息 -->
           <view class="evaluate-top" wx:if="{{isShowAllData}}">
             <view class="evaluate" data-item="{{ item }}" bind:tap="isShowEvaBoard">
               <swiper autoplay="true" interval="3000" circular style="height: 60rpx;">
@@ -177,7 +146,6 @@
               <van-icon name="https://ai.anythingai.online/static/profile3/view.svg" />
             </view>
           </view>
-          <!-- 场地图片更新 -->
           <block>
             <van-transition show="{{ item.is_show }}" custom-class="block">
               <view class="venue-img-update">
@@ -237,7 +205,6 @@
               </view>
             </van-transition>
           </block>
-          <!-- 组队 -->
           <view class="group-status">
             <!-- 组队 -->
             <van-button round color="#256d64" size="small" type="{{ item.hasJoined ? 'info' : 'warning' }}" custom-style="width:218rpx" data-item="{{ item }}" bind:tap="joinSportGroup">
@@ -247,12 +214,7 @@
             <van-button round color="#256d64" size="small" data-index="{{index}}" custom-style="width:218rpx" data-item="{{ item }}"  bindtap="toggleShowVenueImg">
               <van-icon size="30rpx" custom-class="van-icon-5" name="https://ai.anythingai.online/static/profile3/click-3.svg" /><text class="group_title">场地更新日志</text>
             </van-button>
-            <!-- 组 -->
-            <!-- <van-button round size="small" custom-style="width:110rpx" data-item="{{ item }}"  bindtap="sendMsg">
-              <text class="group_title">💬</text>
-            </van-button> -->
           </view>
-          <!-- 组队信息 -->
           <van-transition show="{{ item.join_user_count > 0  }}" name="fade-right" >
             <view class="join-user-c">
               <view class="join-user-t">
@@ -335,7 +297,6 @@
 </view>
 <!-- 一些第三放组件或者自定义的组件 -->
 <view>
-  <!-- 昵称 -->
   <van-popup
     show="{{ showNickName }}"
     position="bottom"
@@ -345,7 +306,6 @@
   >
     <input bind:change="chooseNickName" type="nickname" class="wx-nickname" placeholder="请输入昵称"/>
   </van-popup>
-  <!-- 留言框 -->
   <van-popup
     wx:if="{{ showEvaBoard }}"
     show="{{ showEvaBoard }}"
@@ -430,7 +390,6 @@
       </view>
     </view>
   </van-dialog>
-  <!-- 运动场地选择 -->
   <van-dialog
       use-slot
       z-index="100"
@@ -458,7 +417,6 @@
         </view>
     </view>
   </van-dialog>
-  <!-- 场地列表 -->
   <van-dialog
       use-slot
       cancel-button-text="关闭"
@@ -574,7 +532,6 @@
         </block>
       </view>
   </van-dialog>
-  <!-- 组队列表 -->
   <van-dialog
       use-slot
       cancel-button-text="关闭"
@@ -627,7 +584,6 @@
         </block>
       </view>
   </van-dialog>
-  <!-- 用户更新场地日志列表 -->
   <van-dialog
       use-slot
       cancel-button-text="关闭"
@@ -682,6 +638,40 @@
         </block>
       </view>
   </van-dialog>
+  <!-- 筛选 -->
+  <van-popup
+  show="{{ showChoose }}"
+  position="top"
+  custom-class="van-pop-2"
+  bind:close="onClose"
+  closeable
+  >
+    <view class="pop-box-1">
+      <view class="title">
+        <text>全部筛选</text>
+      </view>
+      <view class="side">
+        
+      </view>
+      <view class="content">
+        <view class="name"></view>
+        <view class="action">
+          <block wx:for="{{chooseList}}" wx:key="index" wx:for-item="item">
+            <view class="btn">
+              <van-button bind:click="onFiltering" data-id="{{item.id}}" type="default" size="small" color="{{isActive == item.id ? '#ffefe7' : '#f1f5f8'}}" custom-class="van-button-1" custom-style="color:{{isActive == item.id ? '#cf7f5d' : '#454547'}}">
+                {{item.name}}
+              </van-button>
+            </view>
+          </block>
+        </view>
+      </view>
+      <view class="confirm">
+        <van-button color="#fd6303" size="small" custom-style="width:185rpx;border-radius: 10rpx" bind:click="onFilterVenueData">
+          确认
+        </van-button>
+      </view>
+    </view>
+  </van-popup>
   <van-notify id="van-notify" />
   <van-toast id="van-toast" />
   <van-dialog id="van-dialog" />

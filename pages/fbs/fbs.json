@@ -3,8 +3,6 @@
   "enablePullDownRefresh": true,
   "usingComponents": {
     "van-button": "/miniprogram_npm/@vant/weapp/button/index",
-    "van-row": "/miniprogram_npm/@vant/weapp/row/index",
-    "van-col": "/miniprogram_npm/@vant/weapp/col/index",
     "van-icon": "/miniprogram_npm/@vant/weapp/icon/index",
     "van-toast": "/miniprogram_npm/@vant/weapp/toast/index",
     "van-transition": "/miniprogram_npm/@vant/weapp/transition/index",
@@ -16,19 +14,11 @@
     "van-tag": "/miniprogram_npm/@vant/weapp/tag/index",
     "van-image": "/miniprogram_npm/@vant/weapp/image/index",
     "van-field": "/miniprogram_npm/@vant/weapp/field/index",
-    "van-notice-bar": "/miniprogram_npm/@vant/weapp/notice-bar",
     "van-cell-group": "/miniprogram_npm/@vant/weapp/cell-group/index",
     "van-checkbox": "/miniprogram_npm/@vant/weapp/checkbox/index",
-    "van-checkbox-group": "/miniprogram_npm/@vant/weapp/checkbox-group/index",
     "van-action-sheet": "/miniprogram_npm/@vant/weapp/action-sheet/index",
     "van-uploader": "/miniprogram_npm/@vant/weapp/uploader/index",
     "van-search": "/miniprogram_npm/@vant/weapp/search/index",
-    "van-collapse": "/miniprogram_npm/@vant/weapp/collapse/index",
-    "van-collapse-item": "/miniprogram_npm/@vant/weapp/collapse-item/index",
-    "van-tabbar": "/miniprogram_npm/@vant/weapp/tabbar/index",
-    "van-tabbar-item": "/miniprogram_npm/@vant/weapp/tabbar-item/index",
-    "van-tab": "/miniprogram_npm/@vant/weapp/tab/index",
-    "van-tabs": "/miniprogram_npm/@vant/weapp/tabs/index",
     "chat-room": "/components/chat/chat",
     "eva-board": "/components/cb/cb"
   }

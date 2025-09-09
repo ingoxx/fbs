@@ -135,6 +135,12 @@
   padding-right: 60rpx;
 }
 
+.box .choose {
+  margin: 0 32rpx;
+  font-size: 27rpx;
+  color: #adadad;
+}
+
 .box .venue-tab {
   margin: 13rpx 0;
 }
@@ -1004,4 +1010,34 @@
   font-size: 22rpx;
   color: #d0d0d0;
   margin-top: 10rpx;
+}
+
+.pop-box-1 {
+  margin: 15rpx;
+}
+
+.pop-box-1 .title {
+  text-align: center;
+  font-weight: 700;
+}
+
+.pop-box-1 .action {
+  display: flex;
+  gap: 25rpx;
+  margin: 40rpx 0;
+}
+
+.pop-box-1 .confirm {
+  text-align: center;
+}
+
+.van-pop-2 {
+  background-color: #fdfdfd;
+}
+
+.van-button-1 {
+  width: 150rpx !important;
+  height: 69rpx !important;
+  background-color: #f1f5f8;
+  border-radius: 10rpx !important;
 }

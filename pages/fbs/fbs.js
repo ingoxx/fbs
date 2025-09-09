@@ -12,6 +12,10 @@ import Dialog from '@vant/weapp/dialog/dialog';
 const md5 = require('../../utils/md5');
 Page({
   data: {
+    isLock: false,
+    isActive: 1,
+    chooseList: [],
+    showChoose: false,
     isShowAllData: false,
     isShowGoodPage: false,
     totalData: 0,
@@ -82,12 +86,7 @@ Page({
     inputValue: "",
     markers: [],
     currentSquareSelected: 2,
-    basketSquareFilter: [
-      // {'id': 6, 'icon': 'medal','name': '运动场地选择', 'customize': 1, 'disable': true, 'isDisable': false, 'action': false},
-      // {'id': 7, 'icon': 'add-square','name': '添加场地', 'customize': 3, 'disable': false, 'isDisable': false, 'action': false},
-      // {'id': 7, 'icon': 'add-square','name': '添加场地', 'customize': 2, 'disable': false, 'isDisable': false, 'action': false},
-      // {'id': 5, 'icon': 'comment','name': '审核', 'customize': 3, 'disable': false, 'isDisable': false, 'action': false},
-    ],
+    basketSquareFilter: [],
     all_sport_list: [
     ],
     checkListData: [],
@@ -99,6 +98,39 @@ Page({
     images: [],
     user_list: [],
     filter_user_list: [],
+  },
+  onFilterVenueData() {
+    const data = this.data.basketSquareFilterData;
+    const aid = this.data.isActive;
+    if (aid == 2) {
+      data.sort((a, b) => {
+        return b.join_users.length - a.join_users.length;
+      });
+    } else if (aid == 3) {
+      data.sort((a, b) => {
+        return b.user_reviews.length - a.user_reviews.length;
+      });
+    } else if (aid == 1) {
+      data.sort((a, b) => {
+        return a.distance - b.distance;
+      });
+    }
+    this.setData({
+      basketSquareFilterData: data
+    });
+    Toast.success("筛选完成");
+    this.onClose();
+  },
+  onFiltering(e) {
+    const id = e.currentTarget.dataset.id;
+    this.setData({
+      isActive: id,
+    });
+  },
+  openChoosePop() {
+    this.setData({
+      showChoose: true,
+    })
   },
   onTabSportsChange(e) {
     const data = e.currentTarget.dataset.item;
@@ -364,7 +396,6 @@ Page({
       privacyCheckedVal: !this.data.privacyCheckedVal,
     });
   },
-  // 用户提交更新场地图片
   async updateVenueImg(e) {
     const data = e.currentTarget.dataset.item;
     const fileList = this.data.fileList;
@@ -426,7 +457,6 @@ Page({
     this.getAddrDistance();
     Toast.clear();
   },
-  // 场地更新日志
   toggleShowVenueImg(e) {
     const index = e.currentTarget.dataset.index;
     const data = e.currentTarget.dataset.item;
@@ -448,7 +478,6 @@ Page({
       cbt_user_count: data.venue_update_users_count,
     });
   },
-  // 更新昵称api
   userInfoUpdateApi(data) {
     return new Promise((resolve, reject) => {
       wx.request({
@@ -469,7 +498,6 @@ Page({
       })
     });
   },
-  // 更新昵称
   async chooseNickName(e) {
     const nn = e.detail.value;
     if (nn.length == 0) {
@@ -502,13 +530,11 @@ Page({
       showNickName: false,
     })
   },
-  // 别名弹窗
   openNickName() {
     this.setData({
       showNickName: true,
     })
   },
-  // 删除预览的图片
   deleteImg(e) {
     const id = e.detail.index;
     const fileList = [...this.data.fileList];
@@ -517,18 +543,15 @@ Page({
       fileList: fileList,
     });
   },
-  // 图片上传前校验
   beforeRead(event) {
     const { file, callback } = event.detail;
     callback(file.type === 'image');
   },
-  // 图片上传后回调
   afterRead(event) {
     const { file } = event.detail;
     const newFiles = Array.isArray(file) ? file : [file];
     this.setData({ fileList: this.data.fileList.concat(newFiles) });
   },
-  // 场地图片
   onPreviewVenueImage(e) {
     const src = e.currentTarget.dataset.src;
     const imgs =  e.currentTarget.dataset.imgs;
@@ -542,7 +565,6 @@ Page({
       urls: images,
     });
   },
-  // 点击放大图片
   onPreviewImage(e) {
     const src = e.currentTarget.dataset.src;
     var images = [src];
@@ -552,7 +574,6 @@ Page({
       urls: images,
     });
   },
-  // 客服/刷新/聊天室的隐藏开关
   onSwitchContactBtn(e) {
     const id = e.currentTarget.dataset.id;
     const newData = {};
@@ -561,7 +582,6 @@ Page({
     });
     this.setData(newData);
   },
-  // 获取某个场地的所有用户的评价Api
   getAllEvaluateApi(gid) {
     return new Promise((resolve, reject) => {
       wx.request({
@@ -580,7 +600,6 @@ Page({
       })
     });
   },
-  // 场地评价弹窗
   onCloseEvaBoard() {
     this.setData({
       showEvaBoard: false,
@@ -608,7 +627,6 @@ Page({
       info_data: fd
     });
   },
-  // 头像选择,1：用户自行上传，2：系统随机生成，默认是2
   async onChooseAvatar(e) {
     const { avatarUrl } = e.detail 
     this.setData({
@@ -633,7 +651,6 @@ Page({
       Toast.fail(err.code);
     }
   },
-  // 文件上传api
   uploadFileApi(data) {
     return new Promise((resolve, reject) => {
       wx.uploadFile({
@@ -654,7 +671,6 @@ Page({
       })
     })
   },
-  // 获取群组人数
   getGroupUsersApi(gid) {
     return new Promise((resolve, reject) => {
       wx.request({
@@ -673,7 +689,6 @@ Page({
       })
     })
   },
-  // 加入组局api
   joinSportGroupApi(data) {
     return new Promise((resolve, reject) => {
       wx.request({
@@ -694,7 +709,6 @@ Page({
       })
     })
   },
-  // 加入组局弹窗确认, 1:退出组局,2加入组局
   joinSportGroup(e) {
     const data = e.currentTarget.dataset.item;
     Dialog.confirm({
@@ -728,7 +742,6 @@ Page({
       .catch(() => {
       });
   },
-  // 打开地图
   openMapAppDetailed(e) {
     const data = e.currentTarget.dataset.item;
     wx.openLocation({
@@ -821,7 +834,6 @@ Page({
       console.log("缓存失效");
     }
   },
-  // 运动偏好弹窗
   async isShowSportList() {
     // 1：打开场地选择，2：关闭场地选择
     if (this.data.isUse) {
@@ -845,7 +857,6 @@ Page({
       
     }
   },
-  // 运动偏好选择
   onSportsChange(e) {
     const sd = e.currentTarget.dataset.item;
     const nd = this.data.all_sport_list.map((item) => {
@@ -934,7 +945,6 @@ Page({
             });
           }
           this.getAllSportsApi().then((resp) => {
-            console.log("getAllSportsApi 1 >>> ", resp.data);
             if (resp.code == 1000) {
               this.setData({
                 all_sport_list: resp.data,
@@ -1011,7 +1021,6 @@ Page({
       }, 1000)
     }
   },
-  // 提交添加地址的api
   userAddAddrReqApi(data) {
     return new Promise((resolve, reject) => {
       wx.request({
@@ -1028,7 +1037,6 @@ Page({
       })
     })
   },
-  // 地址审核列表Api
   getCheckListApi() {
     return new Promise((resolve, reject) => {
       wx.request({
@@ -1054,7 +1062,6 @@ Page({
       checkListData: data.data,
     })
   },
-  // 拉取所有数据Api
   getAllDataApi() {
     return new Promise((resolve, reject) => {
       wx.request({
@@ -1139,7 +1146,6 @@ Page({
       })
     })
   },
-  // 在审核页面提交通过审核的添加地址请求
   async onAdd(e) {
     const addData = e.currentTarget.dataset.value;
     try {
@@ -1179,7 +1185,6 @@ Page({
         console.log('取消或失败:', err);
       }
   },
-  // 在审核页面审核不通过的加地址请求将会删除
   async onDelete(e) {
     const delData = e.currentTarget.dataset.value;
     try {
@@ -1206,7 +1211,6 @@ Page({
       console.log('取消或失败:', err);
     }
   },
-  // 每个群组的在线人数接口
   getGroupUserCountApi(gid) {
     return new Promise((resolve, reject) => {
       wx.request({
@@ -1227,7 +1231,6 @@ Page({
     const value = e.detail;
     this.setData({placeTag: value});
   },
-  // 用户提交添加篮球场地址的请求
   async onConfirmAddPlace() {
     const val = this.data.villageInfo;
     const val2 = this.data.placeTag;
@@ -1307,7 +1310,11 @@ Page({
     Toast.clear();
   },
   onClose() {
-    this.setData({ addVillage: false, showCheckList: false, showSportsList: false });
+    this.setData({ addVillage: false, 
+      showCheckList: false, 
+      showSportsList: false,
+      showChoose: false,
+    });
   },
   onClearInput(e) {
     if (e.currentTarget.dataset.value != "") {
@@ -1315,7 +1322,6 @@ Page({
       this.getVal(data);
     }
   },
-  // 搜索场地
   async newGetVal(e) {
     const val = e.detail;
     this.setData({
@@ -1362,7 +1368,6 @@ Page({
       totalData: processedList.length,
     });
   },
-  // 获取input值
   getVal(e) {
     if (e.detail.value == "") {
       this.setData({
@@ -1386,7 +1391,6 @@ Page({
       basketSquareFilterData: disSortList.slice(0, this.data.showDataNumber),
     });
   },
-  // 进到群组
   sendMsg(e) {
     const id = e.currentTarget.dataset.item;
     const img = this.data.all_sport_list.find(item => item.key == this.data.defaultSportKey);
@@ -1442,7 +1446,6 @@ Page({
       basketSquareFilterData: fd,
     });
   },
-  // 用户当前坐标
   getUserLocation() {
     const qqmapsdk = new QQMapWX({
       key: 'YSRBZ-GSVY3-3P23L-RNWCE-OQB3V-T6BXG'
@@ -1500,25 +1503,24 @@ Page({
       })
     })
   },
-  // 所有场地数据
   async getAddrDistance() {
     const resp = await this.getUserLocation();
     if (resp.latitude !== "" && resp.longitude !== "" && resp.city !== "") {
       const allData = await this.getAllDataApi();
-
       if (allData.code != 1000) {
         Toast.fail(allData.code);
         return;
       }
       this.setData({
         basketSquareData: allData.other_data,
+        chooseList: allData.filter_data,
+        isActive: 1,
       });
       const newList = this.data.basketSquareData;
       const disSortList = newList.sort((a, b) => a.distance - b.distance);
       // 等待所有异步任务都完成
       const newUL = await Promise.all(
         disSortList.map(async (item) => {
-          // 用户对当前场地的评价
           const dl = item.user_reviews;
           dl.map((item) => {
             if (item.like_users.length > 0) {
@@ -1531,8 +1533,6 @@ Page({
           });
           item.user_reviews = dl;
           item.user_reviews_count = dl.length;
-          // 场地更新日志
-          
           return item;
         })
       );
@@ -1541,8 +1541,8 @@ Page({
           user.group_id === item.id && user.user === this.data.openid
         );
         return {
-          ...item,       // 保留原来的字段
-          hasJoined      // 新增字段
+          ...item,       
+          hasJoined      
         };
       });
       this.setData({
@@ -1555,11 +1555,9 @@ Page({
       this.showGoodBtn();
       this.getBasketSquareFilter();
       wx.stopPullDownRefresh();
-      // wx.hideLoading();
       Toast.clear();
     } else {
       wx.stopPullDownRefresh();
-      // wx.hideLoading();
       Toast.clear();
       Toast.fail("加载数据失败3");
     }
@@ -1572,7 +1570,6 @@ Page({
       return 0;
     }
   },
-  // 腾讯地图的关键字api
   txMapSearchAddrApi(addr) {
     return new Promise((resolve, reject) => {
       wx.request({
@@ -1606,7 +1603,6 @@ Page({
       });
     });
   },
-  // 计算距离
   getDistance(lat1, lng1, lat2, lng2) {
     const rad = Math.PI / 180;
     const radLat1 = lat1 * rad;
@@ -1621,7 +1617,6 @@ Page({
     s = s * 1000;   // 米
     return Math.floor(s);
   },
-  // 获取openid
   getOpenid() {
     let that = this;
     app.login().then(resp => {
