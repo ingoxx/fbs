@@ -738,7 +738,7 @@ Page({
             return;
           }
           this.getAddrDistance();
-          Toast.success(data.hasJoined ? '已退出' : '已加入');
+          Toast.success(data.hasJoined ? '已退出组队' : '已加入组队');
         } catch (error) {
           Toast.fail(error.code);
         }

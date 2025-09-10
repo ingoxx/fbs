@@ -1042,6 +1042,7 @@
 
 .pop-box-1 .confirm {
   text-align: center;
+  margin: 19rpx 0;
 }
 
 .van-pop-2 {
@@ -1055,13 +1056,15 @@
   border-radius: 10rpx !important;
 }
 
-.van-toast__text {
-  white-space: nowrap;
-  /* 不换行 */
-  overflow: hidden;
-  /* 超出隐藏 */
-  text-overflow: ellipsis;
-  /* 超出显示省略号 */
+.van-toast {
+  min-width: auto !important;
+  /* 取消默认最小宽度 */
+  width: auto !important;
+  /* 宽度自适应内容 */
   max-width: 80vw;
-  /* 限制宽度，否则会溢出屏幕 */
+  /* 避免超出屏幕 */
+  padding: 16rpx 24rpx;
+  /* 给内容加一些内边距 */
+  display: inline-block;
+  /* 让背景只包裹内容 */
 }
