@@ -26,7 +26,9 @@ Component({
    * 组件的初始数据
    */
   data: {
+    city: "",
     group_id_value: "",
+    sport_key: "",
     value: '',
     count: 0,
     socket: null,
@@ -35,11 +37,6 @@ Component({
     wssUrl: "",
     baseUrl: "",
     chatData: [
-      // {sender_id: 'lxb', content: '大哥', time: '2025-08-06 15:18:15'},
-      // {sender_id: 'lxb', content: '大哥', time: '2025-08-06 15:18:15'},
-      // {sender_id: 'lxb', content: '大哥', time: '2025-08-06 15:18:15'},
-      // {sender_id: 'lxb', content: '大哥', time: '2025-08-06 15:18:15'},
-      // {sender_id: 'lxb', content: '大哥', time: '2025-08-06 15:18:15'}
     ],
     filter_groups_data: [],
     groups_data: [],
@@ -52,14 +49,17 @@ Component({
    */
   lifetimes: {
     attached() {
-      const { wssUrl, user_id, sender_id, baseUrl } = this.properties;
+      const { wssUrl, user_id, sender_id, baseUrl, sport_key, city } = this.properties;
       this.setData({
         filter_groups_data: this.data.groups_data,
         wssUrl: wssUrl,
         user_id: user_id,
         sender_id:sender_id,
         baseUrl: baseUrl,
+        sport_key: sport_key,
+        city: city
       });
+      
       this.getOnlineDataApi().then((resp) => {
         if (resp.code != 1000) {
           Toast.fail("online: ", resp.code);
@@ -70,10 +70,7 @@ Component({
           groups_data: resp.data,
           filter_groups_data: fd,
         });
-        // this.setData({
-        //   groups_data: resp.data,
-        //   filter_groups_data: resp.data,
-        // });
+        console.log("filter_groups_data >>> ", this.data.filter_groups_data);
       }).catch((err) => {
         Toast.fail("online err: ", err);
       })
@@ -124,7 +121,7 @@ Component({
     getOnlineDataApi() {
       return new Promise((resolve, reject) => {
         wx.request({
-          url: `${this.data.baseUrl}/get-all-online-data?uid=${this.data.user_id}`,
+          url: `${this.data.baseUrl}/get-all-online-data?uid=${this.data.user_id}&key=${this.data.sport_key}`,
           timeout: 10000,
           success: function (res) {
             resolve(res.data);

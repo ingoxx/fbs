@@ -295,7 +295,7 @@
       </view>
     </van-transition>
     <view class="tran-2" data-id="1" bind:tap="onSwitchContactBtn">
-      <van-icon size="90rpx" name="https://ai.anythingai.online/static/profile3/side-6.svg" />
+      <van-icon size="90rpx" color="#256d64" name="https://ai.anythingai.online/static/profile3/side-12.svg" />
     </view>
   </view>
 </view>
@@ -326,7 +326,7 @@
     custom-style="height: 40%;width: 80%; background:#374151"
     bind:close="onCloseChatRoom"
   >
-    <chat-room wssUrl="{{ wssUrl }}" user_id="{{user_id}}" sender_id="{{sender_id}}" baseUrl="{{ baseUrl }}" class="com-chat-room"></chat-room>
+    <chat-room wssUrl="{{ wssUrl }}" user_id="{{user_id}}" sender_id="{{sender_id}}" baseUrl="{{ baseUrl }}" sport_key="{{defaultSportKey}}" city="{{city}}" class="com-chat-room"></chat-room>
   </van-popup>
   <!-- 腾讯api获取场地 -->
   <van-dialog

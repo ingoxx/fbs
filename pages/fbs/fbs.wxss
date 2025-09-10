@@ -520,7 +520,7 @@
 
 .box .contact-us .tran-2, .box .user-list .tran-2 {
   position: relative;
-  right: 40rpx;
+  right: 39rpx;
 }
 
 .box .contact-us .share-btn, .box .user-list .share-btn {

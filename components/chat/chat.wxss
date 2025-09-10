@@ -13,6 +13,8 @@
 }
 .group-id-search {
   display: flex;
+  flex-shrink: 0;
+  height: 92rpx;
   border-bottom: 1rpx solid #545f72;
 }
 .group-id-list {
@@ -40,11 +42,12 @@
 }
 .chat-title {
   display: flex;
+  flex-shrink: 0;
   justify-content: center;
   align-items: center;
-  height: 77rpx;
+  height: 92rpx;
   font-size: 25rpx;
-  padding: 8rpx 10rpx;
+  /* padding: 8rpx 10rpx; */
   border-bottom: 1rpx solid #545f72;
 }
 .chat-content {
@@ -57,7 +60,7 @@
 .group-name-bk {
   /* color: #c1c3c7; */
   color: rgba(0, 0, 0, 0.23);
-  position: fixed;
+  position: absolute;
   left: 63%;
   top: 46%;
   font-size: 39rpx;
@@ -73,7 +76,13 @@
   margin: 15rpx 15rpx;
 }
 .chat_my {
-  background: #fb6f13;
+  background: #6f6f6f;
+}
+.user {
+  width: 230rpx;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .content-fm {
   padding: 6rpx 0;
