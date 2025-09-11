@@ -94,11 +94,14 @@ Component({
             Toast.fail("online: ", resp.code);
             return;
           }
-          const fd = resp.data.sort((a, b) => b.online_user - a.online_user);
+          const fd = resp.data.sort((a, b) => b.online - a.online);
           this.setData({
             groups_data: resp.data,
             filter_groups_data: fd,
+            venue_data_filter: fd,
+            venue_data: fd,
           });
+   
         }).catch((err) => {
           Toast.fail("online err: ", err);
         })
@@ -150,7 +153,7 @@ Component({
     getOnlineDataApi() {
       return new Promise((resolve, reject) => {
         wx.request({
-          url: `${this.data.baseUrl}/get-all-online-data?uid=${this.data.user_id}&key=${this.data.sport_key}`,
+          url: `${this.data.baseUrl}/get-all-online-data?uid=${this.data.user_id}&key=${this.data.sport_key}&city=${this.data.city}`,
           timeout: 10000,
           success: function (res) {
             resolve(res.data);
@@ -194,7 +197,6 @@ Component({
     onClickGroupId(e) {
       const gid = e.currentTarget.dataset.id;
       if (gid.id != this.data.group_id) {
-        // this.clearSocket();
         this.setData({
           chatData: [],
         });
@@ -204,7 +206,6 @@ Component({
         count: gid.online,
         venue_name: gid.title,
       });
-      
       this.initWss(gid.id);
     },
     clearSocket() {
@@ -237,6 +238,11 @@ Component({
           time: this.getCurrentTime(),
           user_id: this.data.user_id,
           sender_id: this.data.sender_id,
+          sport_key: this.data.sport_key,
+          city: this.data.city,
+          nick_name: this.data.nick_name,
+          ava_img: this.data.ava_img,
+          venue_name: this.data.venue_name,
         };
         socket.send({ data: JSON.stringify(initMsg)});
       })
