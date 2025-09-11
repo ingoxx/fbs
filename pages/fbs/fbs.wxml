@@ -210,11 +210,9 @@
             </van-transition>
           </block>
           <view class="group-status">
-            <!-- 组队 -->
             <van-button round color="#256d64" size="small" type="{{ item.hasJoined ? 'info' : 'warning' }}" custom-style="width:218rpx" data-item="{{ item }}" bind:tap="joinSportGroup">
               <van-icon size="30rpx" custom-class="van-icon-5 van-icon-8" name="https://ai.anythingai.online/static/profile3/light.svg" />{{item.hasJoined ? '退出组队' : '加入组队'}}({{item.join_user_count}})
             </van-button>
-            <!-- 拍照 -->
             <van-button round color="#256d64" size="small" data-index="{{index}}" custom-style="width:270rpx" data-item="{{ item }}"  bindtap="toggleShowVenueImg">
               <van-icon size="30rpx" custom-class="van-icon-5" name="https://ai.anythingai.online/static/profile3/click-3.svg" /><text class="group_title">获取更多场地图片</text>
             </van-button>
@@ -273,7 +271,7 @@
           <van-icon size="25rpx" name="https://ai.anythingai.online/static/profile3/flush-5.svg" /> <text class="b-c">刷新</text>
         </button>
       </view>
-      <view class="tran-1" wx:if="{{isAdminShow}}">
+      <view class="tran-1" wx:if="{{isUse && isShowAllData}}">
         <button size="mini" bind:tap="getUserList" class="share-btn">
           <van-icon size="25rpx" name="https://ai.anythingai.online/static/profile3/user_list.svg" /> <text class="b-c">用户</text>
         </button>
@@ -288,14 +286,20 @@
           <van-icon size="25rpx" name="https://ai.anythingai.online/static/profile3/add_addr.svg" /> <text class="b-c">添加</text>
         </button>
       </view>
-      <view class="tran-1" wx:if="{{isAdminShow && isShowAllData}}">
+      <view class="tran-1" wx:if="{{isUse && isShowAllData}}">
         <button size="mini" bind:tap="isShowChatRoom" class="share-btn">
           <van-icon size="25rpx" name="https://ai.anythingai.online/static/profile3/mr.svg" /> <text class="b-c">信息</text>
         </button>
+        <view class="msg-num">
+          <text class="num">{{totalData}}</text>
+        </view>
       </view>
     </van-transition>
     <view class="tran-2" data-id="1" bind:tap="onSwitchContactBtn">
       <van-icon size="90rpx" color="#256d64" name="https://ai.anythingai.online/static/profile3/side-12.svg" />
+    </view>
+    <view class="tran-3" data-id="1" bind:tap="onSwitchContactBtn" wx:if="{{isUse && isShowAllData}}">
+      <text class="msg-num">{{totalData}}</text>
     </view>
   </view>
 </view>
@@ -323,10 +327,23 @@
     wx:if="{{ showChatRoom }}"
     show="{{ showChatRoom }}"
     round
+    custom-class="van-popup-1"
     custom-style="height: 40%;width: 80%; background:#374151"
     bind:close="onCloseChatRoom"
+    closeable
   >
-    <chat-room wssUrl="{{ wssUrl }}" user_id="{{user_id}}" sender_id="{{sender_id}}" baseUrl="{{ baseUrl }}" sport_key="{{defaultSportKey}}" city="{{city}}" class="com-chat-room"></chat-room>
+    <group-team 
+      venue_data="{{basketSquareFilterData}}"
+      wssUrl="{{ wssUrl }}" 
+      user_id="{{user_id}}" 
+      sender_id="{{sender_id}}" 
+      baseUrl="{{ baseUrl }}" 
+      sport_key="{{defaultSportKey}}" 
+      city="{{city}}" 
+      nick_name="{{nick_name}}" 
+      ava_img="{{avatarUrl}}" 
+      class="com-chat-room">
+    </group-team>
   </van-popup>
   <!-- 腾讯api获取场地 -->
   <van-dialog
@@ -526,7 +543,7 @@
                 <view class="you">系统生成</view>
               </view>
               <view>
-                <view class="sport_addr sport_addr_f_2"><text class="check-title">用户: </text><text class="check-content" selectable="true">{{ item.openid }}</text></view>
+                <view wx:if="{{admin == openid }}" class="sport_addr sport_addr_f_2"><text class="check-title">用户: </text><text class="check-content" selectable="true">{{ item.openid }}</text></view>
                 <view class="sport_addr"><text class="check-title">昵称: </text><text class="check-content" selectable="true">{{ item.nick_name ? item.nick_name : "null" }}</text></view>
                 <view class="sport_addr"><text class="check-title">城市: </text><text class="check-content" selectable="true">{{ item.city ? item.city : "未获取到用户定位" }}</text></view>
                 <view class="sport_addr"><text class="check-title">时间: </text><text class="check-content" selectable="true">{{ item.time }}</text></view>

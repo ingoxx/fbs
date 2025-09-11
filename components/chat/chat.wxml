@@ -1,7 +1,7 @@
 <view class="box">
   <view class="sidebar">
     <view class="group-id-search">
-      <input type="text" class="chat-input group-chat-font-size " value="{{ group_id_value }}" bindinput="onFilterGroupId" placeholder="搜索"/>
+      <input type="text" class="chat-input group-chat-font-size " value="{{ group_id_value }}" bindinput="onFilterGroupId" placeholder="搜索场地"/>
       <van-icon custom-class="van-icon-0" name="https://ai.anythingai.online/static/profile3/flush-5.svg" bind:tap="refreshOnlineData"/>
     </view>
     <scroll-view 
@@ -9,17 +9,21 @@
     class="group-id-list"
     scroll-with-animation 
     >
-      <block wx:for="{{ filter_groups_data }}" wx:key="index" wx:for-item="item">
+      <block wx:for="{{ venue_data_filter }}" wx:key="index" wx:for-item="item">
         <view class="venue-info">
-          <text class="{{ item.online_user > 0 ? 'group-name group-chat-font-size online-group' : 'group-name group-chat-font-size'  }}" user-select="true" data-id="{{ item }}" bind:tap="onClickGroupId" style="color:{{item.group_id==group_id ? '#47c747': ''}}">{{ item.group_id }}</text>
+          <text class="{{ item.online > 0 ? 'group-name group-chat-font-size online-group' : 'group-name group-chat-font-size'  }}" user-select="true" data-id="{{ item }}" bind:tap="onClickGroupId" style="color:{{item.id==group_id ? '#47c747': ''}}">
+            {{ item.title }}
+          </text>
         </view>
-        <!-- <text class="{{ item.online_user > 0 ? 'group-name group-chat-font-size online-group' : 'group-name group-chat-font-size'  }}" user-select="true" data-id="{{ item }}" bind:tap="onClickGroupId" style="color:{{item.group_id==group_id ? '#47c747': ''}}">{{ item.group_id }}</text> -->
       </block>
     </scroll-view>
   </view>
   <view class="main">
     <view class="chat-title group-chat-font-size ">
-      运动群组({{count}})
+      <text class="sport_team_group">组队群({{count}})</text> 
+      <view class="find-baller">
+        <text class="find-baller-notic">可点击左侧场地名然后发送信息寻找组队</text>
+      </view>
     </view>
     <scroll-view 
     scroll-y="true" 
@@ -27,10 +31,10 @@
     scroll-with-animation 
     scroll-into-view="{{toView}}"
     >
-      <text class="group-name-bk">{{ group_id }}</text>
+      <!-- <text class="group-name-bk">寻找球友</text> -->
       <block wx:for="{{ chatData }}" wx:key="index" wx:for-item="item">
         <view id="chat-{{index}}" class="{{ item.sender_id == sender_id ? 'chat-detail chat_my' : 'chat-detail' }}">
-          <view class="user content-fm"><text class="cc ccc" user-select="true">user_{{ item.sender_id }}</text></view>
+          <view class="user content-fm"><text class="cc ccc" user-select="true">{{ item.nick_name }}</text></view>
           <view class="content content-fm"><text class="cc" user-select="true">{{ item.content }}</text></view>
           <view class="time content-fm"><text class="cc ccc" user-select="true">{{ item.time }}</text></view>
         </view>

@@ -19,7 +19,7 @@
     "van-action-sheet": "/miniprogram_npm/@vant/weapp/action-sheet/index",
     "van-uploader": "/miniprogram_npm/@vant/weapp/uploader/index",
     "van-search": "/miniprogram_npm/@vant/weapp/search/index",
-    "chat-room": "/components/chat/chat",
+    "group-team": "/components/chat/chat",
     "eva-board": "/components/cb/cb"
   }
 }

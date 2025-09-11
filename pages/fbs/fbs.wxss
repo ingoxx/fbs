@@ -518,9 +518,45 @@
   z-index: 100;
 }
 
+.box .contact-us .tran-1 .msg-num, .box .user-list .tran-1 .msg-num {
+  position: relative;
+  width: 51rpx;
+  height: 39rpx;
+  background: #e84b4b;
+  border-radius: 20%;
+  left: 110rpx;
+  bottom: 85rpx;
+}
+
+.box .contact-us .tran-1 .msg-num .num, .box .user-list .tran-1 .msg-num .num {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24rpx;
+  color: #fff;
+}
+
 .box .contact-us .tran-2, .box .user-list .tran-2 {
   position: relative;
   right: 39rpx;
+}
+
+.box .contact-us .tran-3, .box .user-list .tran-3 {
+  position: relative;
+  width: 51rpx;
+  height: 39rpx;
+  background: #e84b4b;
+  border-radius: 20%;
+  right: 80rpx;
+  bottom: 38rpx;
+}
+
+.box .contact-us .tran-3 .msg-num, .box .user-list .tran-3 .msg-num {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24rpx;
+  color: #fff;
 }
 
 .box .contact-us .share-btn, .box .user-list .share-btn {
@@ -1067,4 +1103,10 @@
   /* 给内容加一些内边距 */
   display: inline-block;
   /* 让背景只包裹内容 */
+}
+
+.van-popup-1 .van-popup__close-icon--top-right {
+  right: var(--popup-close-icon-margin, 10px);
+  top: var(--popup-close-icon-margin, 6px);
+  font-size: 28rpx;
 }

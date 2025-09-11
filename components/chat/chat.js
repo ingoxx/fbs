@@ -1,10 +1,14 @@
 // miniprogram_npm/chat/chat.js
+const app = getApp();
 import Toast from '@vant/weapp/toast/toast';
 Component({
   /**
    * 组件的属性列表
    */
   properties: {
+    venue_data: {
+      type: Object,
+    },
     wssUrl: {
       type: String,
       value: '',
@@ -21,11 +25,29 @@ Component({
       type: String,
       value: '',
     },
+    sport_key: {
+      type: String,
+      value: '',
+    },
+    city: {
+      type: String,
+      value: '',
+    },
+    nick_name: {
+      type: String,
+      value: '',
+    },
+    ava_img: {
+      type: String,
+      value: '',
+    },
   },
   /**
    * 组件的初始数据
    */
   data: {
+    venue_name: "",
+    nick_name: "",
     city: "",
     group_id_value: "",
     sport_key: "",
@@ -41,6 +63,7 @@ Component({
     filter_groups_data: [],
     groups_data: [],
     socket_list: [],
+    venue_data_filter: [],
     toView: '',
     group_id: "",
   },
@@ -49,7 +72,7 @@ Component({
    */
   lifetimes: {
     attached() {
-      const { wssUrl, user_id, sender_id, baseUrl, sport_key, city } = this.properties;
+      const { wssUrl, user_id, sender_id, baseUrl, sport_key, city, nick_name, ava_img, venue_data } = this.properties;
       this.setData({
         filter_groups_data: this.data.groups_data,
         wssUrl: wssUrl,
@@ -57,23 +80,29 @@ Component({
         sender_id:sender_id,
         baseUrl: baseUrl,
         sport_key: sport_key,
-        city: city
+        city: city,
+        ava_img: ava_img,
+        nick_name: nick_name,
+        venue_data: venue_data,
+        venue_data_filter: venue_data,
       });
-      
-      this.getOnlineDataApi().then((resp) => {
-        if (resp.code != 1000) {
-          Toast.fail("online: ", resp.code);
-          return;
-        }
-        const fd = resp.data.sort((a, b) => b.online_user - a.online_user);
-        this.setData({
-          groups_data: resp.data,
-          filter_groups_data: fd,
-        });
-        console.log("filter_groups_data >>> ", this.data.filter_groups_data);
-      }).catch((err) => {
-        Toast.fail("online err: ", err);
-      })
+
+      // 超级管理员才能获取到各个城市的场地信息
+      if (user_id == app.globalData.admin) {
+        this.getOnlineDataApi().then((resp) => {
+          if (resp.code != 1000) {
+            Toast.fail("online: ", resp.code);
+            return;
+          }
+          const fd = resp.data.sort((a, b) => b.online_user - a.online_user);
+          this.setData({
+            groups_data: resp.data,
+            filter_groups_data: fd,
+          });
+        }).catch((err) => {
+          Toast.fail("online err: ", err);
+        })
+      }
     },
     detached() {
       console.log('组件销毁，清除一些连接');
@@ -136,15 +165,17 @@ Component({
       const val = e.detail.value;
       var fd = [];
       if (val != "") {
-        fd = this.data.groups_data.filter(item => {
-          const match = item.group_id.includes(val);
-          return match;
+        fd = this.data.venue_data.filter(item => {
+          const id = item.id.includes(val);
+          const title = item.title.includes(val);
+          return id || title;
         });
       } else {
-        fd = this.data.groups_data;
+        fd = this.data.venue_data;
       }
       this.setData({
         filter_groups_data: fd,
+        venue_data_filter: fd,
       });
     },
     getVal(e) {
@@ -162,18 +193,19 @@ Component({
     },
     onClickGroupId(e) {
       const gid = e.currentTarget.dataset.id;
-      if (gid.group_id != this.data.group_id) {
+      if (gid.id != this.data.group_id) {
         // this.clearSocket();
         this.setData({
           chatData: [],
         });
       }
       this.setData({
-        group_id: gid.group_id,
-        count: gid.online_user,
+        group_id: gid.id,
+        count: gid.online,
+        venue_name: gid.title,
       });
       
-      this.initWss(gid.group_id);
+      this.initWss(gid.id);
     },
     clearSocket() {
       if (this.data.socket) {
@@ -237,7 +269,6 @@ Component({
       const time = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`
       return time
     },
-    // 发送信息
     sendMsg() {
       const content = this.data.value;
       if (content == "") {
@@ -245,7 +276,7 @@ Component({
         return;
       }
       if (this.data.group_id == "") {
-        Toast.fail("点击左侧id");
+        Toast.fail("点击左侧场地发送寻找球友");
         return;
       }
       const initMsg = {
@@ -254,6 +285,11 @@ Component({
         content: content,
         time: this.getCurrentTime(),
         user_id: this.data.user_id,
+        sport_key: this.data.sport_key,
+        city: this.data.city,
+        nick_name: this.data.nick_name,
+        ava_img: this.data.ava_img,
+        venue_name: this.data.venue_name,
       };
       this.data.socket.send({ data: JSON.stringify(initMsg)});
       const data = {detail: {value: ""}};

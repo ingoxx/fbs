@@ -12,6 +12,7 @@ import Dialog from '@vant/weapp/dialog/dialog';
 const md5 = require('../../utils/md5');
 Page({
   data: {
+    admin: "",
     isLock: false,
     isActive: 1,
     chooseList: [],
@@ -339,7 +340,7 @@ Page({
     try {
       const resp = await this.getUserListApi();
       if (resp.code != 1000) {
-        Toast.fail("获取用户列表失败");
+        Toast.fail("获取用户列表失败1");
         return
       }
       const fd = resp.data;
@@ -353,7 +354,7 @@ Page({
         filter_user_list: fd,
       })
     } catch (error) {
-      Toast.fail("获取用户列表失败");
+      Toast.fail("获取用户列表失败2");
     }
   },
   getUserListApi() {
@@ -789,11 +790,14 @@ Page({
     });
   },
   isShowChatRoom(e) {
-    if (this.data.openid == app.globalData.admin) {
-      this.setData({
-        showChatRoom: true,
-      });
-    }
+    this.setData({
+      showChatRoom: true,
+    });
+    // if (this.data.openid == app.globalData.admin) {
+    //   this.setData({
+    //     showChatRoom: true,
+    //   });
+    // }
   },
   onConfirmSportSelection() {
     if (this.data.isUse) {
@@ -1511,6 +1515,7 @@ Page({
     const resp = await this.getUserLocation();
     if (resp.latitude !== "" && resp.longitude !== "" && resp.city !== "") {
       const allData = await this.getAllDataApi();
+
       if (allData.code != 1000) {
         Toast.fail(allData.code);
         return;
@@ -1630,6 +1635,7 @@ Page({
         userid: "user_"+md5(resp.openid),
         nick_name: resp.nickname,
         img_url: IMG_URL,
+        admin: app.globalData.admin,
       });
       
       that.isShowPrivacy();

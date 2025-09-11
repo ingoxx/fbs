@@ -22,9 +22,15 @@
   min-height: 0;
   word-break: break-all;
 }
+.venue-info {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 10rpx;
+}
 .group-name {
   display: block;         
-  padding: 15rpx 11rpx;
+  /* padding: 15rpx 11rpx; */
 }
 .main {
   /* width: 700rpx;
@@ -42,6 +48,7 @@
 }
 .chat-title {
   display: flex;
+  flex-direction: column;
   flex-shrink: 0;
   justify-content: center;
   align-items: center;
@@ -49,6 +56,12 @@
   font-size: 25rpx;
   /* padding: 8rpx 10rpx; */
   border-bottom: 1rpx solid #545f72;
+}
+.sport_team_group {
+  font-weight: 700;
+}
+.find-baller-notic{
+  font-size: 18rpx;
 }
 .chat-content {
   height: 100%;
@@ -58,8 +71,8 @@
   background: #374151;
 }
 .group-name-bk {
-  /* color: #c1c3c7; */
-  color: rgba(0, 0, 0, 0.23);
+  width: 200rpx;
+  color: #539656;
   position: absolute;
   left: 63%;
   top: 46%;
@@ -117,4 +130,16 @@
 .van-icon-0 {
   padding-right: 13rpx;
   font-size: 26rpx!important;
+}
+.van-toast {
+  min-width: auto !important;   /* 取消默认最小宽度 */
+  width: auto !important;       /* 宽度自适应内容 */
+  max-width: 80vw;              /* 避免超出屏幕 */
+  padding: 16rpx 24rpx;         /* 给内容加一些内边距 */
+  display: inline-block;        /* 让背景只包裹内容 */
+}
+.my-popup .van-popup__close-icon {
+  bottom: 20rpx;
+  font-size: 28rpx;
+  left: 10rpx;
 }

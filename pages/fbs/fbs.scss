@@ -480,9 +480,43 @@
     position: fixed;
     top: 32%;
     z-index: 100;
+    .tran-1 {
+      .msg-num {
+        position: relative;
+        width: 51rpx;
+        height: 39rpx;
+        background: #e84b4b;
+        border-radius: 20%;
+        left: 110rpx;
+        bottom: 85rpx;
+        .num {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 24rpx;
+          color: #fff;
+        }
+      }
+    }
     .tran-2 {
       position: relative;
       right: 39rpx;
+    }
+    .tran-3 {
+      position: relative;
+      width: 51rpx;
+      height: 39rpx;
+      background: #e84b4b;
+      border-radius: 20%;
+      right: 80rpx;
+      bottom: 38rpx;
+      .msg-num {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 24rpx;
+        color: #fff;
+      }
     }
     .share-btn {
       opacity: 0.7;
@@ -960,4 +994,9 @@
   max-width: 80vw;              /* 避免超出屏幕 */
   padding: 16rpx 24rpx;         /* 给内容加一些内边距 */
   display: inline-block;        /* 让背景只包裹内容 */
+}
+.van-popup-1 .van-popup__close-icon--top-right {
+  right: var(--popup-close-icon-margin,10px);
+  top: var(--popup-close-icon-margin,6px);
+  font-size: 28rpx;
 }
