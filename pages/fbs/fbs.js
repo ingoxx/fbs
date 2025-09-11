@@ -1527,7 +1527,6 @@ Page({
         venue_count: allData.venues.length,
         isActive: 1,
       });
-      console.log("venue_count >>> ", this.data.venue_count);
       const newList = this.data.basketSquareData;
       const disSortList = newList.sort((a, b) => a.distance - b.distance);
       // 等待所有异步任务都完成
