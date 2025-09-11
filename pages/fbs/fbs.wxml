@@ -291,7 +291,7 @@
           <van-icon size="25rpx" name="https://ai.anythingai.online/static/profile3/mr.svg" /> <text class="b-c">信息</text>
         </button>
         <view class="msg-num">
-          <text class="num">{{totalData}}</text>
+          <text class="num">{{admin == openid ? venue_count : totalData}}</text>
         </view>
       </view>
     </van-transition>
@@ -299,7 +299,7 @@
       <van-icon size="90rpx" color="#256d64" name="https://ai.anythingai.online/static/profile3/side-12.svg" />
     </view>
     <view class="tran-3" data-id="1" bind:tap="onSwitchContactBtn" wx:if="{{isUse && isShowAllData}}">
-      <text class="msg-num">{{totalData}}</text>
+      <text class="msg-num">{{admin == openid ? venue_count : totalData}}</text>
     </view>
   </view>
 </view>

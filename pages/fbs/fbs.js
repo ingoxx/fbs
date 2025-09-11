@@ -12,6 +12,7 @@ import Dialog from '@vant/weapp/dialog/dialog';
 const md5 = require('../../utils/md5');
 Page({
   data: {
+    venue_count: 0,
     admin: "",
     isLock: false,
     isActive: 1,
@@ -1523,8 +1524,10 @@ Page({
       this.setData({
         basketSquareData: allData.other_data,
         chooseList: allData.filter_data,
+        venue_count: allData.venues.length,
         isActive: 1,
       });
+      console.log("venue_count >>> ", this.data.venue_count);
       const newList = this.data.basketSquareData;
       const disSortList = newList.sort((a, b) => a.distance - b.distance);
       // 等待所有异步任务都完成
