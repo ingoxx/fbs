@@ -1002,7 +1002,6 @@ Page({
       })
       setTimeout(()=>{
         this.getAllSportsApi().then((resp) => {
-          
           if (resp.code == 1000) {
             this.setData({
               all_sport_list: resp.data,
@@ -1567,6 +1566,7 @@ Page({
         isInput: false,
         totalData: processedList.length,
         isShowAllData: allData.data,
+        loadText: "获取数据中...",
       });
       this.showGoodBtn();
       this.getBasketSquareFilter();
