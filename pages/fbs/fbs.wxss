@@ -163,11 +163,13 @@
 }
 
 .box .venue-tab .venue-container .tabs {
+  gap: 28rpx;
+  overflow-x: auto;
+  white-space: nowrap;
   display: flex;
-  justify-content: space-around;
   align-items: center;
   background: #ffffff;
-  padding: 20rpx 0;
+  padding: 20rpx 16rpx;
   border-radius: 24rpx;
 }
 

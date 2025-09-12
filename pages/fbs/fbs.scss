@@ -148,11 +148,14 @@
     .venue-container {
       margin: 0 32rpx;
       .tabs {
+        gap: 28rpx;
+        overflow-x: auto;
+        white-space: nowrap;
         display: flex;
-        justify-content: space-around;
+        // justify-content: space-around;
         align-items: center;
         background: #ffffff;
-        padding: 20rpx 0;
+        padding: 20rpx 16rpx;
         border-radius: 24rpx;
         // box-shadow: 0 8rpx 24rpx rgba(0,0,0,0.05);
         // .tab-label {
