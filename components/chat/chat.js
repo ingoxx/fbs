@@ -46,6 +46,7 @@ Component({
    * 组件的初始数据
    */
   data: {
+    admin: "",
     venue_name: "",
     nick_name: "",
     city: "",
@@ -66,6 +67,7 @@ Component({
     venue_data_filter: [],
     toView: '',
     group_id: "",
+    showClear: false,
   },
   /**
    * 组件关闭后的清理
@@ -85,11 +87,11 @@ Component({
         nick_name: nick_name,
         venue_data: venue_data,
         venue_data_filter: venue_data,
+        admin: app.globalData.admin,
       });
-
       // 超级管理员才能获取到各个城市的场地信息
       if (user_id == app.globalData.admin) {
-        this.getOnlineDataApi().then((resp) => {
+        this.adminGetOnlineDataApi().then((resp) => {
           if (resp.code != 1000) {
             Toast.fail("online: ", resp.code);
             return;
@@ -104,6 +106,28 @@ Component({
    
         }).catch((err) => {
           Toast.fail("online err: ", err);
+        })
+      } else {
+        // user
+        const fd = this.data.venue_data;
+        const ids = fd.map(item => item.id);
+        const data = JSON.stringify({id: ids});
+        this.userGetOnlineDataApi(data).then((resp) => {
+          if (resp.code != 1000) {
+            Toast.fail("online: ", resp.code);
+            return;
+          }
+          const fd = resp.data.sort((a, b) => b.online - a.online);
+          this.setData({
+            groups_data: fd,
+            filter_groups_data: fd,
+            venue_data_filter: fd,
+            venue_data: fd,
+          });
+          wx.hideLoading();
+        }).catch((err) => {
+          Toast.fail("online err: ", err);
+          wx.hideLoading();
         })
       }
     },
@@ -127,19 +151,53 @@ Component({
    * 组件的方法列表
    */
   methods: {
+    onClose() {
+      this.setData({
+        showClear: false,
+        value: "",
+      });
+    },
     refreshOnlineData() {
       wx.showLoading({
         title: '刷新中...',
       })
-      this.getOnlineDataApi().then((resp) => {
+      // admin
+      if (this.data.user_id == app.globalData.admin) {
+        this.adminGetOnlineDataApi().then((resp) => {
+          if (resp.code != 1000) {
+            Toast.fail("online: ", resp.code);
+            return;
+          }
+          const fd = resp.data.sort((a, b) => b.online - a.online);
+          this.setData({
+            groups_data: fd,
+            filter_groups_data: fd,
+            venue_data_filter: fd,
+            venue_data: fd,
+          });
+          wx.hideLoading();
+        }).catch((err) => {
+          Toast.fail("online err: ", err);
+          wx.hideLoading();
+        });
+
+        return
+      }
+      // user
+      const fd = this.data.venue_data;
+      const ids = fd.map(item => item.id);
+      const data = JSON.stringify({id: ids});
+      this.userGetOnlineDataApi(data).then((resp) => {
         if (resp.code != 1000) {
           Toast.fail("online: ", resp.code);
           return;
         }
-        const fd = resp.data.sort((a, b) => b.online_user - a.online_user);
+        const fd = resp.data.sort((a, b) => b.online - a.online);
         this.setData({
-          groups_data: resp.data,
+          groups_data: fd,
           filter_groups_data: fd,
+          venue_data_filter: fd,
+          venue_data: fd,
         });
         wx.hideLoading();
       }).catch((err) => {
@@ -150,7 +208,23 @@ Component({
     getGroupIdSuffix(gid) {
       return gid.replace("group_id_online_", "");
     },
-    getOnlineDataApi() {
+    userGetOnlineDataApi(data) {
+      return new Promise((resolve, reject) => {
+        wx.request({
+          url: `${this.data.baseUrl}/get-online-data?uid=${this.data.user_id}`,
+          timeout: 10000,
+          method: "POST",
+          data: data, 
+          success: function (res) {
+            resolve(res.data);
+          },
+          fail: function (err) {
+            reject(err)
+          }
+        })
+      });
+    },
+    adminGetOnlineDataApi() {
       return new Promise((resolve, reject) => {
         wx.request({
           url: `${this.data.baseUrl}/get-all-online-data?uid=${this.data.user_id}&key=${this.data.sport_key}&city=${this.data.city}`,
@@ -171,7 +245,8 @@ Component({
         fd = this.data.venue_data.filter(item => {
           const id = item.id.includes(val);
           const title = item.title.includes(val);
-          return id || title;
+          const city = item.city.includes(val);
+          return id || title || city;
         });
       } else {
         fd = this.data.venue_data;
@@ -182,9 +257,11 @@ Component({
       });
     },
     getVal(e) {
-      console.log(e.detail.value);
+      const val = e.detail.value;
+      
       this.setData({
-        value: e.detail.value,
+        value: val,
+        showClear: val ? true : false,
       });
     },
     handleClick() {
@@ -258,8 +335,14 @@ Component({
       socket.onMessage((res) => {
         const msg = JSON.parse(res.data);
         if (msg.content == "") {
+          const fd = this.data.venue_data_filter;
+          const ufd = fd.map(item =>
+            item.id === gid ? { ...item, online: msg.user_count } : item
+          );
           this.setData({
             count: msg.user_count,
+            venue_data_filter: ufd,
+            venue_data: ufd,
           })
         } else {
           const newChatData = this.data.chatData.concat(msg);
@@ -282,7 +365,11 @@ Component({
         return;
       }
       if (this.data.group_id == "") {
-        Toast.fail("点击左侧场地发送寻找球友");
+        Toast.fail({
+          type: 'fail',
+          message: '点击左侧任意场地发送寻找球友',
+          duration: 5000,
+        });
         return;
       }
       const initMsg = {

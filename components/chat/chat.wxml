@@ -5,14 +5,16 @@
       <van-icon custom-class="van-icon-0" name="https://ai.anythingai.online/static/profile3/flush-5.svg" bind:tap="refreshOnlineData"/>
     </view>
     <scroll-view 
-    scroll-y="true" 
-    class="group-id-list"
-    scroll-with-animation 
+      scroll-y="true" 
+      class="group-id-list"
+      scroll-with-animation 
     >
       <block wx:for="{{ venue_data_filter }}" wx:key="index" wx:for-item="item">
         <view class="venue-info">
-          <text class="{{ item.online > 0 ? 'group-name group-chat-font-size online-group' : 'group-name group-chat-font-size'  }}" user-select="true" data-id="{{ item }}" bind:tap="onClickGroupId" style="color:{{item.id==group_id ? '#47c747': ''}}">
-            {{ item.title }}
+          <van-icon name="location" color="{{item.id==group_id ? '#256d64': '#adadad'}}" custom-class="van-icon-1"/>
+          <text class="group-name group-chat-font-size" user-select="true" data-id="{{ item }}" bind:tap="onClickGroupId" style="color:{{item.id==group_id ? '#256d64': ''}}">
+            {{ item.title }}<text style="color:{{item.id==group_id ? '#256d64': '#adadad'}}">({{item.online}})</text>
+            <text wx:if="{{user_id == admin}}" class="city" style="color:{{item.id==group_id ? '#256d64': '#adadad'}}">{{ item.city }}</text>
           </text>
         </view>
       </block>
@@ -20,7 +22,7 @@
   </view>
   <view class="main">
     <view class="chat-title group-chat-font-size ">
-      <text class="sport_team_group">组队群({{count}})</text> 
+      <text class="sport_team_group">组队({{count}})</text> 
       <view class="find-baller">
         <text class="find-baller-notic">可点击左侧场地名然后发送信息寻找组队</text>
       </view>
@@ -31,17 +33,32 @@
     scroll-with-animation 
     scroll-into-view="{{toView}}"
     >
-      <!-- <text class="group-name-bk">寻找球友</text> -->
       <block wx:for="{{ chatData }}" wx:key="index" wx:for-item="item">
         <view id="chat-{{index}}" class="{{ item.sender_id == sender_id ? 'chat-detail chat_my' : 'chat-detail' }}">
-          <view class="user content-fm"><text class="cc ccc" user-select="true">{{ item.nick_name }}</text></view>
-          <view class="content content-fm"><text class="cc" user-select="true">{{ item.content }}</text></view>
-          <view class="time content-fm"><text class="cc ccc" user-select="true">{{ item.time }}</text></view>
+          <view class="user content-fm">
+            <view class="user-img">
+              <van-image use-loading-slot width="100%" round height="100%"  fit="cover" src="{{item.ava_img}}">
+                <van-loading slot="loading" type="spinner" size="20" vertical />
+              </van-image>
+            </view>
+            <view class="user-name">
+              <text class="cc ccc" user-select="true">{{ item.nick_name }}</text>
+            </view>
+          </view>
+          <view class="content content-fm">
+            <text class="cc" user-select="true">{{ item.content }}</text>
+          </view>
+          <view class="time content-fm">
+            <van-icon name="clock-o" color="#adadad" custom-class="van-icon-1" /> <text class="cc ccc" user-select="true">{{ item.time }}</text>
+          </view>
         </view>
       </block>
     </scroll-view>
     <view class="chat-send">
       <input type="text" value="{{ value }}" confirm-type="send" bindinput="getVal" bindconfirm="sendMsg" class="chat-input group-chat-font-size " placeholder="发送"/>
+      <van-transition show="{{ showClear  }}" >
+        <van-icon name="clear" custom-class="van-icon-1" bind:tap="onClose"/>
+      </van-transition>
     </view>
   </view>
 </view>

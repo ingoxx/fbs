@@ -223,9 +223,6 @@
                 <van-icon size="33rpx" custom-class="van-icon-5" name="friends" /><text class="title">组队信息</text>
               </view>
               <view class="join-user-box">
-                <!-- <view class="jut">
-                  <van-icon name="https://ai.anythingai.online/static/profile3/user_list.svg" /> <text class="font-1">组队人数</text>
-                </view> -->
                 <view class="show-join-user" wx:if="{{ item.join_user_count > 0 }}" data-item="{{item.join_users}}">
                   <block wx:for="{{ item.join_users }}" wx:key="index" wx:for-item="item2" wx:for-index="idx">
                     <view class="o-user" style="margin-right:-10px;">
@@ -271,7 +268,7 @@
           <van-icon size="25rpx" name="https://ai.anythingai.online/static/profile3/flush-5.svg" /> <text class="b-c">刷新</text>
         </button>
       </view>
-      <view class="tran-1" wx:if="{{isUse && isShowAllData}}">
+      <view class="tran-1" wx:if="{{isAdminShow && isShowAllData}}">
         <button size="mini" bind:tap="getUserList" class="share-btn">
           <van-icon size="25rpx" name="https://ai.anythingai.online/static/profile3/user_list.svg" /> <text class="b-c">用户</text>
         </button>
@@ -298,9 +295,11 @@
     <view class="tran-2" data-id="1" bind:tap="onSwitchContactBtn">
       <van-icon size="90rpx" color="#256d64" name="https://ai.anythingai.online/static/profile3/side-12.svg" />
     </view>
-    <view class="tran-3" data-id="1" bind:tap="onSwitchContactBtn" wx:if="{{isUse && isShowAllData}}">
-      <text class="msg-num">{{admin == openid ? venue_count : totalData}}</text>
-    </view>
+    <van-transition show="{{isUse && isShowAllData}}" name="fade-down">
+      <view class="tran-3" data-id="1" bind:tap="onSwitchContactBtn" wx:if="{{isUse && isShowAllData}}">
+        <text class="msg-num">{{admin == openid ? venue_count : totalData}}</text>
+      </view>
+    </van-transition>
   </view>
 </view>
 <!-- 一些第三放组件或者自定义的组件 -->
@@ -532,7 +531,7 @@
         />
       </view>
       <view class="user-num">
-        <text>总{{userCount}}用户</text>
+        <text>总{{userCount}}个用户使用过本小程序</text>
       </view>
       <view class="check-box">
         <block wx:for="{{filter_user_list}}" wx:key="index" wx:for-item="item">

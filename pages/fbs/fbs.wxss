@@ -1097,12 +1097,14 @@
   /* 取消默认最小宽度 */
   width: auto !important;
   /* 宽度自适应内容 */
-  max-width: 80vw;
-  /* 避免超出屏幕 */
   padding: 16rpx 24rpx;
   /* 给内容加一些内边距 */
   display: inline-block;
   /* 让背景只包裹内容 */
+  white-space: nowrap !important;
+  /* 关键：禁止换行 */
+  word-wrap: normal !important;
+  /* 禁止强制拆分单词 */
 }
 
 .van-popup-1 .van-popup__close-icon--top-right {

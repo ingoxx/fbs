@@ -101,6 +101,11 @@ Page({
     user_list: [],
     filter_user_list: [],
   },
+  onCloseAllPop() {
+    this.setData({
+      showServiceBtn: false,
+    });
+  },
   onFilterVenueData() {
     const data = this.data.basketSquareFilterData;
     const aid = this.data.isActive;
