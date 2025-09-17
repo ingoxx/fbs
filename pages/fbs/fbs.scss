@@ -4,7 +4,9 @@
   height: 100vh;
   background: #efefef;
   .program-title {
-    background: #256d64;
+    // background: #256d64;
+    background: linear-gradient(135deg, #256d64 0%, #49a093 50%, #b2e5d8 100%);
+    font-family: Arial, sans-serif;
     padding-top: 111rpx;
     color: #fff;
     font-weight: 700;
@@ -13,25 +15,87 @@
     .title-name {
       text-align: center;
     }
-  }
-  .location {
-    display: flex;
-    justify-content: center; /* 水平居中 */
-    align-items: center;     /* 垂直居中 */
-    min-height: 100rpx;
-    flex-shrink: 0;
-    background: #256d64;
-    padding: 0 20rpx;
-    // box-shadow: 0 8px 25px rgba(0, 0, 0, 0.23);
-    .coordinate {
-      color: #ffffff;
-      font-size: 25rpx;
-      line-height: 1.4; // 设置合理的行高，或者具体值如 35rpx
-      word-break: break-word; // 若地址太长可断行
-      white-space: normal;
-      font-weight: 600;
+    .location {
+      display: flex;
+      justify-content: flex-start; /* 水平居中 */
+      align-items: center;     /* 垂直居中 */
+      min-height: 100rpx;
+      flex-shrink: 0;
+      // background: #256d64;
+      padding: 0 20rpx;
+      // box-shadow: 0 8px 25px rgba(0, 0, 0, 0.23);
+      .coordinate {
+        color: #ffffff;
+        font-size: 25rpx;
+        line-height: 1.4; // 设置合理的行高，或者具体值如 35rpx
+        word-break: break-word; // 若地址太长可断行
+        white-space: normal;
+        font-weight: 600;
+      }
+    }
+    .venue-tab-o {
+      // margin: 13rpx 0;
+      margin-bottom: 26rpx;
+      margin-left: 14rpx;
+      .venue-container {
+        // margin: 0 32rpx;
+        .tabs {
+          gap: 28rpx;
+          overflow-x: auto;
+          white-space: nowrap;
+          display: flex;
+          align-items: center;
+          // background: #ffffff;
+          padding: 20rpx 16rpx;
+          border-radius: 24rpx;
+          .tab-label {
+            font-size: 30rpx;
+            font-weight: 700;
+            // color: #adadad;
+            color: #ffffff;
+            position: relative;
+            padding: 16rpx 0;
+            transition: color 0.3s;
+          }
+          .tab-label.active {
+            // color: #256d64;
+            font-weight: 600;
+            transform: scale(1.4286);
+          }
+          .tab-label.active::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            width: 100%;
+            height: 9rpx;
+            background: #dae2cb;
+            border-radius: 4rpx;
+            transform: translateX(-50%) translateX(0rpx);
+            transition: all 0.3s;
+            margin-bottom: 8rpx;
+          }
+        }
+      }
     }
   }
+  // .location {
+  //   display: flex;
+  //   justify-content: flex-start; 
+  //   align-items: center;     
+  //   min-height: 100rpx;
+  //   flex-shrink: 0;
+  //   background: #256d64;
+  //   padding: 0 20rpx;
+  //   .coordinate {
+  //     color: #ffffff;
+  //     font-size: 27rpx;
+  //     line-height: 1.4;
+  //     word-break: break-word;
+  //     white-space: normal;
+  //     font-weight: 600;
+  //   }
+  // }
   .userinfo {
     display: flex;
     height: 80rpx;
@@ -143,7 +207,7 @@
     font-size: 27rpx;
     color: #adadad;
   }
-  .venue-tab {
+  .venue-tab-t {
     margin: 13rpx 0;
     .venue-container {
       margin: 0 32rpx;
@@ -152,20 +216,10 @@
         overflow-x: auto;
         white-space: nowrap;
         display: flex;
-        // justify-content: space-around;
         align-items: center;
         background: #ffffff;
         padding: 20rpx 16rpx;
         border-radius: 24rpx;
-        // box-shadow: 0 8rpx 24rpx rgba(0,0,0,0.05);
-        // .tab-label {
-        //   font-size: 30rpx;
-        //   font-weight: 700;
-        //   color: #adadad;
-        //   position: relative;
-        //   padding: 16rpx 0;
-        //   transition: color 0.3s;
-        // }
         .tab-label {
           font-size: 30rpx;
           font-weight: 700;
@@ -184,7 +238,7 @@
           left: 50%;
           bottom: 0;
           width: 100%;
-          height: 6rpx;
+          height: 9rpx;
           background: #256d64;
           border-radius: 4rpx;
           transform: translateX(-50%) translateX(6rpx);
@@ -200,6 +254,54 @@
       color: #ffff;
       .content {
         color: #000000;
+      }
+    }
+  }
+  .venue-tab-o {
+    // margin: 13rpx 0;
+    // margin-bottom: 26rpx;
+    // margin-left: 14rpx;
+    margin: 0 31rpx;
+    margin-top: 20rpx;
+    .venue-container {
+      display: flex;
+      gap: 20rpx;
+      .tabs {
+        gap: 28rpx;
+        overflow-x: auto;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        // background: #ffffff;
+        padding: 20rpx 16rpx;
+        border-radius: 24rpx;
+        .tab-label {
+          font-size: 30rpx;
+          font-weight: 700;
+          // color: #adadad;
+          color: #51514f;
+          position: relative;
+          padding: 16rpx 0;
+          transition: color 0.3s;
+        }
+        .tab-label.active {
+          color: #256d64;
+          font-weight: 600;
+          // transform: scale(1.4286);
+        }
+        .tab-label.active::after {
+          content: "";
+          position: absolute;
+          left: 50%;
+          bottom: 0;
+          width: 100%;
+          height: 9rpx;
+          background: #256d64;
+          border-radius: 4rpx;
+          transform: translateX(-50%) translateX(0rpx);
+          transition: all 0.3s;
+          margin-bottom: 8rpx;
+        }
       }
     }
   }
@@ -473,6 +575,80 @@
       }
     }
   }
+  .c-box {
+    // background: #dae2cb;
+    background: #fff;
+    padding: 6rpx 16rpx;
+    border-radius: 10rpx;
+    margin: 19rpx 10rpx;
+    .user {
+      display: flex;
+      justify-content: space-between;
+      margin: 10rpx 0;
+      .user1 {
+        display: flex;
+        align-items: center;
+        gap: 9rpx;
+        .nn {
+          font-size: 23rpx;
+          color: #4e4e4e;
+        }
+      }
+      .date1 {
+        font-size: 23rpx;
+        color: #cacaca;
+      }
+    }
+    .title {
+      margin: 10rpx 0;
+      font-weight: 700;
+      font-size: 30rpx;
+    }
+    .date {
+      margin: 10rpx 0;
+      font-size: 23rpx;
+      color: #4e4e4e;
+    }
+    .addr {
+      margin: 10rpx 0;
+      font-size: 23rpx;
+      color: #4e4e4e;
+    }
+    .price {
+      margin: 10rpx 0;
+      font-size: 23rpx;
+      color: #4e4e4e;
+      .p1 {
+        color: #ce5c5c;
+        font-weight: 700;
+      }
+    }
+    .tags {
+      display: flex;
+      gap: 16rpx;
+      font-size: 23rpx;
+      color: #4e4e4e;
+      margin: 10rpx 0;
+      .fm, .num {
+        background: #ffc64a;
+        color: #fff;
+        padding: 2rpx 8rpx;
+        border-radius: 10rpx;
+      }
+    }
+    .accept {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 10rpx 0;
+      .od {
+        font-size: 21rpx;
+        color: #bbbbbb;
+        position: relative;
+        top: 18rpx;
+      }
+    }
+  }
   .basket {
     color: #ffffff;
   }
@@ -481,7 +657,7 @@
     justify-content: space-between;
     align-items: center;
     position: fixed;
-    top: 32%;
+    top: 47%;
     z-index: 100;
     .tran-1 {
       .msg-num {
@@ -699,6 +875,12 @@
   position: relative;
   bottom: 3rpx;
   color: #ff6161;
+}
+.van-icon-1-1 {
+  position: relative;
+  bottom: 3rpx;
+  color: #ff6161;
+  font-size: 37rpx!important;
 }
 .van-icon-2 {
   font-size: 35rpx!important;
@@ -981,6 +1163,26 @@
     margin: 19rpx 0;
   }
 }
+.pop-box-2 {
+  display: flex;
+  gap: 81rpx;
+  align-items: center;
+  .pop-content-1 {
+    margin: 16rpx 14rpx;
+    .notic {
+      color: red;
+    }
+    .req {
+      color: #646566;
+      padding-left: 4rpx;
+      font-size: 28rpx;
+    }
+  }
+  .pop-content-2 {
+    display: flex;
+    gap: 29rpx;
+  }
+}
 
 .van-pop-2 {
   background-color: #fdfdfd;
@@ -1004,4 +1206,10 @@
   right: var(--popup-close-icon-margin,10px);
   top: var(--popup-close-icon-margin,6px);
   font-size: 28rpx;
+}
+.van-check-1 {
+  .van-checkbox__label {
+    padding-left: 9rpx!important;
+    font-size: 27rpx!important;
+  }
 }

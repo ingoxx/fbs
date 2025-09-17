@@ -1,18 +1,62 @@
 <view class="box">
-  <!-- <view class="program-title">
+  <!-- 顶部 -->
+  <view class="program-title">
     <view class="title-name">
-      <text>运动记录</text>
     </view>
-  </view> -->
+    <!-- 定位 -->
+    <view class="location">
+      <block wx:if="{{ addr == '未获取位置' }}">
+        <van-icon name="location" custom-class="van-icon-l"/> <text class="coordinate" >{{ addr }}</text>
+      </block>
+      <block wx:else>
+        <van-icon name="location" custom-class="van-icon-1-1"/> <text class="coordinate" bind:tap="openMapApp">{{ addr }}</text> 
+      </block>
+    </view>
+    <!-- tab页 -->
+    <!-- <view class="venue-tab-o">
+      <view class="venue-container"> 
+        <view class="tabs">
+          <block wx:for="{{titles}}" wx:key="index" wx:for-item="item">
+            <view 
+              class="tab-label {{item.id === isActiveTitle ? 'active' : ''}}" 
+              bindtap="onConfirmSportSelection2" 
+              data-id="{{item.id}}"
+            >
+              {{item.name}}
+            </view>
+          </block>
+        </view>
+      </view>
+    </view> -->
+  </view>
   <!-- 定位 -->
-  <view class="location">
+  <!-- <view class="location">
     <block wx:if="{{ addr == '未获取位置' }}">
       <van-icon name="location" custom-class="van-icon-l"/> <text class="coordinate" >{{ addr }}</text>
     </block>
     <block wx:else>
-      <van-icon name="location" custom-class="van-icon-l"/> <text class="coordinate" bind:tap="openMapApp">您现在的位置: 【{{ addr }}】</text> 
+      <van-icon name="location" custom-class="van-icon-l"/> <text class="coordinate" bind:tap="openMapApp">{{ addr }}</text> 
     </block>
-  </view>
+  </view> -->
+  <!-- tab页 -->
+  <!-- <view class="venue-tab">
+    <view class="venue-container"> 
+      <view class="tabs">
+        <view 
+            class="tab-label active" 
+            bindtap="onConfirmSportSelection1" 
+          >
+          场地
+        </view>
+        <view 
+            class="tab-label active" 
+            bindtap="onConfirmSportSelection1" 
+          >
+          陪练
+        </view>
+      </view>
+    </view>
+  </view> -->
   <!-- 搜索场地 -->
   <view class="search">
     <view class="s-p">
@@ -36,7 +80,7 @@
     </view>
   </view>
   <!-- 场地选择 -->
-  <view class="venue-tab">
+  <view class="venue-tab-t">
     <view class="venue-container"> 
       <view class="tabs">
         <block wx:for="{{all_sport_list}}" wx:key="index" wx:for-item="item">
@@ -46,7 +90,7 @@
             data-index="{{index}}"
             data-item="{{item}}"
           >
-          <van-icon custom-class="van-icon-9"  name="{{item.sport_img}}" />{{item.title}}
+            <van-icon custom-class="van-icon-9"  name="{{item.sport_img}}" />{{item.title}}
           </view>
         </block>
       </view>
@@ -58,8 +102,18 @@
       <van-icon custom-class="van-icon-6" color="#efefef" name="https://ai.anythingai.online/static/profile3/data-2.svg" /><text class="content">目前最多展示{{totalData}}条场地信息</text>
     </view>
   </view>
+  <!-- 练习 -->
+  <view class="venue-tab-o">
+    <view class="venue-container"> 
+      <block wx:for="{{titles}}" wx:key="index" wx:for-item="item">
+          <van-button type="default" round custom-style="width:150rpx;color:{{item.id === isActiveTitle ? '#ffffff' : ''}}" color="{{item.id === isActiveTitle ? '#256d64' : ''}}" size="small" data-id="{{item.id}}" bind:tap="onConfirmSportSelection2">{{item.name}}</van-button>
+      </block>
+    </view>
+  </view>
   <!-- 展示附近场地 -->
   <view class="card-1">
+    <!-- 场地数据 -->
+    <van-transition show="{{!isSwitchData}}" custom-class="block" name="fade-left">
     <block wx:for="{{ basketSquareFilterData }}" wx:key="index" wx:for-item="item">
       <van-transition show="{{ isUse }}" custom-class="block">
         <view class="card-1-1">
@@ -213,8 +267,8 @@
             <van-button round color="#256d64" size="small" type="{{ item.hasJoined ? 'info' : 'warning' }}" custom-style="width:218rpx" data-item="{{ item }}" bind:tap="joinSportGroup">
               <van-icon size="30rpx" custom-class="van-icon-5 van-icon-8" name="https://ai.anythingai.online/static/profile3/light.svg" />{{item.hasJoined ? '退出组队' : '加入组队'}}({{item.join_user_count}})
             </van-button>
-            <van-button round color="#256d64" size="small" data-index="{{index}}" custom-style="width:270rpx" data-item="{{ item }}"  bindtap="toggleShowVenueImg">
-              <van-icon size="30rpx" custom-class="van-icon-5" name="https://ai.anythingai.online/static/profile3/click-3.svg" /><text class="group_title">获取更多场地图片</text>
+            <van-button round color="#256d64" size="small" data-index="{{index}}" custom-style="width:270rpx" data-item="{{ item }}"  bindtap="toggleShowVenueImg1">
+              <van-icon size="30rpx" custom-class="van-icon-5" name="https://ai.anythingai.online/static/profile3/click-3.svg" /><text class="group_title">发布付费陪练</text>
             </van-button>
           </view>
           <van-transition show="{{ item.join_user_count > 0  }}" name="fade-right" >
@@ -251,6 +305,55 @@
         </view>
       </van-transition>
     </block>
+  </van-transition>
+    <!-- 练习数据 -->
+    <van-transition show="{{isSwitchData}}" custom-class="block" name="fade-left">
+    <block wx:for="{{ spData }}" wx:key="index" wx:for-item="item">
+      <view class="c-box">
+        <view class="user">
+          <view class="user1">
+            <van-image use-loading-slot 
+              data-src="{{item.img}}" 
+              custom-class="van-img-1" radius="10" fit="cover"
+              src="{{item.img}}" 
+              >
+              <van-loading slot="loading" type="spinner" size="20" vertical />
+             </van-image>
+             <text class="nn">{{item.nick_name}}</text>
+          </view>
+          <view class="date1">
+            <text>发布于{{item.publish_date}}</text>
+          </view>
+        </view>
+        <view class="title">
+          <text>{{item.content}}</text>
+        </view>
+        <view class="date">
+          <van-icon size="25rpx" name="clock" /><text>{{item.date}}</text>
+        </view>
+        <view class="addr">
+          <van-icon size="25rpx" name="location" /><text>{{item.addr}}</text>
+        </view>
+        <view class="price">
+          <van-icon size="25rpx" name="gold-coin" /><text class="p1">{{item.price}}</text>
+        </view>
+        <view class="tags">
+          <view class="fm">
+            <text>{{item.gender_req}}</text>
+          </view>
+          <view class="num">
+            <text>需要{{item.players}}人</text>
+          </view>
+        </view>
+        <view class="accept">
+          <view class="od">
+            <van-icon size="21rpx" name="like" /><text>快去抢单吧</text>
+          </view>
+          <van-button type="default" round custom-style="width:180rpx;" color="#256d64" size="small" data-id="{{item.id}}" >沟通</van-button>
+        </view>
+      </view>
+    </block>
+  </van-transition>
     <block wx:if="{{ isEmpty }}">
       <van-empty description="{{ isUse ? useNotice: '请先阅读注意事项' }}"></van-empty>
     </block>
@@ -281,6 +384,11 @@
       <view class="tran-1" wx:if="{{isUse && isShowAllData}}">
         <button size="mini" bind:tap="openAddAddrPop" class="share-btn">
           <van-icon size="25rpx" name="https://ai.anythingai.online/static/profile3/add_addr.svg" /> <text class="b-c">添加</text>
+        </button>
+      </view>
+      <view class="tran-1" wx:if="{{isUse && isShowAllData}}">
+        <button size="mini" bind:tap="openAddAddrPop" class="share-btn">
+          <van-icon size="25rpx" name="https://ai.anythingai.online/static/profile3/pub.svg" /> <text class="b-c">发布</text>
         </button>
       </view>
       <view class="tran-1" wx:if="{{isUse && isShowAllData}}">
@@ -661,7 +769,7 @@
   <!-- 筛选 -->
   <van-popup
   show="{{ showChoose }}"
-  position="top"
+  position="bottom"
   custom-class="van-pop-2"
   bind:close="onClose"
   closeable
@@ -688,6 +796,109 @@
       <view class="confirm">
         <van-button color="#fd6303" size="small" custom-style="width:185rpx;border-radius: 10rpx" bind:click="onFilterVenueData">
           确认
+        </van-button>
+      </view>
+    </view>
+  </van-popup>
+  <van-popup
+    show="{{ showSpPop }}"
+    round
+    custom-style="width: 80%;"
+    bind:close="onClose"
+    closeable
+  >
+    <view class="privacy-title">
+      <text>发布付费陪练信息</text>
+    </view>
+    <van-cell-group>
+      <van-field
+        value="{{ sp_content }}"
+        required
+        clearable
+        autosize
+        type="textarea"
+        label="陪练内容"
+        placeholder="如:帮捡球,技术指导,1v1对练等等"
+        border="{{ true }}"
+        confirm-type="done"
+        bind:change="onChangeSpContentField"
+      />
+      <van-field
+        value="{{ sp_price }}"
+        required
+        clearable
+        autosize
+        type="textarea"
+        label="陪练价格"
+        placeholder="如: 20元/时"
+        border="{{ true }}"
+        confirm-type="done"
+        bind:change="onChangeSpPriceField"
+      />
+      <van-field
+        value="{{ sp_time }}"
+        required
+        clearable
+        autosize
+        type="textarea"
+        label="陪练时间"
+        placeholder="如: 2025-09-17 16:30:30"
+        border="{{ true }}"
+        confirm-type="done"
+        bind:change="onChangeSpReqField"
+      />
+      <van-field
+        value="{{ sp_players }}"
+        required
+        clearable
+        autosize
+        type="textarea"
+        label="陪练人数"
+        placeholder="如: 1人"
+        border="{{ true }}"
+        confirm-type="done"
+        bind:change="onChangeSpPlayersField"
+      />
+      <view class="pop-box-2">
+        <view class="pop-content-1">
+          <text class="notic">*</text>
+          <text class="req">性别要求</text>
+        </view>
+        <view class="pop-content-2">
+          <van-checkbox custom-class="van-check-1" icon-size="27rpx" value="{{ mChecked }}" shape="square" data-id="1" bind:change="onChangeGender">
+            <van-icon size="29rpx" custom-class="van-icon-5" name="https://ai.anythingai.online/static/profile3/male.svg" />
+          </van-checkbox>
+          <van-checkbox custom-class="van-check-1" icon-size="27rpx" value="{{ fmChecked }}" shape="square" data-id="2" bind:change="onChangeGender">
+            <van-icon size="29rpx" custom-class="van-icon-5" name="https://ai.anythingai.online/static/profile3/female.svg" />
+          </van-checkbox>
+        </view>
+      </view>
+      <!-- <view class="add-square-img">
+        <view class="title">
+          <text>添加场地图片目前只能传1张</text>
+        </view>
+        <view class="img">
+          <van-uploader 
+          max-count="1"
+          multiple
+          preview-image
+          deletable
+          file-list="{{ fileList }}" 
+          bind:after-read="afterRead" 
+          bind:delete="deleteImg"
+          />
+        </view>
+      </view> -->
+    </van-cell-group>
+    <view class="dialog-btn">
+      <view class="cancel">
+        <van-button round  data-index="{{index}}" custom-style="width:218rpx" bind:tap="onSet">
+          <text class="group_title">重置</text>
+        </van-button>
+      </view>
+      <view class="confirm" bind:tap="onConfirmPublishSp">
+        <van-button round custom-style="width:218rpx" >
+          <text class="group_title">发布</text>
         </van-button>
       </view>
     </view>

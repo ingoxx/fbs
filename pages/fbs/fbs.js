@@ -12,6 +12,21 @@ import Dialog from '@vant/weapp/dialog/dialog';
 const md5 = require('../../utils/md5');
 Page({
   data: {
+    isSwitchData: false,
+    sp_time: "",
+    titleName: "",
+    isActiveTitle: 3,
+    titles: [
+      {id: 3, name: "场地"},
+      {id: 4, name: "陪练"},
+    ],
+    mChecked: false,
+    fmChecked: false,
+    showSpPop: false,
+    sp_players: "",
+    sp_content: "",
+    sp_price: "",
+    sp_required: "",
     venue_count: 0,
     admin: "",
     isLock: false,
@@ -100,6 +115,90 @@ Page({
     images: [],
     user_list: [],
     filter_user_list: [],
+    spData: [
+      {id: "1", nick_name: "深圳吴彦祖", img: "https://ai.anythingai.online/static/profile3/1527.png", publish_date: "09-15", content: "需要2个帮捡球", date: "2025-09-20 16:30 周六", addr: "顶峰篮球俱乐部龙华分店", price: "20元/小时", gender_req: "男女都可以", players: "2"},
+      {id: "2", nick_name: "铁王", img: "https://ai.anythingai.online/static/profile3/1047.png", publish_date: "09-11", content: "需要5v5对抗训练,还缺两个人", date: "2025-09-19 18:30 周五", addr: "深圳湾体育中心", price: "25元/小时", gender_req: "仅限男", players: "2"},
+      {id: "3", nick_name: "三不沾阿三", img: "https://ai.anythingai.online/static/profile3/1684.png", publish_date: "09-14", content: "百分单挑局输赢都给100", date: "2025-09-21 19:30 周日", addr: "东岸天台篮球场", price: "100元/局", gender_req: "仅限男", players: "1"},
+    ],
+  },
+  onConfirmSportSelection2(e) {
+    const id = e.currentTarget.dataset.id;
+    this.setData({
+      isActiveTitle: id,
+      isSwitchData: !this.data.isSwitchData,
+    })
+  },
+  onChangeGender(e) {
+    const id = e.currentTarget.dataset.id;
+    if (id == 1) {
+      this.setData({
+        mChecked: !this.data.mChecked,
+      });
+    } else if (id == 2) {
+      this.setData({
+        fmChecked: !this.data.fmChecked,
+      });
+    }
+  },
+
+  onSet() {
+    this.setData({
+      sp_content: "",
+      sp_price: "",
+      sp_required: "",
+      sp_players: "",
+      sp_time: "",
+      mChecked: false,
+      fmChecked: false,
+    });
+  },
+  onChangeSpPlayersField(e) {
+    const value = e.detail;
+    this.setData({sp_players: value});
+  },
+  onChangeSpContentField(e) {
+    const value = e.detail;
+    this.setData({sp_content: value});
+  },
+  onChangeSpPriceField(e) {
+    const value = e.detail;
+    this.setData({sp_price: value});
+  },
+  onChangeSpReqField(e) {
+    const value = e.detail;
+    this.setData({sp_time: value});
+  },
+  onConfirmPublishSp(e) {
+    if (!this.data.sp_content) {
+      Toast.fail("请输入陪练内容");
+      return;
+    }
+
+    if (!this.data.sp_price) {
+      Toast.fail("请输入陪练价格");
+      return;
+    }
+
+    if (!this.data.sp_required) {
+      Toast.fail("请输入陪练要求");
+      return;
+    }
+
+    if (!this.data.sp_players) {
+      Toast.fail("请输入陪练人数");
+      return;
+    }
+
+    Dialog.confirm({
+      title: "",
+      message: "确定发布吗？",
+    }).then(() => {
+        Toast.success("发布成功");
+        this.onClose();
+      })
+      .catch(() => {
+        Toast.success("已取消发布");
+      });
   },
   onCloseAllPop() {
     this.setData({
@@ -463,6 +562,11 @@ Page({
     this.toggleShowVenueImg(e);
     this.getAddrDistance();
     Toast.clear();
+  },
+  toggleShowVenueImg1(e) {
+    this.setData({
+      showSpPop: true,
+    })
   },
   toggleShowVenueImg(e) {
     if (!this.data.isShowAllData) {
@@ -1327,6 +1431,7 @@ Page({
       showCheckList: false, 
       showSportsList: false,
       showChoose: false,
+      showSpPop: false,
     });
   },
   onClearInput(e) {
@@ -1567,6 +1672,8 @@ Page({
         totalData: processedList.length,
         isShowAllData: allData.data,
         loadText: "获取数据中...",
+        isSwitchData: false,
+        isActiveTitle: 3,
       });
       this.showGoodBtn();
       this.getBasketSquareFilter();
@@ -1651,20 +1758,20 @@ Page({
     });
   },
   // 设置当前页的标题
-  setNavigatInfo() {
-    wx.setNavigationBarColor({
-      frontColor: "#ffffff",
-      backgroundColor: "#256d64",
-    });
-    wx.setNavigationBarTitle({
-      title: app.globalData.title,
-    });
-  },
+  // setNavigatInfo() {
+  //   wx.setNavigationBarColor({
+  //     frontColor: "#ffffff",
+  //     backgroundColor: "#256d64",
+  //   });
+  //   wx.setNavigationBarTitle({
+  //     title: "",
+  //   });
+  // },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    this.setNavigatInfo();
+    // this.setNavigatInfo();
     this.getOpenid();
     this.getSportType();
   },

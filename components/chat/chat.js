@@ -93,7 +93,7 @@ Component({
       if (user_id == app.globalData.admin) {
         this.adminGetOnlineDataApi().then((resp) => {
           if (resp.code != 1000) {
-            Toast.fail("online: ", resp.code);
+            Toast.fail("online err 4: ", resp.code);
             return;
           }
           const fd = resp.data.sort((a, b) => b.online - a.online);
@@ -105,7 +105,7 @@ Component({
           });
    
         }).catch((err) => {
-          Toast.fail("online err: ", err);
+          Toast.fail("online err 3: ", err);
         })
       } else {
         // user
@@ -114,7 +114,7 @@ Component({
         const data = JSON.stringify({id: ids});
         this.userGetOnlineDataApi(data).then((resp) => {
           if (resp.code != 1000) {
-            Toast.fail("online: ", resp.code);
+            Toast.fail("online err 1: ", resp.code);
             return;
           }
           const fd = resp.data.sort((a, b) => b.online - a.online);
@@ -126,7 +126,7 @@ Component({
           });
           wx.hideLoading();
         }).catch((err) => {
-          Toast.fail("online err: ", err);
+          Toast.fail("online err 2: ", err);
           wx.hideLoading();
         })
       }
@@ -165,7 +165,7 @@ Component({
       if (this.data.user_id == app.globalData.admin) {
         this.adminGetOnlineDataApi().then((resp) => {
           if (resp.code != 1000) {
-            Toast.fail("online: ", resp.code);
+            Toast.fail("online err 8: ", resp.code);
             return;
           }
           const fd = resp.data.sort((a, b) => b.online - a.online);
@@ -177,7 +177,7 @@ Component({
           });
           wx.hideLoading();
         }).catch((err) => {
-          Toast.fail("online err: ", err);
+          Toast.fail("online err 7: ", err);
           wx.hideLoading();
         });
 
@@ -201,7 +201,7 @@ Component({
         });
         wx.hideLoading();
       }).catch((err) => {
-        Toast.fail("online err: ", err);
+        Toast.fail("online err 6: ", err);
         wx.hideLoading();
       })
     },
