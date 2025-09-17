@@ -554,14 +554,20 @@ Page({
     }
    const resp = await this.userAddAddrReqApi(ad);
    if (resp.code != 1000) {
-      Notify({ type: 'danger', message: resp.msg ? resp.msg : "操作失败, 请联系管理员", duration: 20000 });
-      Toast.clear();
+      // Notify({ type: 'danger', message: resp.msg ? resp.msg : "操作失败, 请联系管理员", duration: 20000 });
+      Toast({ type: 'fail', message: resp.msg ? resp.msg : "操作失败, 请联系管理员", duration: 8000 });
+      setTimeout(() => {
+        Toast.clear();
+      },8000);
       return;
     }
-    Notify({type: "success", message: "非常感谢您做出的巨大贡献，图片生效需要几分钟", duration: 3000});
+    // Notify({type: "success", message: "非常感谢您做出的巨大贡献，图片生效需要几分钟", duration: 3000});
+    Toast({ type: 'success', message: "跪谢，图片生效需要几分钟", duration: 3000 });
     this.toggleShowVenueImg(e);
     this.getAddrDistance();
-    Toast.clear();
+    setTimeout(() => {
+      Toast.clear();
+    },8000);
   },
   toggleShowVenueImg1(e) {
     this.setData({
