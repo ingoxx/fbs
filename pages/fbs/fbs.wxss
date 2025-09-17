@@ -599,7 +599,7 @@
 }
 
 .box .c-box {
-  background: #fff;
+  background: #dae2cb;
   padding: 6rpx 16rpx;
   border-radius: 10rpx;
   margin: 19rpx 10rpx;

@@ -106,7 +106,9 @@
   <view class="venue-tab-o">
     <view class="venue-container"> 
       <block wx:for="{{titles}}" wx:key="index" wx:for-item="item">
-          <van-button type="default" round custom-style="width:150rpx;color:{{item.id === isActiveTitle ? '#ffffff' : ''}}" color="{{item.id === isActiveTitle ? '#256d64' : ''}}" size="small" data-id="{{item.id}}" bind:tap="onConfirmSportSelection2">{{item.name}}</van-button>
+          <van-button type="default" round custom-style="width:150rpx;color:{{item.id === isActiveTitle ? '#ffffff' : ''}}" color="{{item.id === isActiveTitle ? '#256d64' : ''}}" size="small" data-id="{{item.id}}" bind:tap="onConfirmSportSelection2">
+            {{item.name}}
+          </van-button>
       </block>
     </view>
   </view>
@@ -349,7 +351,9 @@
           <view class="od">
             <van-icon size="21rpx" name="like" /><text>快去抢单吧</text>
           </view>
-          <van-button type="default" round custom-style="width:180rpx;" color="#256d64" size="small" data-id="{{item.id}}" >沟通</van-button>
+          <van-button type="default" round custom-style="width:180rpx;" color="#256d64" size="small" data-id="{{item.id}}" >
+            <van-icon size="30rpx" custom-class="van-icon-5 van-icon-8" name="https://ai.anythingai.online/static/profile3/user-con-2.svg" /> 沟通
+          </van-button>
         </view>
       </view>
     </block>

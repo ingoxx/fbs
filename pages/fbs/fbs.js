@@ -17,8 +17,8 @@ Page({
     titleName: "",
     isActiveTitle: 3,
     titles: [
-      {id: 3, name: "场地"},
-      {id: 4, name: "陪练"},
+      {id: 3, name: "场地", icon:"https://ai.anythingai.online/static/profile3/venue.svg"},
+      {id: 4, name: "陪练", icon:"https://ai.anythingai.online/static/profile3/sp-1.svg"},
     ],
     mChecked: false,
     fmChecked: false,
