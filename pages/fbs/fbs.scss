@@ -587,7 +587,8 @@
       margin: 10rpx 0;
       .user1 {
         display: flex;
-        align-items: center;
+        align-items: flex-end;
+        // align-items: center;
         gap: 9rpx;
         .nn {
           font-size: 23rpx;
@@ -596,7 +597,7 @@
       }
       .date1 {
         font-size: 23rpx;
-        color: #cacaca;
+        color: #888888;
       }
     }
     .title {
@@ -610,11 +611,20 @@
       color: #4e4e4e;
     }
     .addr {
+      position: relative;
+      right: 3rpx;
       margin: 10rpx 0;
       font-size: 23rpx;
       color: #4e4e4e;
+      .deri {
+        font-size: 17rpx;
+        padding-left: 14rpx;
+        color: #888888;
+      }
     }
     .price {
+      position: relative;
+      left: 2rpx;
       margin: 10rpx 0;
       font-size: 23rpx;
       color: #4e4e4e;
@@ -630,6 +640,7 @@
       color: #4e4e4e;
       margin: 10rpx 0;
       .fm, .num {
+        display: flex;
         background: #ffc64a;
         color: #fff;
         padding: 2rpx 8rpx;
@@ -643,9 +654,13 @@
       margin: 10rpx 0;
       .od {
         font-size: 21rpx;
-        color: #bbbbbb;
+        color: #888888;
         position: relative;
         top: 18rpx;
+      }
+      .control {
+        display: flex;
+        gap: 18rpx;
       }
     }
   }
@@ -821,7 +836,7 @@
   margin: 0 auto;
 }
 .van-empty__description {
-  color: #dcdcdc!important;
+  color: #a9a9a9!important;
 }
 .van-dialog-c .van-dialog__footer{
   text-align: center!important;
@@ -1120,6 +1135,11 @@
   position: relative!important;
   font-size: 35rpx!important;
   top: 8rpx!important;
+}
+.van-icon-10 {
+  position: relative;
+  top: 5rpx;
+  // bottom: 5rpx;
 }
 .van-tab-1 {
   .van-tabs--line {

@@ -15,6 +15,30 @@ const generateUUID = (() => {
 
   return s.join("");
 })
+
+const isValidDateTime = ((str) => {
+  // 1. 初步格式校验：YYYY-MM-DD HH:MM:SS
+  const regex = /^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])\s(0\d|1\d|2[0-3]):([0-5]\d):([0-5]\d)$/;
+  const match = str.match(regex);
+  if (!match) return false;
+
+  // 2. 进一步校验是否是合法日期（如2月29日、闰年等）
+  const year = parseInt(match[1], 10);
+  const month = parseInt(match[2], 10) - 1; // JS月份从0开始
+  const day = parseInt(match[3], 10);
+
+  const date = new Date(year, month, day);
+  // 检查：年月日是否匹配
+  if (
+    date.getFullYear() !== year ||
+    date.getMonth() !== month ||
+    date.getDate() !== day
+  ) {
+    return false;
+  }
+  return true;
+})
+
 const checkUpdate = (() => {
   if (wx.canIUse('getUpdateManager')) {
     const updateManager = wx.getUpdateManager();
@@ -105,5 +129,6 @@ module.exports = {
   stringToTimestamp,
   checkUpdate,
   storage,
+  isValidDateTime,
 }
 

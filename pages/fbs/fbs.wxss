@@ -613,7 +613,7 @@
 
 .box .c-box .user .user1 {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   gap: 9rpx;
 }
 
@@ -624,7 +624,7 @@
 
 .box .c-box .user .date1 {
   font-size: 23rpx;
-  color: #cacaca;
+  color: #888888;
 }
 
 .box .c-box .title {
@@ -640,12 +640,22 @@
 }
 
 .box .c-box .addr {
+  position: relative;
+  right: 3rpx;
   margin: 10rpx 0;
   font-size: 23rpx;
   color: #4e4e4e;
 }
 
+.box .c-box .addr .deri {
+  font-size: 17rpx;
+  padding-left: 14rpx;
+  color: #888888;
+}
+
 .box .c-box .price {
+  position: relative;
+  left: 2rpx;
   margin: 10rpx 0;
   font-size: 23rpx;
   color: #4e4e4e;
@@ -665,6 +675,7 @@
 }
 
 .box .c-box .tags .fm, .box .c-box .tags .num {
+  display: flex;
   background: #ffc64a;
   color: #fff;
   padding: 2rpx 8rpx;
@@ -680,9 +691,14 @@
 
 .box .c-box .accept .od {
   font-size: 21rpx;
-  color: #bbbbbb;
+  color: #888888;
   position: relative;
   top: 18rpx;
+}
+
+.box .c-box .accept .control {
+  display: flex;
+  gap: 18rpx;
 }
 
 .box .basket {
@@ -879,7 +895,7 @@
 }
 
 .van-empty__description {
-  color: #dcdcdc !important;
+  color: #a9a9a9 !important;
 }
 
 .van-dialog-c .van-dialog__footer {
@@ -1217,6 +1233,11 @@
   position: relative !important;
   font-size: 35rpx !important;
   top: 8rpx !important;
+}
+
+.van-icon-10 {
+  position: relative;
+  top: 5rpx;
 }
 
 .van-tab-1 .van-tabs--line {

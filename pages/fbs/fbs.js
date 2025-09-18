@@ -7,18 +7,19 @@ const { BASE_URL } = require('../../utils/http');
 const { IMG_URL } = require('../../utils/http');
 import Notify from '@vant/weapp/notify/notify';
 import Toast from '@vant/weapp/toast/toast';
-const { generateUUID, stringToTimestamp, getCurrentTime, storage } = require('../../utils/util'); 
+const { generateUUID, stringToTimestamp, getCurrentTime, storage, isValidDateTime } = require('../../utils/util'); 
 import Dialog from '@vant/weapp/dialog/dialog';
 const md5 = require('../../utils/md5');
 Page({
   data: {
+    p_data: {addr: "", lng: "", lat: "", title: ""},
     isSwitchData: false,
     sp_time: "",
     titleName: "",
     isActiveTitle: 3,
     titles: [
-      {id: 3, name: "场地", icon:"https://ai.anythingai.online/static/profile3/venue.svg"},
-      {id: 4, name: "陪练", icon:"https://ai.anythingai.online/static/profile3/sp-1.svg"},
+      {id: 3, name: "场地", icon:"https://ai.anythingai.online/static/profile3/venue-7.svg"},
+      {id: 4, name: "陪练", icon:"https://ai.anythingai.online/static/profile3/sp-11.svg"},
     ],
     mChecked: false,
     fmChecked: false,
@@ -115,18 +116,83 @@ Page({
     images: [],
     user_list: [],
     filter_user_list: [],
+    spDataNum: 1,
     spData: [
-      {id: "1", nick_name: "深圳吴彦祖", img: "https://ai.anythingai.online/static/profile3/1527.png", publish_date: "09-15", content: "需要2个帮捡球", date: "2025-09-20 16:30 周六", addr: "顶峰篮球俱乐部龙华分店", price: "20元/小时", gender_req: "男女都可以", players: "2"},
-      {id: "2", nick_name: "铁王", img: "https://ai.anythingai.online/static/profile3/1047.png", publish_date: "09-11", content: "需要5v5对抗训练,还缺两个人", date: "2025-09-19 18:30 周五", addr: "深圳湾体育中心", price: "25元/小时", gender_req: "仅限男", players: "2"},
-      {id: "3", nick_name: "三不沾阿三", img: "https://ai.anythingai.online/static/profile3/1684.png", publish_date: "09-14", content: "百分单挑局输赢都给100", date: "2025-09-21 19:30 周日", addr: "东岸天台篮球场", price: "100元/局", gender_req: "仅限男", players: "1"},
+      {id: "1", is_del: false, user_id: "ogR3E62jXXJMbVcImRqMA1gTSegM1", nick_name: "吴艳祖深圳分祖", img: "https://ai.anythingai.online/static/profile3/1527.png", publish_date: "09-15", content: "需要2个帮捡球", date: "2025-09-20 16:30 周六", addr: "深圳市顶峰篮球俱乐部龙华分店", price: "20元/小时", gender_req: "男女都可以", players: "需要2人", city: "深圳市"},
+      {id: "2", is_del: false,  user_id: "ogR3E62jXXJMbVcImRqMA1gTSegM", nick_name: "深圳打铁王", img: "https://ai.anythingai.online/static/profile3/1047.png", publish_date: "09-11", content: "需要5v5对抗训练,还缺两个人", date: "2025-09-19 18:30 周五", addr: "深圳市深圳湾体育中心", price: "25元/小时", user_id: "", gender_req: "仅限男", players: "需要2人", city: "深圳市"},
+      {id: "3", is_del: false,  user_id: "ogR3E62jXXJMbVcImRqMA1gTSegM", nick_name: "裤里的4分球", img: "https://ai.anythingai.online/static/profile3/1684.png", publish_date: "09-14", content: "百分单挑局输赢都给100", date: "2025-09-21 19:30 周日", addr: "深圳市东岸天台篮球场", price: "100元/局", gender_req: "仅限男", players: "需要1人", city: "深圳市"},
+      {id: "4", is_del: false,  user_id: "ogR3E62jXXJMbVcImRqMA1gTSegM", nick_name: "天上掉了个篮球", img: "https://ai.anythingai.online/static/profile3/1685.png", publish_date: "09-12", content: "需要一名篮球裁判", date: "2025-09-21 19:30 周日", addr: "深圳市东岸天台篮球场", price: "50元/场", gender_req: "仅限男", players: "需要1人", city: "深圳市"},
     ],
+  },
+  async put_out() {
+    var gender_req = ""
+    const pd = this.data.p_data;
+    if (this.data.mChecked) {
+      gender_req = "仅限男性";
+    }
+    if (this.data.fmChecked) {
+      gender_req = "仅限女性";
+    }
+    if (this.data.mChecked && this.data.fmChecked) {
+      gender_req = "男女都可以";
+    }
+    if (!this.data.mChecked && !this.data.fmChecked) {
+      gender_req = "男女都可以";
+    }
+    const data = {
+        id:"1",
+        user_id: this.data.openid,
+        nick_name: this.data.nick_name,
+        img: this.data.avatarUrl,
+        content: this.data.sp_content,
+        addr: pd.addr,
+        price: this.data.sp_price,
+        gender_req: gender_req,
+        players: `需要${this.data.sp_players}人`,
+        city: this.data.city,
+        sport_key: this.data.defaultSportKey,
+        lng: pd.lng,
+        lat: pd.lat,
+        title: pd.title
+    }
+
+    try {
+      const resp = await this.put_out_api(data);
+      if (resp.code != 1000) {
+        Toast.fail("发布失败: ", resp.code);
+        return;
+      }
+      this.setData({
+        spData: resp.data,
+      });
+    } catch (error) {
+      Toast.fail("发布失败: ", resp.code);
+    }
+  },
+  put_out_api(data) {
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: `${this.data.baseUrl}/add-publish-data?uid=${this.data.user_id}`,
+        timeout: 10000,
+        method: "POST",
+        data: data,
+        success: function (res) {
+          resolve(res.data);
+        },
+        fail: function (err) {
+          reject(err)
+        }
+      })
+    });
   },
   onConfirmSportSelection2(e) {
     const id = e.currentTarget.dataset.id;
-    this.setData({
-      isActiveTitle: id,
-      isSwitchData: !this.data.isSwitchData,
-    })
+    if (this.data.isActiveTitle != id) {
+      this.setData({
+        isActiveTitle: id,
+        isSwitchData: !this.data.isSwitchData,
+      })
+    }
   },
   onChangeGender(e) {
     const id = e.currentTarget.dataset.id;
@@ -168,7 +234,7 @@ Page({
     const value = e.detail;
     this.setData({sp_time: value});
   },
-  onConfirmPublishSp(e) {
+  async onConfirmPublishSp(e) {
     if (!this.data.sp_content) {
       Toast.fail("请输入陪练内容");
       return;
@@ -179,8 +245,13 @@ Page({
       return;
     }
 
-    if (!this.data.sp_required) {
-      Toast.fail("请输入陪练要求");
+    if (!this.data.sp_time) {
+      Toast.fail("请输入陪练时间");
+      return;
+    }
+
+    if (!isValidDateTime(this.data.sp_time)) {
+      Toast.fail("输入的时间格式不对");
       return;
     }
 
@@ -192,9 +263,58 @@ Page({
     Dialog.confirm({
       title: "",
       message: "确定发布吗？",
-    }).then(() => {
+    }).then(async () => {
+      Toast.loading({
+        message: '发布中...',
+        forbidClick: true,
+      });
+      var gender_req = ""
+      const pd = this.data.p_data;
+      if (this.data.mChecked) {
+        gender_req = "仅限男性";
+      }
+      if (this.data.fmChecked) {
+        gender_req = "仅限女性";
+      }
+      if (this.data.mChecked && this.data.fmChecked) {
+        gender_req = "男女都可以";
+      }
+      if (!this.data.mChecked && !this.data.fmChecked) {
+        gender_req = "男女都可以";
+      }
+      const data = {
+          id:"1",
+          user_id: this.data.openid,
+          nick_name: this.data.nick_name,
+          img: this.data.avatarUrl,
+          content: this.data.sp_content,
+          addr: pd.addr,
+          date: this.data.sp_time,
+          price: this.data.sp_price,
+          gender_req: gender_req,
+          players: `需要${this.data.sp_players}人`,
+          city: this.data.city,
+          sport_key: this.data.defaultSportKey,
+          lng: pd.lng,
+          lat: pd.lat,
+          title: pd.title
+      }
+  
+      try {
+        const resp = await this.put_out_api(data);
+        console.log(resp);
+        if (resp.code != 1000) {
+          Toast.fail("发布失败1: ", resp.code);
+          return;
+        }
+        this.setData({
+          spData: resp.data,
+        });
+        // Toast.clear();
         Toast.success("发布成功");
-        this.onClose();
+      } catch (error) {
+        Toast.fail("发布失败2: ", resp.code);
+      }
       })
       .catch(() => {
         Toast.success("已取消发布");
@@ -570,8 +690,12 @@ Page({
     },8000);
   },
   toggleShowVenueImg1(e) {
+    const data = e.currentTarget.dataset.item;
+    const fd = {addr: data.addr+data.title, lng: data.lng, lat: data.lat, title: this.data.city+data.title};
+    console.log(fd);
     this.setData({
       showSpPop: true,
+      p_data: fd,
     })
   },
   toggleShowVenueImg(e) {

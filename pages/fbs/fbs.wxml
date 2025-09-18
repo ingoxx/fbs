@@ -116,248 +116,257 @@
   <view class="card-1">
     <!-- 场地数据 -->
     <van-transition show="{{!isSwitchData}}" custom-class="block" name="fade-left">
-    <block wx:for="{{ basketSquareFilterData }}" wx:key="index" wx:for-item="item">
-      <van-transition show="{{ isUse }}" custom-class="block">
-        <view class="card-1-1">
-          <view class="online-status">
-            <!-- <van-icon color="{{ item.join_user_count > 0 ? '#ff6161': '#909090' }}" name="fire" /> -->
-            <view class="venue-hot">
-              <van-icon color="{{ item.join_user_count > 0 ? '#ff6161': '#909090' }}" name="fire" />
-            </view>
-            <view class="user-tag">
-              <van-tag custom-class="van-tag-1" color="#ffc64a" text-color="#333333">
-                <!-- <van-icon name="https://ai.anythingai.online/static/profile3/star.svg" /> <text class="sport-key">{{defaultSportSquare}}</text> -->
-                <text class="sport-key">{{defaultSportSquare}}</text>
-              </van-tag>
-            </view>
-          </view>
-          <view class="addr">
-            <view class="sport-icon">
-              <!-- 真实场地图片 -->
-              <block wx:if="{{ item.img != '' }}">
-                <van-image use-loading-slot custom-class="van-img-1" radius="10"  fit="cover" src="{{item.img}}" data-src="{{item.img}}" data-imgs="{{item.images}}" bind:click="onPreviewVenueImage"><van-loading slot="loading" type="spinner" size="20" vertical /></van-image>
-              </block>
-              <!-- 没有就用其他代替 -->
-              <block wx:else>
-                <block wx:for="{{ all_sport_list }}" wx:key="index3" wx:for-item="item3" >
-                  <van-image use-loading-slot data-src="{{item3.img}}" custom-class="van-img-1" radius="10" wx:if="{{ defaultSportKey == item3.key }}" fit="cover" src="{{item3.img}}" data-src="{{item3.img}}" bind:click="onPreviewImage"><van-loading slot="loading" type="spinner" size="20" vertical /></van-image>
-                </block>
-              </block>
-            </view>
-            <view class="sport-addr" data-item="{{ item }}" bind:tap="openMapAppDetailed">
-              <view class="sport-addr-name">
-                <text class="t-f">{{ item.addr }}</text>
+      <block wx:for="{{ basketSquareFilterData }}" wx:key="index" wx:for-item="item">
+        <van-transition show="{{ isUse }}" custom-class="block">
+          <view class="card-1-1">
+            <view class="online-status">
+              <!-- <van-icon color="{{ item.join_user_count > 0 ? '#ff6161': '#909090' }}" name="fire" /> -->
+              <view class="venue-hot">
+                <van-icon color="{{ item.join_user_count > 0 ? '#ff6161': '#909090' }}" name="fire" />
               </view>
-              <view class="sport-addr-tag">
-                <block wx:for="{{ item.tags }}" wx:key="index" wx:for-item="item2">
-                  <block wx:for="{{ all_sport_list }}" wx:key="index3" wx:for-item="item3">
-                    <van-tag color="#256d64" size="mini"  wx:if="{{ defaultSportKey == item3.key }}">
-                      {{ item3.icon }}{{ item2 }}
-                    </van-tag>
+              <view class="user-tag">
+                <van-tag custom-class="van-tag-1" color="#ffc64a" text-color="#333333">
+                  <!-- <van-icon name="https://ai.anythingai.online/static/profile3/star.svg" /> <text class="sport-key">{{defaultSportSquare}}</text> -->
+                  <text class="sport-key">{{defaultSportSquare}}</text>
+                </van-tag>
+              </view>
+            </view>
+            <view class="addr">
+              <view class="sport-icon">
+                <!-- 真实场地图片 -->
+                <block wx:if="{{ item.img != '' }}">
+                  <van-image use-loading-slot custom-class="van-img-1" radius="10"  fit="cover" src="{{item.img}}" data-src="{{item.img}}" data-imgs="{{item.images}}" bind:click="onPreviewVenueImage"><van-loading slot="loading" type="spinner" size="20" vertical /></van-image>
+                </block>
+                <!-- 没有就用其他代替 -->
+                <block wx:else>
+                  <block wx:for="{{ all_sport_list }}" wx:key="index3" wx:for-item="item3" >
+                    <van-image use-loading-slot data-src="{{item3.img}}" custom-class="van-img-1" radius="10" wx:if="{{ defaultSportKey == item3.key }}" fit="cover" src="{{item3.img}}" data-src="{{item3.img}}" bind:click="onPreviewImage"><van-loading slot="loading" type="spinner" size="20" vertical /></van-image>
                   </block>
                 </block>
-                <text class="nav">点击可展示导航路线</text>
               </view>
-            </view>
-          </view>
-          <view class="distance" data-item="{{ item }}">
-            <view class="online-users">
-              <view class="num">
-                <text>{{ item.join_user_count }}</text>
-              </view>
-              <view class="title">
-                <van-icon name="friends-o" /><text class="title-name">组队人数</text>
-              </view>
-            </view>
-            <view class="users-reviews">
-              <view class="num">
-                <text>{{ item.user_reviews_count }}</text>
-              </view>
-              <view class="title">
-                <van-icon name="like-o" /><text class="title-name">用户赞美</text>
-              </view>
-            </view>
-            <view class="square-distance">
-              <view class="num">
-                <text>{{ item.distance }}km</text>
-              </view>
-              <view class="title">
-                <van-icon name="location-o" /><text class="title-name">离您距离</text>
-              </view>
-            </view>
-          </view>
-          <view class="evaluate-top" wx:if="{{isShowAllData}}">
-            <view class="evaluate" data-item="{{ item }}" bind:tap="isShowEvaBoard">
-              <swiper autoplay="true" interval="3000" circular style="height: 60rpx;">
-                <swiper-item wx:for="{{item.user_reviews}}" wx:key="index" wx:for-item="item2">
-                  <view class="review-card">
-                    <view class="o-user" style="margin-right:-7px;">
-                      <van-image use-loading-slot width="100%" round height="100%"  fit="cover" src="{{item2.img}}">
-                        <van-loading slot="loading" type="spinner" size="20" vertical />
-                      </van-image>
-                    </view>
-                    <view class="user-evaluate">
-                      <text>{{item2.evaluate}}</text>
-                    </view>
-                  </view>
-                </swiper-item>
-              </swiper>
-            </view>
-            <view class="view-sign" data-item="{{ item }}" bind:tap="isShowEvaBoard">
-              <van-icon name="https://ai.anythingai.online/static/profile3/view.svg" />
-            </view>
-          </view>
-          <block>
-            <van-transition show="{{ item.is_show }}" custom-class="block">
-              <view class="venue-img-update">
-                <view class="title" wx:if="{{isShowAllData}}">
-                  <text>添加最新的场地图片以帮助更多人, 磕头跪谢</text>
+              <view class="sport-addr" data-item="{{ item }}" bind:tap="openMapAppDetailed">
+                <view class="sport-addr-name">
+                  <text class="t-f">{{ item.addr }}</text>
                 </view>
-                <view class="img" wx:if="{{isShowAllData}}">
-                  <van-uploader 
-                  max-count="1"
-                  multiple
-                  preview-image
-                  deletable
-                  file-list="{{ fileList }}" 
-                  bind:after-read="afterRead" 
-                  bind:delete="deleteImg"
-                  />
+                <view class="sport-addr-tag">
+                  <block wx:for="{{ item.tags }}" wx:key="index" wx:for-item="item2">
+                    <block wx:for="{{ all_sport_list }}" wx:key="index3" wx:for-item="item3">
+                      <van-tag color="#256d64" size="mini"  wx:if="{{ defaultSportKey == item3.key }}">
+                        {{ item3.icon }}{{ item2 }}
+                      </van-tag>
+                    </block>
+                  </block>
+                  <text class="nav">点击可展示导航路线</text>
                 </view>
-                <view class="submit-img-container">
-                  <view class="submit-img" wx:if="{{isShowAllData}}">
-                    <van-button color="#256d64" bind:tap="updateVenueImg" data-index="{{ index }}" data-item="{{ item }}" icon="https://ai.anythingai.online/static/profile3/smil.svg" custom-style="width: 170rpx" size="small" round type="info">上传</van-button>
-                  </view>
-                  <view class="submit-img" wx:if="{{item.img == ''}}">
-                    <van-button  color="#7c9d34" round type="primary" bind:tap="getVenueImg" data-index="{{ index }}" data-item="{{ item }}" icon="https://ai.anythingai.online/static/profile3/smil.svg" custom-style="width: 258rpx" size="small">获取最新场地图片</van-button>
-                  </view>
+              </view>
+            </view>
+            <view class="distance" data-item="{{ item }}">
+              <view class="online-users">
+                <view class="num">
+                  <text>{{ item.join_user_count }}</text>
                 </view>
-                <view class="cbt" wx:if="{{isShowAllData}}">
-                  <view class="cbt-title">
-                    <view class="name"><van-icon name="like" color="red" custom-class="van-icon-1" />场地更新贡献用户 </view>
-                    <view class="num"><text class="cbt-num">{{item.venue_update_users_count}}</text></view>
-                  </view>
-                  <view class="cbt-user-info">
-                    <view class="info">
-                      <view wx:if="{{item.venue_update_users_count > 0}}" class="info-t-1">
-                        <block wx:for="{{ cbt_users }}" wx:key="index" wx:for-item="item4">
-                          <view class="cbt-user-img" style="margin-right:-10px;">
-                            <van-image use-loading-slot width="100%" round height="100%"  fit="cover" src="{{item4.user_img}}">
-                              <van-loading slot="loading" type="spinner" size="20" vertical />
-                            </van-image>
-                          </view>
-                        </block>
+                <view class="title">
+                  <van-icon name="friends-o" /><text class="title-name">组队人数</text>
+                </view>
+              </view>
+              <view class="users-reviews">
+                <view class="num">
+                  <text>{{ item.user_reviews_count }}</text>
+                </view>
+                <view class="title">
+                  <van-icon name="like-o" /><text class="title-name">用户赞美</text>
+                </view>
+              </view>
+              <view class="square-distance">
+                <view class="num">
+                  <text>{{ item.distance }}km</text>
+                </view>
+                <view class="title">
+                  <van-icon name="location-o" /><text class="title-name">离您距离</text>
+                </view>
+              </view>
+            </view>
+            <view class="evaluate-top" wx:if="{{isShowAllData}}">
+              <view class="evaluate" data-item="{{ item }}" bind:tap="isShowEvaBoard">
+                <swiper autoplay="true" interval="3000" circular style="height: 60rpx;">
+                  <swiper-item wx:for="{{item.user_reviews}}" wx:key="index" wx:for-item="item2">
+                    <view class="review-card">
+                      <view class="o-user" style="margin-right:-7px;">
+                        <van-image use-loading-slot width="100%" round height="100%"  fit="cover" src="{{item2.img}}">
+                          <van-loading slot="loading" type="spinner" size="20" vertical />
+                        </van-image>
                       </view>
-                      <view class="no-info" wx:else>
-                        <van-icon color="yellow" name="https://ai.anythingai.online/static/profile3/cry.svg" /><text class="info-1">还没用户更新该场地</text>
+                      <view class="user-evaluate">
+                        <text>{{item2.evaluate}}</text>
                       </view>
                     </view>
-                    <view class="num">
-                      <text>+{{item.venue_update_users_count}}</text>
+                  </swiper-item>
+                </swiper>
+              </view>
+              <view class="view-sign" data-item="{{ item }}" bind:tap="isShowEvaBoard">
+                <van-icon name="https://ai.anythingai.online/static/profile3/view.svg" />
+              </view>
+            </view>
+            <block>
+              <van-transition show="{{ item.is_show }}" custom-class="block">
+                <view class="venue-img-update">
+                  <view class="title" wx:if="{{isShowAllData}}">
+                    <text>添加最新的场地图片以帮助更多人, 磕头跪谢</text>
+                  </view>
+                  <view class="img" wx:if="{{isShowAllData}}">
+                    <van-uploader 
+                    max-count="1"
+                    multiple
+                    preview-image
+                    deletable
+                    file-list="{{ fileList }}" 
+                    bind:after-read="afterRead" 
+                    bind:delete="deleteImg"
+                    />
+                  </view>
+                  <view class="submit-img-container">
+                    <view class="submit-img" wx:if="{{isShowAllData}}">
+                      <van-button color="#256d64" bind:tap="updateVenueImg" data-index="{{ index }}" data-item="{{ item }}" icon="https://ai.anythingai.online/static/profile3/smil.svg" custom-style="width: 170rpx" size="small" round type="info">上传</van-button>
                     </view>
-                    <view class="log">
-                      <van-button round  size="mini" data-item="{{item}}" custom-style="width:190rpx" bind:tap="showUserUpdateLog" wx:if="{{item.venue_update_users_count > 0}}">
-                        <van-icon color="yellow" name="https://ai.anythingai.online/static/profile3/log.svg" /><text class="group_title">场地更新详情</text>
+                    <view class="submit-img" wx:if="{{item.img == ''}}">
+                      <van-button  color="#7c9d34" round type="primary" bind:tap="getVenueImg" data-index="{{ index }}" data-item="{{ item }}" icon="https://ai.anythingai.online/static/profile3/smil.svg" custom-style="width: 258rpx" size="small">获取最新场地图片</van-button>
+                    </view>
+                  </view>
+                  <view class="cbt" wx:if="{{isShowAllData}}">
+                    <view class="cbt-title">
+                      <view class="name"><van-icon name="like" color="red" custom-class="van-icon-1" />场地更新贡献用户 </view>
+                      <view class="num"><text class="cbt-num">{{item.venue_update_users_count}}</text></view>
+                    </view>
+                    <view class="cbt-user-info">
+                      <view class="info">
+                        <view wx:if="{{item.venue_update_users_count > 0}}" class="info-t-1">
+                          <block wx:for="{{ cbt_users }}" wx:key="index" wx:for-item="item4">
+                            <view class="cbt-user-img" style="margin-right:-10px;">
+                              <van-image use-loading-slot width="100%" round height="100%"  fit="cover" src="{{item4.user_img}}">
+                                <van-loading slot="loading" type="spinner" size="20" vertical />
+                              </van-image>
+                            </view>
+                          </block>
+                        </view>
+                        <view class="no-info" wx:else>
+                          <van-icon color="yellow" name="https://ai.anythingai.online/static/profile3/cry.svg" /><text class="info-1">还没用户更新该场地</text>
+                        </view>
+                      </view>
+                      <view class="num">
+                        <text>+{{item.venue_update_users_count}}</text>
+                      </view>
+                      <view class="log">
+                        <van-button round  size="mini" data-item="{{item}}" custom-style="width:190rpx" bind:tap="showUserUpdateLog" wx:if="{{item.venue_update_users_count > 0}}">
+                          <van-icon color="yellow" name="https://ai.anythingai.online/static/profile3/log.svg" /><text class="group_title">场地更新详情</text>
+                        </van-button>
+                      </view>
+                    </view>
+                  </view>
+                </view>
+              </van-transition>
+            </block>
+            <view class="group-status">
+              <van-button round color="#256d64" size="small" type="{{ item.hasJoined ? 'info' : 'warning' }}" custom-style="width:218rpx" data-item="{{ item }}" bind:tap="joinSportGroup">
+                <van-icon size="30rpx" custom-class="van-icon-5 van-icon-8" name="https://ai.anythingai.online/static/profile3/light.svg" />{{item.hasJoined ? '退出组队' : '加入组队'}}({{item.join_user_count}})
+              </van-button>
+              <van-button round color="#256d64" size="small" data-index="{{index}}" custom-style="width:270rpx" data-item="{{ item }}"  bindtap="toggleShowVenueImg1">
+                <van-icon size="30rpx" custom-class="van-icon-5" name="https://ai.anythingai.online/static/profile3/click-3.svg" /><text class="group_title">发布付费陪练</text>
+              </van-button>
+            </view>
+            <van-transition show="{{ item.join_user_count > 0  }}" name="fade-right" >
+              <view class="join-user-c">
+                <view class="join-user-t">
+                  <van-icon size="33rpx" custom-class="van-icon-5" name="friends" /><text class="title">组队信息</text>
+                </view>
+                <view class="join-user-box">
+                  <view class="show-join-user" wx:if="{{ item.join_user_count > 0 }}" data-item="{{item.join_users}}">
+                    <block wx:for="{{ item.join_users }}" wx:key="index" wx:for-item="item2" wx:for-index="idx">
+                      <view class="o-user" style="margin-right:-10px;">
+                        <van-image use-loading-slot width="100%" round height="100%"  fit="cover" src="{{item2.img}}">
+                          <van-loading slot="loading" type="spinner" size="20" vertical />
+                        </van-image>
+                      </view>
+                    </block>
+                    <view class="join-users">
+                      <text>{{item.join_user_count}}人加入组队</text>
+                    </view>
+                    <view class="join-users" wx:if="{{isShowAllData}}">
+                      <van-button color="#7c9d34" round type="info" size="mini" data-item="{{item.join_users}}" data-val="{{item}}" custom-style="width:150rpx" bind:tap="showUserImgShape">
+                        <text class="group_title">⚡组队详情</text>
                       </van-button>
                     </view>
+                    <!-- <view class="join-users">
+                      <van-button round size="mini" custom-style="width:110rpx" data-item="{{ item }}"  bindtap="sendMsg">
+                        <text class="group_title">💬</text>
+                      </van-button>
+                    </view> -->
                   </view>
                 </view>
               </view>
             </van-transition>
-          </block>
-          <view class="group-status">
-            <van-button round color="#256d64" size="small" type="{{ item.hasJoined ? 'info' : 'warning' }}" custom-style="width:218rpx" data-item="{{ item }}" bind:tap="joinSportGroup">
-              <van-icon size="30rpx" custom-class="van-icon-5 van-icon-8" name="https://ai.anythingai.online/static/profile3/light.svg" />{{item.hasJoined ? '退出组队' : '加入组队'}}({{item.join_user_count}})
-            </van-button>
-            <van-button round color="#256d64" size="small" data-index="{{index}}" custom-style="width:270rpx" data-item="{{ item }}"  bindtap="toggleShowVenueImg1">
-              <van-icon size="30rpx" custom-class="van-icon-5" name="https://ai.anythingai.online/static/profile3/click-3.svg" /><text class="group_title">发布付费陪练</text>
-            </van-button>
           </view>
-          <van-transition show="{{ item.join_user_count > 0  }}" name="fade-right" >
-            <view class="join-user-c">
-              <view class="join-user-t">
-                <van-icon size="33rpx" custom-class="van-icon-5" name="friends" /><text class="title">组队信息</text>
-              </view>
-              <view class="join-user-box">
-                <view class="show-join-user" wx:if="{{ item.join_user_count > 0 }}" data-item="{{item.join_users}}">
-                  <block wx:for="{{ item.join_users }}" wx:key="index" wx:for-item="item2" wx:for-index="idx">
-                    <view class="o-user" style="margin-right:-10px;">
-                      <van-image use-loading-slot width="100%" round height="100%"  fit="cover" src="{{item2.img}}">
-                        <van-loading slot="loading" type="spinner" size="20" vertical />
-                      </van-image>
-                    </view>
-                  </block>
-                  <view class="join-users">
-                    <text>{{item.join_user_count}}人加入组队</text>
-                  </view>
-                  <view class="join-users" wx:if="{{isShowAllData}}">
-                    <van-button color="#7c9d34" round type="info" size="mini" data-item="{{item.join_users}}" data-val="{{item}}" custom-style="width:150rpx" bind:tap="showUserImgShape">
-                      <text class="group_title">⚡组队详情</text>
-                    </van-button>
-                  </view>
-                  <!-- <view class="join-users">
-                    <van-button round size="mini" custom-style="width:110rpx" data-item="{{ item }}"  bindtap="sendMsg">
-                      <text class="group_title">💬</text>
-                    </van-button>
-                  </view> -->
-                </view>
-              </view>
-            </view>
-          </van-transition>
-        </view>
-      </van-transition>
-    </block>
-  </van-transition>
+        </van-transition>
+      </block>
+    </van-transition>
     <!-- 练习数据 -->
     <van-transition show="{{isSwitchData}}" custom-class="block" name="fade-left">
-    <block wx:for="{{ spData }}" wx:key="index" wx:for-item="item">
-      <view class="c-box">
-        <view class="user">
-          <view class="user1">
-            <van-image use-loading-slot 
-              data-src="{{item.img}}" 
-              custom-class="van-img-1" radius="10" fit="cover"
-              src="{{item.img}}" 
-              >
-              <van-loading slot="loading" type="spinner" size="20" vertical />
-             </van-image>
-             <text class="nn">{{item.nick_name}}</text>
+      <block wx:for="{{ spData }}" wx:key="index" wx:for-item="item">
+        <view class="c-box" wx:if="{{!item.is_del}}">
+          <view class="user">
+            <view class="user1">
+              <van-image use-loading-slot 
+                data-src="{{item.img}}" 
+                custom-class="van-img-1" radius="10" fit="cover"
+                src="{{item.img}}" 
+                >
+                <van-loading slot="loading" type="spinner" size="20" vertical />
+              </van-image>
+              <text class="nn">{{item.nick_name}}</text>
+            </view>
+            <view class="date1">
+              <text>发布于{{item.publish_date}}</text>
+            </view>
           </view>
-          <view class="date1">
-            <text>发布于{{item.publish_date}}</text>
+          <view class="title">
+            <text>{{item.content}}</text>
+          </view>
+          <view class="date">
+            <van-icon size="25rpx" name="clock" /><text>{{item.date}}</text>
+          </view>
+          <view class="addr">
+            <van-icon size="29rpx" name="location" /><text>{{item.addr}}</text> <text class="deri">点击可查看路线</text>
+          </view>
+          <view class="price">
+            <van-icon size="25rpx" name="gold-coin" /><text class="p1">{{item.price}}</text>
+          </view>
+          <view class="tags">
+            <view class="fm">
+              <van-icon size="20rpx" name="https://ai.anythingai.online/static/profile3/gender-3.svg" /><text>{{item.gender_req}}</text>
+            </view>
+            <view class="num">
+              <van-icon size="25rpx" name="https://ai.anythingai.online/static/profile3/user-num-4.svg" /><text>{{item.players}}</text>
+            </view>
+          </view>
+          <view class="accept">
+            <view class="od">
+              <van-icon size="21rpx" name="like" /><text>快去沟通吧</text>
+            </view>
+            <view class="control">
+              <van-button type="default" round custom-style="width:180rpx;" color="#256d64" size="small" data-id="{{item.id}}" >
+                <van-icon size="30rpx" custom-class="van-icon-5 van-icon-8" name="https://ai.anythingai.online/static/profile3/user-con-4.svg" /> 沟通
+              </van-button>
+              <van-button type="danger" round custom-style="width:180rpx;" size="small" data-id="{{item.id}}" wx:if="{{item.user_id == admin}}">
+                <van-icon size="25rpx" custom-class="van-icon-10" name="https://ai.anythingai.online/static/profile3/del.svg" /> 删除
+              </van-button>
+            </view>
+            
           </view>
         </view>
-        <view class="title">
-          <text>{{item.content}}</text>
-        </view>
-        <view class="date">
-          <van-icon size="25rpx" name="clock" /><text>{{item.date}}</text>
-        </view>
-        <view class="addr">
-          <van-icon size="25rpx" name="location" /><text>{{item.addr}}</text>
-        </view>
-        <view class="price">
-          <van-icon size="25rpx" name="gold-coin" /><text class="p1">{{item.price}}</text>
-        </view>
-        <view class="tags">
-          <view class="fm">
-            <text>{{item.gender_req}}</text>
-          </view>
-          <view class="num">
-            <text>需要{{item.players}}人</text>
-          </view>
-        </view>
-        <view class="accept">
-          <view class="od">
-            <van-icon size="21rpx" name="like" /><text>快去抢单吧</text>
-          </view>
-          <van-button type="default" round custom-style="width:180rpx;" color="#256d64" size="small" data-id="{{item.id}}" >
-            <van-icon size="30rpx" custom-class="van-icon-5 van-icon-8" name="https://ai.anythingai.online/static/profile3/user-con-2.svg" /> 沟通
-          </van-button>
-        </view>
-      </view>
-    </block>
-  </van-transition>
+      </block>
+      <block wx:if="{{ spDataNum == 0 }}">
+        <van-empty description="还没有人发布陪练信息哟"></van-empty>
+      </block>
+    </van-transition>
     <block wx:if="{{ isEmpty }}">
       <van-empty description="{{ isUse ? useNotice: '请先阅读注意事项' }}"></van-empty>
     </block>
@@ -822,7 +831,7 @@
         autosize
         type="textarea"
         label="陪练内容"
-        placeholder="如:帮捡球,技术指导,1v1对练等等"
+        placeholder="如:帮捡球,裁判,对练,指导等等"
         border="{{ true }}"
         confirm-type="done"
         bind:change="onChangeSpContentField"
