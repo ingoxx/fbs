@@ -203,8 +203,8 @@
     }
   }
   .choose {
-    margin: 0 32rpx;
-    font-size: 27rpx;
+    // margin: 0 32rpx;
+    font-size: 23rpx;
     color: #adadad;
   }
   .venue-tab-t {
@@ -265,6 +265,7 @@
     margin-top: 20rpx;
     .venue-container {
       display: flex;
+      align-items: flex-end;
       gap: 20rpx;
       .tabs {
         gap: 28rpx;
@@ -1133,7 +1134,7 @@
 }
 .van-icon-9 {
   position: relative!important;
-  font-size: 35rpx!important;
+  font-size: 27rpx!important;
   top: 8rpx!important;
 }
 .van-icon-10 {

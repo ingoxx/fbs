@@ -73,12 +73,6 @@
       />
     </view>
   </view>
-  <!-- 筛选 -->
-  <view class="choose" bind:tap="openChoosePop">
-    <view class="container-c" wx:if="{{isShowAllData}}">
-      <text>筛选</text><van-icon custom-class="van-icon-9"  name="https://ai.anythingai.online/static/profile3/choose.svg" />
-    </view>
-  </view>
   <!-- 场地选择 -->
   <view class="venue-tab-t">
     <view class="venue-container"> 
@@ -110,6 +104,12 @@
             {{item.name}}
           </van-button>
       </block>
+      <!-- 筛选 -->
+      <view class="choose" bind:tap="openChoosePop">
+        <view class="container-c" wx:if="{{isShowAllData}}">
+          <text>筛选</text><van-icon custom-class="van-icon-9"  name="https://ai.anythingai.online/static/profile3/choose.svg" />
+        </view>
+      </view>
     </view>
   </view>
   <!-- 展示附近场地 -->
