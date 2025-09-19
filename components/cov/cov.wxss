@@ -1,0 +1,184 @@
+
+.box {
+  display: flex;
+  height: 100%;
+  background: #374151;
+}
+.sidebar {
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  width: 209rpx;
+  border-right: 1rpx solid #545f72;
+  background: #374151;
+}
+.group-id-search {
+  display: flex;
+  flex-shrink: 0;
+  height: 92rpx;
+  border-bottom: 1rpx solid #545f72;
+}
+.group-id-list {
+  overflow-y: auto;
+  min-height: 0;
+  word-break: break-all;
+}
+.venue-info {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 0 7rpx;
+}
+.group-name {
+  display: block;         
+  /* padding: 15rpx 11rpx; */
+}
+.city {
+  padding-left: 13rpx;
+  font-size: 18rpx;
+  color: dimgrey;
+}
+.main {
+  /* width: 700rpx;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 98rpx;
+  background: #374151; */
+  flex: 1;
+  flex-shrink: 0;
+  /* width: 700rpx; */
+  padding-bottom: 98rpx;
+  background: #374151;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.chat-title {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  height: 92rpx;
+  font-size: 25rpx;
+  /* padding: 8rpx 10rpx; */
+  border-bottom: 1rpx solid #545f72;
+}
+.sport_team_group {
+  font-weight: 700;
+}
+.find-baller-notic{
+  font-size: 18rpx;
+}
+.chat-content {
+  height: 100%;
+  overflow-y: auto;        
+  min-height: 0;
+  padding-top: 20rpx;
+  background: #374151;
+}
+.group-name-bk {
+  width: 200rpx;
+  color: #539656;
+  position: absolute;
+  left: 63%;
+  top: 46%;
+  font-size: 39rpx;
+  opacity: 0.6;
+  transform: translate(-50%, -50%) rotate(-26deg);
+}
+.chat-detail {
+  max-width: 288rpx;
+  background: #5d6f8c;
+  border-radius: 10rpx;
+  padding: 11rpx 10rpx;
+  color: #ffffff;
+  margin: 15rpx 15rpx;
+}
+.chat_my {
+  background: #727272;
+}
+.user {
+  display: flex;
+  gap: 6rpx;
+  width: 230rpx;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.user-img {
+  width: 40rpx;
+  height: 40rpx;
+}
+.user-name {
+  position: relative;
+  top: 6rpx;
+}
+.content-fm {
+  padding: 6rpx 0;
+  word-break: break-all;
+}
+.chat-send {
+  display: flex;
+  align-items: center;
+  border-left: none;
+  background: #374151;
+  border-top: 1rpx solid #545f72;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80rpx;
+}
+.chat-send .van-icon-1 {
+  margin-right: 26rpx;
+}
+.chat-input {
+  flex: 1;
+  height: 76rpx;
+  font-size: 25rpx;
+  padding: 0 17rpx;
+  background: #374151;
+}
+.group-chat-font-size {
+  font-size: 25rpx;
+  color: #adadad;
+}
+.online-group {
+  color: #256d64!important;
+}
+.ccc {
+  color: #adadad;
+}
+.van-icon-0 {
+  padding-right: 13rpx;
+  font-size: 26rpx!important;
+}
+.van-toast {
+  min-width: auto !important;   
+  width: auto !important;       
+  padding: 16rpx 24rpx;         
+  display: inline-block;     
+  white-space: nowrap !important;     /* 关键：禁止换行 */
+  word-wrap: normal !important;       /* 禁止强制拆分单词 */   
+}
+.my-popup .van-popup__close-icon {
+  bottom: 20rpx;
+  font-size: 28rpx;
+  left: 10rpx;
+}
+.venue-info .van-icon-1 {
+  /* vertical-align: top!important; */
+  position: relative!important;
+  top: 37rpx!important;
+}
+.time {
+  display: flex;
+  font-size: 20rpx;
+}
+.time .van-icon-1 {
+  top: 0rpx!important;
+}
+.time .cc {
+  padding-left: 3rpx;
+}

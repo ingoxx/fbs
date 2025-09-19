@@ -117,12 +117,40 @@ Page({
     user_list: [],
     filter_user_list: [],
     spDataNum: 1,
+    showPubRm: false,
+    cov_data: {},
     spData: [
       {id: "1", is_del: false, user_id: "ogR3E62jXXJMbVcImRqMA1gTSegM1", nick_name: "吴艳祖深圳分祖", img: "https://ai.anythingai.online/static/profile3/1527.png", publish_date: "09-15", content: "需要2个帮捡球", date: "2025-09-20 16:30 周六", addr: "深圳市顶峰篮球俱乐部龙华分店", price: "20元/小时", gender_req: "男女都可以", players: "需要2人", city: "深圳市"},
       {id: "2", is_del: false,  user_id: "ogR3E62jXXJMbVcImRqMA1gTSegM", nick_name: "深圳打铁王", img: "https://ai.anythingai.online/static/profile3/1047.png", publish_date: "09-11", content: "需要5v5对抗训练,还缺两个人", date: "2025-09-19 18:30 周五", addr: "深圳市深圳湾体育中心", price: "25元/小时", user_id: "", gender_req: "仅限男", players: "需要2人", city: "深圳市"},
       {id: "3", is_del: false,  user_id: "ogR3E62jXXJMbVcImRqMA1gTSegM", nick_name: "裤里的4分球", img: "https://ai.anythingai.online/static/profile3/1684.png", publish_date: "09-14", content: "百分单挑局输赢都给100", date: "2025-09-21 19:30 周日", addr: "深圳市东岸天台篮球场", price: "100元/局", gender_req: "仅限男", players: "需要1人", city: "深圳市"},
       {id: "4", is_del: false,  user_id: "ogR3E62jXXJMbVcImRqMA1gTSegM", nick_name: "天上掉了个篮球", img: "https://ai.anythingai.online/static/profile3/1685.png", publish_date: "09-12", content: "需要一名篮球裁判", date: "2025-09-21 19:30 周日", addr: "深圳市东岸天台篮球场", price: "50元/场", gender_req: "仅限男", players: "需要1人", city: "深圳市"},
     ],
+  },
+  user_del_sp () {
+    Dialog.confirm({
+      title: "",
+      message: "确定撤销吗？",
+    }).then(async () => {
+      Toast.loading({
+        message: '撤销中...',
+        forbidClick: true,
+      });
+      setTimeout(() => {
+        Toast.success("已撤销");
+      }, 3000)
+      })
+      .catch(() => {
+        Toast.success("已取消发布");
+      });
+  },
+  cov_detail_pop(e) {
+    const data =  e.currentTarget.dataset.item;
+    console.log(data);
+    this.setData({
+      showPubRm: true,
+      cov_data: data,
+    });
+
   },
   async put_out() {
     var gender_req = ""
@@ -206,7 +234,6 @@ Page({
       });
     }
   },
-
   onSet() {
     this.setData({
       sp_content: "",
@@ -1562,6 +1589,7 @@ Page({
       showSportsList: false,
       showChoose: false,
       showSpPop: false,
+      showPubRm: false,
     });
   },
   onClearInput(e) {

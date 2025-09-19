@@ -21,6 +21,7 @@
     "van-uploader": "/miniprogram_npm/@vant/weapp/uploader/index",
     "van-search": "/miniprogram_npm/@vant/weapp/search/index",
     "group-team": "/components/chat/chat",
+    "pub-cov": "/components/cov/cov",
     "eva-board": "/components/cb/cb"
   }
 }

@@ -1,0 +1,73 @@
+<view class="box">
+  <view class="sidebar" wx:if="{{user_id == cov_data.user_id}}">
+    <view class="group-id-search">
+      <input type="text" class="chat-input group-chat-font-size " value="{{ group_id_value }}" bindinput="onFilterGroupId" placeholder="搜索场地"/>
+      <van-icon custom-class="van-icon-0" name="https://ai.anythingai.online/static/profile3/flush-5.svg" bind:tap="refreshOnlineData"/>
+    </view>
+    <scroll-view 
+      scroll-y="true" 
+      class="group-id-list"
+      scroll-with-animation 
+    > 
+        <view class="venue-info">
+          <van-icon name="location" color="#adadad" custom-class="van-icon-1"/>
+          <text class="group-name group-chat-font-size" user-select="true" data-id="{{ item }}" bind:tap="onClickGroupId">
+            <!-- {{ item.title }}<text style="color:{{item.id==group_id ? '#256d64': '#adadad'}}">({{item.online}})</text> -->
+            {{ cov_data.nick_name }}
+            <!-- <text wx:if="{{user_id == admin}}" class="city" style="color:{{item.id==group_id ? '#256d64': '#adadad'}}">{{ cov_data.nick_name }}</text> -->
+          </text>
+        </view>
+      <!-- <block wx:for="{{ venue_data_filter }}" wx:key="index" wx:for-item="item">
+        <view class="venue-info">
+          <van-icon name="location" color="{{item.id==group_id ? '#256d64': '#adadad'}}" custom-class="van-icon-1"/>
+          <text class="group-name group-chat-font-size" user-select="true" data-id="{{ item }}" bind:tap="onClickGroupId" style="color:{{item.id==group_id ? '#256d64': ''}}">
+            {{ item.title }}<text style="color:{{item.id==group_id ? '#256d64': '#adadad'}}">({{item.online}})</text>
+            <text wx:if="{{user_id == admin}}" class="city" style="color:{{item.id==group_id ? '#256d64': '#adadad'}}">{{ item.city }}</text>
+          </text>
+        </view>
+      </block> -->
+    </scroll-view>
+  </view>
+  <view class="main">
+    <view class="chat-title group-chat-font-size ">
+      <text class="sport_team_group">发布者: {{cov_data.nick_name}}</text> 
+      <view class="find-baller">
+        <text class="find-baller-notic" wx:if="{{user_id == cov_data.user_id}}">点击左侧场接单者昵称进行沟通</text>
+        <text class="find-baller-notic" wx:else>沟通具体陪练内容</text>
+      </view>
+    </view>
+    <scroll-view 
+    scroll-y="true" 
+    class="chat-content group-chat-font-size"
+    scroll-with-animation 
+    scroll-into-view="{{toView}}"
+    >
+      <block wx:for="{{ chatData }}" wx:key="index" wx:for-item="item">
+        <view id="chat-{{index}}" class="{{ item.sender_id == sender_id ? 'chat-detail chat_my' : 'chat-detail' }}">
+          <view class="user content-fm">
+            <view class="user-img">
+              <van-image use-loading-slot width="100%" round height="100%"  fit="cover" src="{{item.ava_img}}">
+                <van-loading slot="loading" type="spinner" size="20" vertical />
+              </van-image>
+            </view>
+            <view class="user-name">
+              <text class="cc ccc" user-select="true">{{ item.nick_name }}</text>
+            </view>
+          </view>
+          <view class="content content-fm">
+            <text class="cc" user-select="true">{{ item.content }}</text>
+          </view>
+          <view class="time content-fm">
+            <van-icon name="clock-o" color="#adadad" custom-class="van-icon-1" /> <text class="cc ccc" user-select="true">{{ item.time }}</text>
+          </view>
+        </view>
+      </block>
+    </scroll-view>
+    <view class="chat-send">
+      <input type="text" value="{{ value }}" confirm-type="send" bindinput="getVal" bindconfirm="sendMsg" class="chat-input group-chat-font-size " placeholder="发送"/>
+      <van-transition show="{{ showClear  }}" >
+        <van-icon name="clear" custom-class="van-icon-1" bind:tap="onClose"/>
+      </van-transition>
+    </view>
+  </view>
+</view>

@@ -352,11 +352,11 @@
               <van-icon size="21rpx" name="like" /><text>快去沟通吧</text>
             </view>
             <view class="control">
-              <van-button type="default" round custom-style="width:180rpx;" color="#256d64" size="small" data-id="{{item.id}}" >
-                <van-icon size="30rpx" custom-class="van-icon-5 van-icon-8" name="https://ai.anythingai.online/static/profile3/user-con-4.svg" /> 沟通
+              <van-button type="default" round custom-style="width:180rpx;" color="#256d64" size="small" data-item="{{item}}" bind:tap="cov_detail_pop">
+                <van-icon size="30rpx" custom-class="van-icon-5 van-icon-8" name="https://ai.anythingai.online/static/profile3/user-con-4.svg" /> <text>{{openid == item.user_id ? '接单用户' : '沟通'}}</text>
               </van-button>
-              <van-button type="danger" round custom-style="width:180rpx;" size="small" data-id="{{item.id}}" wx:if="{{item.user_id == admin}}">
-                <van-icon size="25rpx" custom-class="van-icon-10" name="https://ai.anythingai.online/static/profile3/del.svg" /> 删除
+              <van-button type="danger" round custom-style="width:180rpx;" size="small" data-id="{{item.id}}" wx:if="{{item.user_id == openid}}" bind:tap="user_del_sp">
+                <van-icon size="25rpx" custom-class="van-icon-10" name="https://ai.anythingai.online/static/profile3/del.svg" /> <text>撤销</text>
               </van-button>
             </view>
             
@@ -433,6 +433,29 @@
     round
   >
     <input bind:change="chooseNickName" type="nickname" class="wx-nickname" placeholder="请输入昵称"/>
+  </van-popup>
+  <van-popup
+    wx:if="{{ showPubRm }}"
+    show="{{ showPubRm }}"
+    round
+    custom-class="van-popup-1"
+    custom-style="height: 40%;width: 80%; background:#374151"
+    bind:close="onClose"
+    closeable
+  >
+    <pub-cov 
+      venue_data="{{basketSquareFilterData}}"
+      cov_data="{{cov_data}}"
+      wssUrl="{{ wssUrl }}" 
+      user_id="{{user_id}}" 
+      sender_id="{{sender_id}}" 
+      baseUrl="{{ baseUrl }}" 
+      sport_key="{{defaultSportKey}}" 
+      city="{{city}}" 
+      nick_name="{{nick_name}}" 
+      ava_img="{{avatarUrl}}" 
+      class="com-chat-room">
+    </pub-cov>
   </van-popup>
   <van-popup
     wx:if="{{ showEvaBoard }}"
