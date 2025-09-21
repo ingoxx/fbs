@@ -464,6 +464,7 @@ Page({
           spData: fd,
           spDataNum: fd.length,
         });
+        Toast.success("获取完成");
       } catch (error) {
         Toast.fail("获取发布数据失败2");
       }
@@ -485,6 +486,7 @@ Page({
           spData: fd,
           spDataNum: fd.length,
         });
+        Toast.success("获取完成");
       } catch (error) {
         Toast.fail("获取发布数据失败4");
       }
