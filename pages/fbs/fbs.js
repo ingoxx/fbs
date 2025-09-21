@@ -467,7 +467,7 @@ Page({
       } catch (error) {
         Toast.fail("获取发布数据失败2");
       }
-      Toast.clear();
+      // Toast.clear();
     } else { // user data
       try {
         const resp = await this.userGetTaskByCityAndSportTpApi();
@@ -488,7 +488,7 @@ Page({
       } catch (error) {
         Toast.fail("获取发布数据失败4");
       }
-      Toast.clear();
+      // Toast.clear();
     }
   },
   async onConfirmSportSelection2(e) {
