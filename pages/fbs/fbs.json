@@ -22,6 +22,7 @@
     "van-search": "/miniprogram_npm/@vant/weapp/search/index",
     "group-team": "/components/chat/chat",
     "pub-cov": "/components/cov/cov",
+    "time-picker": "/components/timePicker/timePicker",
     "eva-board": "/components/cb/cb"
   }
 }

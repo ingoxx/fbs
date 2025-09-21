@@ -68,6 +68,7 @@ Component({
     groups_data: [],
     socket_list: [],
     venue_data_filter: [],
+    user_list: [],
     toView: '',
     group_id: "",
     showClear: false,
@@ -76,7 +77,7 @@ Component({
    * 组件关闭后的清理
    */
   lifetimes: {
-    attached() {
+    async attached() {
       const { wssUrl, user_id, sender_id, baseUrl, sport_key, city, nick_name, ava_img, venue_data, cov_data } = this.properties;
       this.setData({
         cov_data: cov_data, 
@@ -93,8 +94,23 @@ Component({
         venue_data_filter: venue_data,
         admin: app.globalData.admin,
       });
-      // 超级管理员才能获取到各个城市的场地信息
-      
+      // admin
+      if (cov_data.user_id == user_id) {
+        try {
+          const resp = await this.getAllRidApi();
+          if (resp.code != 1000) {
+            Toast.fail(`获取用户列表失败1: ${resp.code}`);
+            return;
+          }
+          this.setData({
+            user_list: resp.data,
+          });
+        } catch (error) {
+          Toast.fail(`获取用户列表失败2: ${error}`);
+        }
+      }
+
+      this.initWss(cov_data.rid)
     },
     detached() {
       console.log('组件销毁，清除一些连接');
@@ -116,6 +132,20 @@ Component({
    * 组件的方法列表
    */
   methods: {
+    getAllRidApi() {
+      return new Promise((resolve, reject) => {
+        wx.request({
+          url: `${this.data.baseUrl}/get-all-rid?uid=${this.data.user_id}&tid=${this.data.cov_data.id}`,
+          timeout: 10000,
+          success: function (res) {
+            resolve(res.data);
+          },
+          fail: function (err) {
+            reject(err)
+          }
+        })
+      });
+    },
     onClose() {
       this.setData({
         showClear: false,
@@ -237,18 +267,21 @@ Component({
       this.triggerEvent('myevent', { count: this.data.count });
     },
     onClickGroupId(e) {
-      const gid = e.currentTarget.dataset.id;
-      if (gid.id != this.data.group_id) {
+      const data = e.currentTarget.dataset.item;
+      if (data.rid == this.data.group_id) {
+        return;
+      }
+      if (data.rid != this.data.group_id) {
         this.setData({
           chatData: [],
         });
       }
       this.setData({
-        group_id: gid.id,
-        count: gid.online,
-        venue_name: gid.title,
+        group_id: data.rid,
+        // count: gid.online,
+        // venue_name: gid.title,
       });
-      this.initWss(gid.id);
+      this.initWss(data.rid);
     },
     clearSocket() {
       if (this.data.socket) {
@@ -274,6 +307,9 @@ Component({
       socket.onOpen(() => {
         console.log('连接成功');
         wx.hideLoading();
+        this.setData({
+          group_id: gid,
+        });
         const initMsg = {
           group_id: this.getGroupIdSuffix(gid),
           content: '',
@@ -329,14 +365,14 @@ Component({
         Toast.fail("输入内容");
         return;
       }
-      if (this.data.group_id == "") {
-        Toast.fail({
-          type: 'fail',
-          message: '点击左侧任意场地发送寻找球友',
-          duration: 5000,
-        });
-        return;
-      }
+      // if (this.data.group_id == "") {
+      //   Toast.fail({
+      //     type: 'fail',
+      //     message: '点击左侧任意场地发送寻找球友',
+      //     duration: 5000,
+      //   });
+      //   return;
+      // }
       const initMsg = {
         group_id: this.getGroupIdSuffix(this.data.group_id),
         sender_id: this.data.sender_id,

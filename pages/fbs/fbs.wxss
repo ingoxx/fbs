@@ -634,9 +634,30 @@
 }
 
 .box .c-box .date {
+  position: relative;
   margin: 10rpx 0;
   font-size: 23rpx;
   color: #4e4e4e;
+}
+
+.box .c-box .date .pub-status {
+  position: absolute;
+  right: 125rpx;
+  border: 6rpx solid #cc2f2f;
+  padding: 10rp;
+  border-radius: 6rpx;
+  transform: rotate(380deg);
+  transform-origin: center;
+}
+
+.box .c-box .date .pub-status .ps-1 {
+  padding: 10rpx;
+}
+
+.box .c-box .date .pub-status .ps-1 .t-1 {
+  font-size: 30rpx;
+  color: #cc2f2f;
+  font-weight: 700;
 }
 
 .box .c-box .addr {
@@ -699,6 +720,25 @@
 .box .c-box .accept .control {
   display: flex;
   gap: 18rpx;
+  position: relative;
+}
+
+.box .c-box .accept .control .user-num-c {
+  position: absolute;
+  left: 150rpx;
+  bottom: 37rpx;
+  width: 41rpx;
+  height: 41rpx;
+  border-radius: 50%;
+  background: #e84b4b;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.box .c-box .accept .control .user-num-c .online {
+  font-size: 22rpx;
+  color: #ffffff;
 }
 
 .box .basket {
@@ -716,7 +756,7 @@
 
 .box .contact-us .tran-1 .msg-num, .box .user-list .tran-1 .msg-num {
   position: relative;
-  width: 51rpx;
+  width: 65rpx;
   height: 39rpx;
   background: #e84b4b;
   border-radius: 20%;
@@ -739,7 +779,7 @@
 
 .box .contact-us .tran-3, .box .user-list .tran-3 {
   position: relative;
-  width: 51rpx;
+  width: 65rpx;
   height: 39rpx;
   background: #e84b4b;
   border-radius: 20%;
@@ -1089,6 +1129,15 @@
   padding-left: 0;
 }
 
+.check-box .check-container .sport-img-container .user-info {
+  width: 100%;
+}
+
+.check-box .check-container .sport-img-container .user-info .del {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .check-box .check-container .sport-img-container .n-box .m-box .m-container {
   display: flex;
   gap: 28rpx;
@@ -1240,6 +1289,11 @@
   top: 5rpx;
 }
 
+.van-icon-11 {
+  position: relative;
+  top: 7rpx !important;
+}
+
 .van-tab-1 .van-tabs--line {
   border-radius: 10rpx !important;
 }
@@ -1281,6 +1335,7 @@
 .pop-box-1 .action {
   display: flex;
   gap: 25rpx;
+  flex-wrap: wrap;
   margin: 40rpx 0;
 }
 
@@ -1349,4 +1404,19 @@
 .van-check-1 .van-checkbox__label {
   padding-left: 9rpx !important;
   font-size: 27rpx !important;
+}
+
+.date-cus {
+  position: relative;
+}
+
+.dt-display {
+  position: absolute;
+  bottom: 15rpx;
+  width: 126rpx;
+  border: none;
+  background: #ffffff;
+  left: 294rpx;
+  font-size: 23rpx;
+  color: #c8c9d6;
 }

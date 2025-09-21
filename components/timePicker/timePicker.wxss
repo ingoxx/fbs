@@ -1,0 +1,20 @@
+/* 简单样式，可按需更改 */
+/* .dt-display { padding:10px; border:1px solid #eee; border-radius:6px; } */
+.pic {
+  position: relative;
+}
+.dt-display {
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  position: absolute;
+  bottom: 20rpx;
+  left: 213rpx;
+  border: none;
+  background: #ffffff;
+  color: #cbc9d6;
+  font-size: 7rpx;
+  z-index: 10000;
+  font-size: 26rpx!important;
+  font-weight: 400!important;
+}

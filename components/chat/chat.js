@@ -273,6 +273,9 @@ Component({
     },
     onClickGroupId(e) {
       const gid = e.currentTarget.dataset.id;
+      if (gid.id == this.data.group_id) {
+        return;
+      }
       if (gid.id != this.data.group_id) {
         this.setData({
           chatData: [],

@@ -1,7 +1,7 @@
 <view class="box">
   <view class="sidebar" wx:if="{{user_id == cov_data.user_id}}">
     <view class="group-id-search">
-      <input type="text" class="chat-input group-chat-font-size " value="{{ group_id_value }}" bindinput="onFilterGroupId" placeholder="搜索场地"/>
+      <input type="text" class="chat-input group-chat-font-size " value="{{ group_id_value }}" bindinput="onFilterGroupId" placeholder="搜索用户"/>
       <van-icon custom-class="van-icon-0" name="https://ai.anythingai.online/static/profile3/flush-5.svg" bind:tap="refreshOnlineData"/>
     </view>
     <scroll-view 
@@ -9,23 +9,15 @@
       class="group-id-list"
       scroll-with-animation 
     > 
-        <view class="venue-info">
-          <van-icon name="location" color="#adadad" custom-class="van-icon-1"/>
-          <text class="group-name group-chat-font-size" user-select="true" data-id="{{ item }}" bind:tap="onClickGroupId">
-            <!-- {{ item.title }}<text style="color:{{item.id==group_id ? '#256d64': '#adadad'}}">({{item.online}})</text> -->
-            {{ cov_data.nick_name }}
-            <!-- <text wx:if="{{user_id == admin}}" class="city" style="color:{{item.id==group_id ? '#256d64': '#adadad'}}">{{ cov_data.nick_name }}</text> -->
-          </text>
-        </view>
-      <!-- <block wx:for="{{ venue_data_filter }}" wx:key="index" wx:for-item="item">
+      <block wx:for="{{ user_list }}" wx:key="index" wx:for-item="item">
         <view class="venue-info">
           <van-icon name="location" color="{{item.id==group_id ? '#256d64': '#adadad'}}" custom-class="van-icon-1"/>
-          <text class="group-name group-chat-font-size" user-select="true" data-id="{{ item }}" bind:tap="onClickGroupId" style="color:{{item.id==group_id ? '#256d64': ''}}">
-            {{ item.title }}<text style="color:{{item.id==group_id ? '#256d64': '#adadad'}}">({{item.online}})</text>
-            <text wx:if="{{user_id == admin}}" class="city" style="color:{{item.id==group_id ? '#256d64': '#adadad'}}">{{ item.city }}</text>
+          <text class="group-name group-chat-font-size" user-select="true" data-item="{{ item }}" bind:tap="onClickGroupId" style="color:{{item.id==group_id ? '#256d64': ''}}">
+            {{ item.nick_name }}
+            <text class="city" style="color:{{item.id==group_id ? '#256d64': '#adadad'}}">{{ item.city }}</text>
           </text>
         </view>
-      </block> -->
+      </block>
     </scroll-view>
   </view>
   <view class="main">

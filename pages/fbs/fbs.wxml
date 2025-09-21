@@ -66,7 +66,7 @@
       value="{{ inputValue }}"
       shape="round"
       background="#efefef"
-      placeholder="请输入场地搜索"
+      placeholder="请输入关键字搜索"
       bindchange="newGetVal"
       clearable
       disabled="{{ isInput }}"
@@ -93,14 +93,19 @@
   <!-- 数据统计 -->
   <view class="data-num">
     <view class="num">
-      <van-icon custom-class="van-icon-6" color="#efefef" name="https://ai.anythingai.online/static/profile3/data-2.svg" /><text class="content">目前最多展示{{totalData}}条场地信息</text>
+      <van-icon 
+      custom-class="van-icon-6" 
+      color="#efefef" 
+      name="https://ai.anythingai.online/static/profile3/data-2.svg" />
+      <text class="content" wx:if="{{isActiveTitle == 4}}">{{defaultSportSquare}}类型有【{{spDataNum}}】条陪练数据</text>
+      <text class="content" wx:else>目前{{defaultSportSquare}}最多展示{{totalData}}条场地信息</text>
     </view>
   </view>
   <!-- 练习 -->
-  <view class="venue-tab-o">
+  <view class="venue-tab-o" wx:if="{{isShowAllData}}">
     <view class="venue-container"> 
       <block wx:for="{{titles}}" wx:key="index" wx:for-item="item">
-          <van-button type="default" round custom-style="width:150rpx;color:{{item.id === isActiveTitle ? '#ffffff' : ''}}" color="{{item.id === isActiveTitle ? '#256d64' : ''}}" size="small" data-id="{{item.id}}" bind:tap="onConfirmSportSelection2">
+          <van-button wx:if="{{item.id > 2 }}" type="default" round custom-style="width:150rpx;color:{{item.id === isActiveTitle ? '#ffffff' : ''}}" color="{{item.id === isActiveTitle ? '#256d64' : ''}}" size="small" data-id="{{item.id}}" bind:tap="onConfirmSportSelection2">
             {{item.name}}
           </van-button>
       </block>
@@ -270,7 +275,7 @@
                 <van-icon size="30rpx" custom-class="van-icon-5 van-icon-8" name="https://ai.anythingai.online/static/profile3/light.svg" />{{item.hasJoined ? '退出组队' : '加入组队'}}({{item.join_user_count}})
               </van-button>
               <van-button round color="#256d64" size="small" data-index="{{index}}" custom-style="width:270rpx" data-item="{{ item }}"  bindtap="toggleShowVenueImg1">
-                <van-icon size="30rpx" custom-class="van-icon-5" name="https://ai.anythingai.online/static/profile3/click-3.svg" /><text class="group_title">发布付费陪练</text>
+                <van-icon size="30rpx" custom-class="van-icon-5" name="https://ai.anythingai.online/static/profile3/click-3.svg" /><text class="group_title">{{pub_btn_text}}</text>
               </van-button>
             </view>
             <van-transition show="{{ item.join_user_count > 0  }}" name="fade-right" >
@@ -310,8 +315,8 @@
     </van-transition>
     <!-- 练习数据 -->
     <van-transition show="{{isSwitchData}}" custom-class="block" name="fade-left">
-      <block wx:for="{{ spData }}" wx:key="index" wx:for-item="item">
-        <view class="c-box" wx:if="{{!item.is_del}}">
+      <block wx:for="{{ filterSpData }}" wx:key="index" wx:for-item="item">
+        <view class="c-box" wx:if="{{!item.is_del || openid == admin}}">
           <view class="user">
             <view class="user1">
               <van-image use-loading-slot 
@@ -331,13 +336,20 @@
             <text>{{item.content}}</text>
           </view>
           <view class="date">
-            <van-icon size="25rpx" name="clock" /><text>{{item.date}}</text>
+            <view class="data-1">
+              <van-icon size="25rpx" name="clock" /><text>{{item.date}}</text>
+            </view>
+            <view class="pub-status" wx:if="{{openid == admin && item.is_del}}">
+              <view class="ps-1">
+                <text class="t-1">{{item.is_del ? "已删除" : ""}}</text>
+              </view>
+            </view>
           </view>
           <view class="addr">
-            <van-icon size="29rpx" name="location" /><text>{{item.addr}}</text> <text class="deri">点击可查看路线</text>
+            <van-icon size="29rpx" name="location" /><text>{{item.title}}</text> <text class="deri" data-item="{{item}}" bind:tap="openMapAppDetailed2">点击可查看路线</text>
           </view>
           <view class="price">
-            <van-icon size="25rpx" name="gold-coin" /><text class="p1">{{item.price}}</text>
+            <van-icon size="25rpx" name="gold-coin" /><text class="p1">{{item.price}}元/时</text>
           </view>
           <view class="tags">
             <view class="fm">
@@ -352,14 +364,16 @@
               <van-icon size="21rpx" name="like" /><text>快去沟通吧</text>
             </view>
             <view class="control">
-              <van-button type="default" round custom-style="width:180rpx;" color="#256d64" size="small" data-item="{{item}}" bind:tap="cov_detail_pop">
-                <van-icon size="30rpx" custom-class="van-icon-5 van-icon-8" name="https://ai.anythingai.online/static/profile3/user-con-4.svg" /> <text>{{openid == item.user_id ? '接单用户' : '沟通'}}</text>
+              <van-button type="default" round custom-style="width:180rpx;" disabled="{{item.is_del}}" color="#256d64" size="small" data-item="{{item}}" bind:tap="cov_detail_pop">
+                <van-icon size="30rpx" custom-class="van-icon-5 van-icon-8" name="https://ai.anythingai.online/static/profile3/user-con-5.svg" /> <text>{{openid == item.user_id ? '查看消息' : '沟通'}}</text>
               </van-button>
-              <van-button type="danger" round custom-style="width:180rpx;" size="small" data-id="{{item.id}}" wx:if="{{item.user_id == openid}}" bind:tap="user_del_sp">
-                <van-icon size="25rpx" custom-class="van-icon-10" name="https://ai.anythingai.online/static/profile3/del.svg" /> <text>撤销</text>
+              <view class="user-num-c" wx:if="{{openid == item.user_id || openid == admin}}">
+                <text class="online" >{{item.online_num > 10 ? '10+' : item.online_num}}</text>
+              </view>
+              <van-button color="#cc2f2f" round custom-style="width:180rpx;" disabled="{{item.is_del}}" size="small" data-item="{{item}}" wx:if="{{item.user_id == openid || openid == admin}}" bind:tap="user_del_sp">
+                <van-icon size="25rpx" custom-class="van-icon-10" name="https://ai.anythingai.online/static/profile3/del.svg" /> <text>删除</text>
               </van-button>
             </view>
-            
           </view>
         </view>
       </block>
@@ -400,7 +414,7 @@
         </button>
       </view>
       <view class="tran-1" wx:if="{{isUse && isShowAllData}}">
-        <button size="mini" bind:tap="openAddAddrPop" class="share-btn">
+        <button size="mini" bind:tap="openPublishList" class="share-btn">
           <van-icon size="25rpx" name="https://ai.anythingai.online/static/profile3/pub.svg" /> <text class="b-c">发布</text>
         </button>
       </view>
@@ -748,6 +762,77 @@
         </block>
       </view>
   </van-dialog>
+  <!-- 发布历史 -->
+  <van-dialog
+      use-slot
+      cancel-button-text="关闭"
+      z-index="100"
+      show="{{ showPublishHistoryPop }}"
+      show-confirm-button="{{false}}"  
+      show-cancel-button="{{true}}"     
+      confirm-button-open-type="getUserInfo"
+      bind:close="onClose"
+      custom-class="van-dialog-1"
+    >
+      <view class="van-dialog-title">
+        <view class="title-m">
+          <text >我的历史发布记录</text>
+        </view>
+        <view  class="title-n">
+          <text>可随时删除</text>
+        </view>
+      </view>
+      <view class="user-search">
+        <van-search
+          value="{{ userVal }}"
+          input-align="center"
+          placeholder="请输入搜索关键词"
+          bindchange="searchPublishHistory"
+        />
+      </view>
+      <view class="user-num">
+        <text>总{{userPublishCount}}条记录</text>
+      </view>
+      <view class="check-box">
+        <block wx:for="{{filterUserPublishList}}" wx:key="index" wx:for-item="item">
+          <view class="check-container">
+            <view class="sport-img-container">
+              <view class="sport_img">
+                <van-image use-loading-slot custom-class="van-img-1" radius="10" fit="cover" src="{{item.img}}" data-src="{{item.img}}" bind:click="onPreviewImage"><van-loading slot="loading" type="spinner" size="20" vertical /></van-image>
+                <view class="you">系统生成</view>
+              </view>
+              <view class="user-info">
+                <view class="sport_addr"><text class="check-title">状态: </text> <van-tag type="success">{{item.is_del ? '': '有效'}} </van-tag></view>
+                <view class="sport_addr"><text class="check-title">地址: </text><text class="check-content" selectable="true">{{ item.title}}</text></view>
+                <view class="sport_addr">
+                  <text class="check-title">内容: </text><van-icon name="info" custom-class="van-icon-10" color="#ff6161" /><text class="check-content check-content-3" selectable="true">{{ item.content }}</text>
+                </view>
+                <view class="sport_addr">
+                  <text class="check-title">价格: </text><text class="check-content" selectable="true">{{ item.price }}</text>
+                </view>
+                <view class="sport_addr">
+                  <text class="check-title">人数: </text><text class="check-content" selectable="true">{{ item.players }}</text>
+                </view>
+                <view class="sport_addr">
+                  <text class="check-title">要求: </text><text class="check-content" selectable="true">{{ item.gender_req }}</text>
+                </view>
+                <view class="sport_addr">
+                  <text class="check-title">时间: </text><text class="check-content" selectable="true">{{ item.time }}</text>
+                </view>
+                <view class="sport_addr del">
+                  <!-- <van-button color="#cc2f2f" round custom-style="width:130rpx;" size="mini" data-item="{{item}}" bind:tap="publish_data">
+                    <van-icon size="20rpx" custom-class="van-icon-10" name="https://ai.anythingai.online/static/profile3/del.svg" /> <text>再次发布</text>
+                  </van-button> -->
+                  <van-button color="#cc2f2f" round custom-style="width:130rpx;" size="mini" data-item="{{item}}" bind:tap="user_del_sp">
+                    <van-icon size="20rpx" custom-class="van-icon-10" name="https://ai.anythingai.online/static/profile3/del.svg" /> <text>删除</text>
+                  </van-button>
+                </view>
+              </view>
+            </view>
+          </view>
+        </block>
+      </view>
+  </van-dialog>
   <van-dialog
       use-slot
       cancel-button-text="关闭"
@@ -820,9 +905,9 @@
       <view class="content">
         <view class="name"></view>
         <view class="action">
-          <block wx:for="{{chooseList}}" wx:key="index" wx:for-item="item">
+          <block wx:for="{{filterChooseList}}" wx:key="index" wx:for-item="item">
             <view class="btn">
-              <van-button bind:click="onFiltering" data-id="{{item.id}}" type="default" size="small" color="{{isActive == item.id ? '#ffefe7' : '#f1f5f8'}}" custom-class="van-button-1" custom-style="color:{{isActive == item.id ? '#cf7f5d' : '#454547'}}">
+              <van-button bind:click="onFiltering" data-id="{{item.id}}" type="default" size="small" color="{{isActive == item.id ? '#dae2cb' : '#f1f5f8'}}" custom-class="van-button-1" custom-style="color:{{isActive == item.id ? '#ffffff' : '#454547'}}">
                 {{item.name}}
               </van-button>
             </view>
@@ -830,12 +915,13 @@
         </view>
       </view>
       <view class="confirm">
-        <van-button color="#fd6303" size="small" custom-style="width:185rpx;border-radius: 10rpx" bind:click="onFilterVenueData">
+        <van-button color="#256d64" size="small" custom-style="width:185rpx;border-radius: 10rpx" bind:click="onFilterVenueData">
           确认
         </van-button>
       </view>
     </view>
   </van-popup>
+  <!-- 发布内容 -->
   <van-popup
     show="{{ showSpPop }}"
     round
@@ -865,8 +951,8 @@
         clearable
         autosize
         type="textarea"
-        label="陪练价格"
-        placeholder="如: 20元/时"
+        label="价格(元/时)"
+        placeholder="如: 20"
         border="{{ true }}"
         confirm-type="done"
         bind:change="onChangeSpPriceField"
@@ -877,20 +963,25 @@
         clearable
         autosize
         type="textarea"
-        label="陪练时间"
-        placeholder="如: 2025-09-17 16:30:30"
+        label="时间"
+        placeholder=""
         border="{{ true }}"
         confirm-type="done"
         bind:change="onChangeSpReqField"
       />
+      <view class="date-cus" wx:if="{{sp_time == ''}}">
+        <time-picker id="dt" bindchange="onDtChange">
+          <button>点击</button>
+        </time-picker>
+      </view>
       <van-field
         value="{{ sp_players }}"
         required
         clearable
         autosize
         type="textarea"
-        label="陪练人数"
-        placeholder="如: 1人"
+        label="人数"
+        placeholder="如: 1"
         border="{{ true }}"
         confirm-type="done"
         bind:change="onChangeSpPlayersField"
@@ -909,25 +1000,10 @@
           </van-checkbox>
         </view>
       </view>
-      <!-- <view class="add-square-img">
-        <view class="title">
-          <text>添加场地图片目前只能传1张</text>
-        </view>
-        <view class="img">
-          <van-uploader 
-          max-count="1"
-          multiple
-          preview-image
-          deletable
-          file-list="{{ fileList }}" 
-          bind:after-read="afterRead" 
-          bind:delete="deleteImg"
-          />
-        </view>
-      </view> -->
     </van-cell-group>
     <view class="dialog-btn">
       <view class="cancel">
+        <!-- openPicker,onSet -->
         <van-button round  data-index="{{index}}" custom-style="width:218rpx" bind:tap="onSet">
           <text class="group_title">重置</text>
         </van-button>
@@ -942,4 +1018,5 @@
   <van-notify id="van-notify" />
   <van-toast id="van-toast" />
   <van-dialog id="van-dialog" />
+  
 </view>

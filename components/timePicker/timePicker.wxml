@@ -1,0 +1,11 @@
+<picker mode="multiSelector"
+        range="{{rangeList}}"
+        value="{{value}}"
+        bindchange="onConfirm"
+        bindcolumnchange="onColumnChange"
+        class="pic"
+        >
+  <!-- 这里直接放要显示的视图，不要用slot -->
+  <!-- <view class="dt-display">{{displayText}}</view> -->
+  <button size="mini" class="dt-display">选择时间</button>
+</picker>

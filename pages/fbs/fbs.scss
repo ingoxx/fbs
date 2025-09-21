@@ -607,9 +607,27 @@
       font-size: 30rpx;
     }
     .date {
+      position: relative;
       margin: 10rpx 0;
       font-size: 23rpx;
       color: #4e4e4e;
+      .pub-status {
+        position: absolute;
+        right: 125rpx;
+        border: 6rpx solid #cc2f2f;
+        padding: 10rp;
+        border-radius: 6rpx;
+        transform: rotate(380deg);
+        transform-origin: center;
+        .ps-1 {
+          padding: 10rpx;
+          .t-1 {
+            font-size: 30rpx;
+            color: #cc2f2f;
+            font-weight: 700;
+          }
+        }
+      }
     }
     .addr {
       position: relative;
@@ -662,6 +680,23 @@
       .control {
         display: flex;
         gap: 18rpx;
+        position: relative;
+        .user-num-c {
+          position: absolute;
+          left: 150rpx;
+          bottom: 37rpx;
+          width: 41rpx;
+          height: 41rpx;
+          border-radius: 50%;
+          background: #e84b4b;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          .online {
+            font-size: 22rpx;
+            color: #ffffff;
+          }
+        }
       }
     }
   }
@@ -678,7 +713,7 @@
     .tran-1 {
       .msg-num {
         position: relative;
-        width: 51rpx;
+        width: 65rpx;
         height: 39rpx;
         background: #e84b4b;
         border-radius: 20%;
@@ -699,7 +734,7 @@
     }
     .tran-3 {
       position: relative;
-      width: 51rpx;
+      width: 65rpx;
       height: 39rpx;
       background: #e84b4b;
       border-radius: 20%;
@@ -1002,6 +1037,13 @@
           padding-left: 0;
         }
       }
+      .user-info {
+        width: 100%;
+        .del {
+          display: flex;
+          justify-content: flex-end;
+        }
+      }
       .n-box {
         .m-box {
           .m-container {
@@ -1142,6 +1184,11 @@
   top: 5rpx;
   // bottom: 5rpx;
 }
+.van-icon-11 {
+  position: relative;
+  top: 7rpx!important;
+  // bottom: 5rpx;
+}
 .van-tab-1 {
   .van-tabs--line {
     border-radius: 10rpx!important;
@@ -1177,6 +1224,7 @@
   .action {
     display: flex;
     gap: 25rpx;
+    flex-wrap: wrap;
     margin: 40rpx 0;
   }
   .confirm {
@@ -1233,4 +1281,20 @@
     padding-left: 9rpx!important;
     font-size: 27rpx!important;
   }
+}
+.date-cus {
+  position: relative;
+}
+.dt-display { 
+  position: absolute;
+  bottom: 15rpx;
+  width: 126rpx;
+  border: none;
+  background: #ffffff;
+  left: 294rpx;
+  font-size: 23rpx;
+  color: #c8c9d6;
+}
+.van-field {
+  
 }

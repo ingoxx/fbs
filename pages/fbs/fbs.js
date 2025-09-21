@@ -12,17 +12,22 @@ import Dialog from '@vant/weapp/dialog/dialog';
 const md5 = require('../../utils/md5');
 Page({
   data: {
+    wxDate: "",
     p_data: {addr: "", lng: "", lat: "", title: ""},
     isSwitchData: false,
     sp_time: "",
     titleName: "",
     isActiveTitle: 3,
+    golbal_rid: "",
+    pub_btn_text: "",
     titles: [
-      {id: 3, name: "场地", icon:"https://ai.anythingai.online/static/profile3/venue-7.svg"},
-      {id: 4, name: "陪练", icon:"https://ai.anythingai.online/static/profile3/sp-11.svg"},
+      // {id: 3, name: "场地", icon:"https://ai.anythingai.online/static/profile3/venue-7.svg"},
+      // {id: 4, name: "陪练", icon:"https://ai.anythingai.online/static/profile3/sp-11.svg"},
     ],
     mChecked: false,
     fmChecked: false,
+    filterUserPublishList: [],
+    userPublishList: [],
     showSpPop: false,
     sp_players: "",
     sp_content: "",
@@ -33,12 +38,14 @@ Page({
     isLock: false,
     isActive: 1,
     chooseList: [],
+    filterChooseList: [],
     showChoose: false,
     isShowAllData: false,
     isShowGoodPage: false,
     totalData: 0,
     showSettingCenter: false,
     showUserUpdateList: false,
+    userPublishCount: 0,
     cbt_user_count: 0,
     filter_cbt_users: [],
     cbt_users: [],
@@ -96,6 +103,7 @@ Page({
     addVillage: false,
     showCloseBtn: false,
     showPrivacy: false,
+    showPublishHistoryPop: false,
     villageInfo: '',
     useNotice: "下拉小程序以获取附近运动场地址",
     notice: "以帮助更多人了解场地信息，感谢！",
@@ -119,36 +127,242 @@ Page({
     spDataNum: 1,
     showPubRm: false,
     cov_data: {},
-    spData: [
-      {id: "1", is_del: false, user_id: "ogR3E62jXXJMbVcImRqMA1gTSegM1", nick_name: "吴艳祖深圳分祖", img: "https://ai.anythingai.online/static/profile3/1527.png", publish_date: "09-15", content: "需要2个帮捡球", date: "2025-09-20 16:30 周六", addr: "深圳市顶峰篮球俱乐部龙华分店", price: "20元/小时", gender_req: "男女都可以", players: "需要2人", city: "深圳市"},
-      {id: "2", is_del: false,  user_id: "ogR3E62jXXJMbVcImRqMA1gTSegM", nick_name: "深圳打铁王", img: "https://ai.anythingai.online/static/profile3/1047.png", publish_date: "09-11", content: "需要5v5对抗训练,还缺两个人", date: "2025-09-19 18:30 周五", addr: "深圳市深圳湾体育中心", price: "25元/小时", user_id: "", gender_req: "仅限男", players: "需要2人", city: "深圳市"},
-      {id: "3", is_del: false,  user_id: "ogR3E62jXXJMbVcImRqMA1gTSegM", nick_name: "裤里的4分球", img: "https://ai.anythingai.online/static/profile3/1684.png", publish_date: "09-14", content: "百分单挑局输赢都给100", date: "2025-09-21 19:30 周日", addr: "深圳市东岸天台篮球场", price: "100元/局", gender_req: "仅限男", players: "需要1人", city: "深圳市"},
-      {id: "4", is_del: false,  user_id: "ogR3E62jXXJMbVcImRqMA1gTSegM", nick_name: "天上掉了个篮球", img: "https://ai.anythingai.online/static/profile3/1685.png", publish_date: "09-12", content: "需要一名篮球裁判", date: "2025-09-21 19:30 周日", addr: "深圳市东岸天台篮球场", price: "50元/场", gender_req: "仅限男", players: "需要1人", city: "深圳市"},
-    ],
+    filterSpData: [],
+    spData: [],
+    selectedTime: "",
+    chosen: "",
+    pickerVisible: true,
   },
-  user_del_sp () {
+  formatTimestamp(timestamp, format = "yyyy-MM-dd HH:mm:ss") {
+    const date = new Date(Number(timestamp));
+    const pad = n => n.toString().padStart(2, '0');
+  
+    const map = {
+      "yyyy": date.getFullYear(),
+      "MM": pad(date.getMonth() + 1),
+      "dd": pad(date.getDate()),
+      "HH": pad(date.getHours()),
+      "mm": pad(date.getMinutes()),
+      "ss": pad(date.getSeconds())
+    };
+  
+    return format.replace(/yyyy|MM|dd|HH|mm|ss/g, matched => map[matched]);
+  },
+  onDtChange(e) {
+    this.setData({ sp_time: this.formatTimestamp(e.detail.timestamp) });
+    console.log('timestamp', this.formatTimestamp(e.detail.timestamp));
+  },
+  isPositiveInteger(val) {
+    return /^[1-9]\d*$/.test(val);
+  },
+  searchPublishHistory(e) {
+    const val = e.detail;
+    const data = this.data.userPublishList;
+    if (val == "") {
+      this.setData({
+        filterUserPublishList: data,
+        userPublishCount: data.length,
+      });
+      return;
+    }
+    this.setData({
+      userVal: val,
+    });
+
+    const fd = this.data.filterUserPublishList.filter(item => {
+      const contentMatch = item.content.includes(val);
+      return contentMatch;
+    });
+    this.setData({
+      filterUserPublishList: fd,
+      userPublishCount: fd.length,
+    });
+  },
+  getUserSelfPulDataApi() {
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: `${this.data.baseUrl}/get-user-publish-data?uid=${this.data.user_id}`,
+        timeout: 10000,
+        success: function (res) {
+          resolve(res.data);
+        },
+        fail: function (err) {
+          console.log(err);
+          reject(err)
+        }
+      })
+    });
+  },
+  async openPublishList() {
+    try {
+      const resp = await this.getUserSelfPulDataApi();
+      if (resp.code != 1000) {
+        Toast.fail(`请求失败1: ${resp.code}`);
+        return;
+      }
+      const fd = resp.data;
+      fd.sort((a, b) => {
+        return stringToTimestamp(b.time) - stringToTimestamp(a.time);
+      });
+      this.setData({
+        filterUserPublishList: fd,
+        userPublishList: fd,
+        userPublishCount: fd.length,
+        showPublishHistoryPop: true,
+      });
+    } catch (error) {
+      Toast.fail("请求失败2");
+    }
+  },
+  updateTaskStatusApi(data) {
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: `${this.data.baseUrl}/update-single-publish-data?uid=${this.data.user_id}`,
+        timeout: 10000,
+        method:"POST",
+        data: data,
+        success: function (res) {
+          resolve(res.data);
+        },
+        fail: function (err) {
+          reject(err)
+        }
+      })
+    });
+  },
+  adminGetTaskBySportTpApi() {
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: `${this.data.baseUrl}/get-all-user-publish-data?uid=${this.data.user_id}&sport_key=${this.data.defaultSportKey}`,
+        timeout: 10000,
+        success: function (res) {
+          resolve(res.data);
+        },
+        fail: function (err) {
+          reject(err)
+        }
+      })
+    });
+  },
+  userGetTaskByCityAndSportTpApi() {
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: `${this.data.baseUrl}/get-task-by-city-sport?uid=${this.data.user_id}&city=${this.data.city}&sport_key=${this.data.defaultSportKey}`,
+        timeout: 10000,
+        success: function (res) {
+          resolve(res.data);
+        },
+        fail: function (err) {
+          reject(err)
+        }
+      })
+    });
+  },
+  createRidApi(date) {
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: `${this.data.baseUrl}/create-user-rid?uid=${this.data.user_id}`,
+        timeout: 10000,
+        method: "POST",
+        data: date, 
+        success: function (res) {
+          resolve(res.data);
+        },
+        fail: function (err) {
+          reject(err)
+        }
+      })
+    });
+  },
+  flushSpData(data) {
+    data.sort((a, b) => {
+      return stringToTimestamp(b.time) - stringToTimestamp(a.time);
+    });
+
+    return data;
+  },
+  user_del_sp(e) {
+    const data =  e.currentTarget.dataset.item;
+    if (data.is_del) {
+      return;
+    }
     Dialog.confirm({
       title: "",
-      message: "确定撤销吗？",
+      message: "确定删除吗？",
     }).then(async () => {
       Toast.loading({
-        message: '撤销中...',
+        message: '删除中...',
         forbidClick: true,
       });
-      setTimeout(() => {
-        Toast.success("已撤销");
-      }, 3000)
-      })
-      .catch(() => {
-        Toast.success("已取消发布");
+      const fd = {
+        id: data.id,
+        user_id: data.user_id,
+        city: data.city,
+        sport_key: data.sport_key,
+        status: 2 
+      };
+      const resp = await this.updateTaskStatusApi(fd);
+      if (resp.code != 1000) {
+        Toast.fail(`删除失败1:${resp.code}`);
+        return;
+      }
+
+      const sd = resp.data;
+      const usd = this.data.filterUserPublishList;
+      const nd = usd.filter(item => item.id != data.id);
+      this.setData({
+        filterSpData: this.flushSpData(sd),
+        spData: this.flushSpData(sd),
+        spDataNum: sd.length,
+        filterUserPublishList: this.flushSpData(nd),
+        userPublishList: this.flushSpData(nd),
+        userPublishCount: nd.length,
       });
+
+      Toast.success("删除完成");
+    })
+    .catch(() => {
+    });
   },
-  cov_detail_pop(e) {
+  async cov_detail_pop(e) {
     const data =  e.currentTarget.dataset.item;
-    console.log(data);
+    if (data.is_del) {
+      return;
+    }
+    if (this.data.openid != data.user_id) {
+      Toast.loading({
+        message: "正在初始化...",
+        forbidClick: true,
+        duration: 0,
+      });
+      try {
+        const rd = {
+          tid: data.id,
+          nick_name: this.data.nick_name, 
+          img: this.data.avatarUrl,
+          city: this.data.city,
+          user_id: this.data.openid
+        };
+        const resp = await this.createRidApi(rd);
+        if (resp.code != 1000) {
+          Toast.fail(`请求失败: ${resp.code}`);
+          return;
+        }
+        data.rid = resp.data.rid;
+        console.log("createRidApi data >>> ", data);
+        this.setData({
+          cov_data: data,
+          showPubRm: true,
+        });
+        Toast.success("初始化完成");
+      } catch (error) {
+        Toast.fail(`请求失败: ${error}`);
+      }
+      return;
+    } 
     this.setData({
-      showPubRm: true,
       cov_data: data,
+      showPubRm: true,
     });
 
   },
@@ -213,13 +427,81 @@ Page({
       })
     });
   },
-  onConfirmSportSelection2(e) {
+  diffFilterKeyWork() {
+    const choose = this.data.chooseList;
+    const tag = this.data.isActiveTitle;
+    var chs = 0;
+    if (tag == 3) {
+      chs = 1000;
+    } else if (tag == 4) {
+      chs = 2000;
+    }
+    const nc = choose.filter(item => item.type == chs);
+    this.setData({
+      filterChooseList: nc,
+    })
+  },
+  async getLatestSpData() {
+    Toast.loading({
+      message: "正在获取最新陪练信息...",
+      forbidClick: true,
+      duration: 0,
+    });
+
+    if (this.data.openid == app.globalData.admin) { //admin data
+      try {
+        const resp = await this.adminGetTaskBySportTpApi();
+        if (resp.code != 1000) {
+          Toast.fail(`获取发布数据失败1: ${resp.code}`);
+          return;
+        }
+        const fd = resp.data;
+        fd.sort((a, b) => {
+          return stringToTimestamp(b.time) - stringToTimestamp(a.time);
+        });
+        this.setData({
+          filterSpData: fd,
+          spData: fd,
+          spDataNum: fd.length,
+        });
+      } catch (error) {
+        Toast.fail("获取发布数据失败2");
+      }
+      Toast.clear();
+    } else { // user data
+      try {
+        const resp = await this.userGetTaskByCityAndSportTpApi();
+        if (resp.code != 1000) {
+          Toast.fail(`获取发布数据失败3: ${resp.code}`);
+          return;
+        }
+        const fd = resp.data;
+        fd.filter(item => !item.is_del);
+        fd.sort((a, b) => {
+          return stringToTimestamp(b.time) - stringToTimestamp(a.time);
+        });
+        this.setData({
+          filterSpData: fd,
+          spData: fd,
+          spDataNum: fd.length,
+        });
+      } catch (error) {
+        Toast.fail("获取发布数据失败4");
+      }
+      Toast.clear();
+    }
+  },
+  async onConfirmSportSelection2(e) {
     const id = e.currentTarget.dataset.id;
     if (this.data.isActiveTitle != id) {
       this.setData({
         isActiveTitle: id,
         isSwitchData: !this.data.isSwitchData,
-      })
+      });
+      this.diffFilterKeyWork();
+      if (id == 4) {
+        this.getLatestSpData();
+      }
     }
   },
   onChangeGender(e) {
@@ -244,6 +526,7 @@ Page({
       mChecked: false,
       fmChecked: false,
     });
+
   },
   onChangeSpPlayersField(e) {
     const value = e.detail;
@@ -267,8 +550,8 @@ Page({
       return;
     }
 
-    if (!this.data.sp_price) {
-      Toast.fail("请输入陪练价格");
+    if (!this.isPositiveInteger(this.data.sp_price)) {
+      Toast.fail("价格只能是整数");
       return;
     }
 
@@ -282,8 +565,8 @@ Page({
       return;
     }
 
-    if (!this.data.sp_players) {
-      Toast.fail("请输入陪练人数");
+    if (!this.isPositiveInteger(this.data.sp_players)) {
+      Toast.fail("人数只能是整数");
       return;
     }
 
@@ -329,22 +612,25 @@ Page({
   
       try {
         const resp = await this.put_out_api(data);
-        console.log(resp);
         if (resp.code != 1000) {
           Toast.fail("发布失败1: ", resp.code);
           return;
         }
-        this.setData({
-          spData: resp.data,
-        });
-        // Toast.clear();
         Toast.success("发布成功");
+        this.getLatestSpData();
+        this.setData({
+          isActiveTitle: 4,
+          isSwitchData: true,
+          spData: resp.data,
+          filterSpData: resp.data,
+        });
+        this.onClose();
       } catch (error) {
         Toast.fail("发布失败2: ", resp.code);
+        this.onClose();
       }
       })
       .catch(() => {
-        Toast.success("已取消发布");
       });
   },
   onCloseAllPop() {
@@ -352,7 +638,33 @@ Page({
       showServiceBtn: false,
     });
   },
-  onFilterVenueData() {
+  filterSpDetail() {
+    var data = [];
+    const data2 = this.data.filterSpData;
+    const data1 = this.data.spData;
+    const aid = this.data.isActive;
+    if (aid == 4) {
+      data = data2.sort((a, b) => {
+        return b - a; 
+      });
+    } else if (aid == 5) {
+      this.getLatestSpData();
+      this.onClose();
+      return;
+    } else if (aid == 6) {
+      data = data1.filter(item => item.is_del);
+    } else if (aid == 7) {
+      data = data1.filter(item => item.is_del == false);
+    }
+
+    this.setData({
+      filterSpData: data,
+    });
+    Toast.success("筛选完成");
+    this.onClose();
+
+  },
+  filterVenueDetail() {
     const data = this.data.basketSquareFilterData;
     const aid = this.data.isActive;
     if (aid == 2) {
@@ -373,6 +685,16 @@ Page({
     });
     Toast.success("筛选完成");
     this.onClose();
+  },
+  onFilterVenueData() {
+    const tid = this.data.isActiveTitle;
+    if (tid == 3) {
+      this.filterVenueDetail();
+    } else if (tid == 4) {
+      this.filterSpDetail();
+    }
+    
+    
   },
   onFiltering(e) {
     const id = e.currentTarget.dataset.id;
@@ -1014,12 +1336,34 @@ Page({
       .catch(() => {
       });
   },
-  openMapAppDetailed(e) {
+  openMapAppDetailed2(e) {
     const data = e.currentTarget.dataset.item;
+    console.log("data >>> ", data);
     wx.openLocation({
       latitude: Number(data.lat),  // 纬度
       longitude: Number(data.lng), // 经度
-      address: data.addr+data.tags[0], // 地址（可选）
+      address: data.addr, // 地址（可选）
+      scale: 18,
+      success(res) {
+        console.log('打开成功');
+      },
+      fail(err) {
+        console.log('打开失败', err);
+      }
+    });
+  },
+  openMapAppDetailed(e) {
+    const data = e.currentTarget.dataset.item;
+    var addr  = "";
+    if (data.tags != undefined && data.tags.length > 0) {
+      addr = data.addr+data.tags[0];
+    } else {
+      addr = data.addr;
+    }
+    wx.openLocation({
+      latitude: Number(data.lat),  // 纬度
+      longitude: Number(data.lng), // 经度
+      address: addr, // 地址（可选）
       scale: 18,
       success(res) {
         console.log('打开成功');
@@ -1590,6 +1934,7 @@ Page({
       showChoose: false,
       showSpPop: false,
       showPubRm: false,
+      showPublishHistoryPop:false,
     });
   },
   onClearInput(e) {
@@ -1598,12 +1943,11 @@ Page({
       this.getVal(data);
     }
   },
-  async newGetVal(e) {
+  async venvuFliterData(e) {
     const val = e.detail;
     this.setData({
       inputValue: val,
     });
-    // var fd = this.data.basketSquareData.filter(item => item.addr.includes(val));
     const fd = this.data.basketSquareData.filter(item => {
       const addrMatch = item.addr.includes(val);
       const tagsMatch = item.tags.some(tag => tag.includes(val));
@@ -1643,6 +1987,38 @@ Page({
       basketSquareFilterData: processedList,
       totalData: processedList.length,
     });
+  },
+  spFilterData(e) {
+    const val = e.detail;
+    const data = this.data.spData;
+    if (val == "") {
+      this.setData({
+        filterSpData: data,
+        spDataNum: data.length,
+      });
+      return;
+    }
+    this.setData({
+      inputValue: val,
+    });
+
+    const fd = this.data.filterSpData.filter(item => {
+      const contentMatch = item.content.includes(val);
+      return contentMatch;
+    });
+    this.setData({
+      filterSpData: fd,
+      spDataNum: fd.length,
+    });
+  },
+  newGetVal(e) {
+    const tid = this.data.isActiveTitle;
+    if (tid == 4) {
+      this.spFilterData(e);
+    } else {
+      this.venvuFliterData(e);
+    }
+    
   },
   getVal(e) {
     if (e.detail.value == "") {
@@ -1788,10 +2164,13 @@ Page({
         Toast.fail(allData.code);
         return;
       }
+
       this.setData({
         basketSquareData: allData.other_data,
         chooseList: allData.filter_data,
+        filterChooseList: allData.filter_data,
         venue_count: allData.venues.length,
+        
         isActive: 1,
       });
       const newList = this.data.basketSquareData;
@@ -1823,6 +2202,15 @@ Page({
           hasJoined      
         };
       });
+      const btn_list = allData.btn;
+      var btn_text = "";
+      if (allData.data) {
+        const obj = btn_list.find(item => item.id == 2);
+        btn_text = obj.name;
+      } else {
+        const obj = btn_list.find(item => item.id == 1);
+        btn_text = obj.name;
+      }
       this.setData({
         basketSquareFilterData: processedList,
         isEmpty: false,
@@ -1832,10 +2220,13 @@ Page({
         loadText: "获取数据中...",
         isSwitchData: false,
         isActiveTitle: 3,
+        titles: allData.btn,
+        pub_btn_text: btn_text,
       });
       this.showGoodBtn();
       this.getBasketSquareFilter();
       wx.stopPullDownRefresh();
+      this.diffFilterKeyWork();
       Toast.clear();
     } else {
       wx.stopPullDownRefresh();
@@ -1909,7 +2300,7 @@ Page({
         img_url: IMG_URL,
         admin: app.globalData.admin,
       });
-      
+     
       that.isShowPrivacy();
     }).catch(err => {
       console.error('登录失败:', err);
