@@ -967,6 +967,7 @@
         placeholder=""
         border="{{ true }}"
         confirm-type="done"
+        readonly="true"
         bind:change="onChangeSpReqField"
       />
       <view class="date-cus" wx:if="{{sp_time == ''}}">

@@ -18,11 +18,11 @@ Component({
     // 生成初始 range（years, months, days, hours, mins, secs）
     initRange() {
       const years = [];
-      for (let y = this.data.startYear; y <= this.data.endYear; y++) years.push(y + '年');
-      const months = Array.from({length:12}, (_,i)=> (i+1) + '月');
-      const hours = Array.from({length:24}, (_,i)=> (i) + '时');
-      const mins = Array.from({length:60}, (_,i)=> i + '分');
-      const secs = Array.from({length:60}, (_,i)=> i + '秒');
+      for (let y = this.data.startYear; y <= this.data.endYear; y++) years.push(y);
+      const months = Array.from({length:12}, (_,i)=> (i+1));
+      const hours = Array.from({length:24}, (_,i)=> (i));
+      const mins = Array.from({length:60}, (_,i)=> i);
+      const secs = Array.from({length:60}, (_,i)=> i);
 
       // days will be set based on current year/month
       const now = this.data.valueTimestamp ? new Date(this.data.valueTimestamp) : new Date();
@@ -32,7 +32,7 @@ Component({
       const days = this.daysOfMonth(now.getFullYear(), now.getMonth()+1);
 
       this.setData({
-        rangeList: [years, months, days.map(d=> d + '日'), hours, mins, secs],
+        rangeList: [years, months, days.map(d=> d), hours, mins, secs],
         value: [yIdx, mIdx, now.getDate()-1, now.getHours(), now.getMinutes(), now.getSeconds()]
       }, () => this.updateDisplay());
     },
@@ -58,7 +58,7 @@ Component({
         const year = parseInt(yearStr, 10);
         const monthStr = range[1][val[1]];
         const month = parseInt(monthStr, 10);
-        const days = this.daysOfMonth(year, month).map(d=> d + '日');
+        const days = this.daysOfMonth(year, month).map(d=> d);
         range[2] = days;
 
         // 如果当前 day index 超出新天数长度，修正为最后一天

@@ -4,12 +4,13 @@
   position: relative;
 }
 .dt-display {
+  display: flex!important;
   padding: 10px;
   border: 1px solid #eee;
   border-radius: 6px;
   position: absolute;
   bottom: 20rpx;
-  left: 213rpx;
+  left: 132rpx!important;
   border: none;
   background: #ffffff;
   color: #cbc9d6;
@@ -17,4 +18,19 @@
   z-index: 10000;
   font-size: 26rpx!important;
   font-weight: 400!important;
+  width:442rpx!important;
+  height: 75rpx!important;
+  line-height: 90rpx!important;
+  padding: 0!important;
+}
+.pick-date {
+  position: relative!important;
+  left: 89rpx!important;
+}
+picker-view view {
+  font-size: 28rpx;      /* 调整字体大小 */
+  text-align: center;    /* 居中显示 */
+  width: 200rpx!important;         /* 增加列宽度 */
+  overflow: visible;     /* 防止被裁剪 */
+  white-space: nowrap;   /* 不换行 */
 }

@@ -624,6 +624,7 @@ Page({
           spData: resp.data,
           filterSpData: resp.data,
         });
+        this.diffFilterKeyWork();
         this.onClose();
       } catch (error) {
         Toast.fail("发布失败2: ", resp.code);
