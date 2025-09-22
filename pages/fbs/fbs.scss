@@ -461,7 +461,8 @@
               color: #333;
             }
           }
-          .show-join-user {
+          .show-join-user-t {
+            display: flex;
             justify-content: flex-start;
             margin-top: 23rpx;
             .o-user {
@@ -479,6 +480,32 @@
               font-size: 20rpx;
               color: #333;
               margin-left: 31rpx;
+            }
+          }
+          .show-join-user {
+            justify-content: space-between;
+            // justify-content: flex-start;
+            margin-top: 23rpx;
+            .o-user {
+              width: 49rpx;
+              height: 49rpx;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+              background: #6b6ed4;
+              border-radius: 50%;
+              overflow: hidden;
+              flex-shrink: 0;
+              color: #fff;
+            }
+            .join-users {
+              display: flex;
+              // align-items: flex-end;
+              font-size: 20rpx;
+              color: #333;
+              margin-left: 31rpx;
+            }
+            .join-user-2 {
+              align-items: flex-end;
             }
           }
         }

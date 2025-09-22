@@ -460,8 +460,32 @@
   color: #333;
 }
 
-.box .card-1 .card-1-1 .join-user-c .join-user-box .show-join-user {
+.box .card-1 .card-1-1 .join-user-c .join-user-box .show-join-user-t {
+  display: flex;
   justify-content: flex-start;
+  margin-top: 23rpx;
+}
+
+.box .card-1 .card-1-1 .join-user-c .join-user-box .show-join-user-t .o-user {
+  width: 49rpx;
+  height: 49rpx;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  background: #6b6ed4;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  color: #fff;
+}
+
+.box .card-1 .card-1-1 .join-user-c .join-user-box .show-join-user-t .join-users {
+  font-size: 20rpx;
+  color: #333;
+  margin-left: 31rpx;
+}
+
+.box .card-1 .card-1-1 .join-user-c .join-user-box .show-join-user {
+  justify-content: space-between;
   margin-top: 23rpx;
 }
 
@@ -478,9 +502,14 @@
 }
 
 .box .card-1 .card-1-1 .join-user-c .join-user-box .show-join-user .join-users {
+  display: flex;
   font-size: 20rpx;
   color: #333;
   margin-left: 31rpx;
+}
+
+.box .card-1 .card-1-1 .join-user-c .join-user-box .show-join-user .join-user-2 {
+  align-items: flex-end;
 }
 
 .box .card-1 .card-1-1 .addr {

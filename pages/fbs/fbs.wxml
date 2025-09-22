@@ -248,7 +248,20 @@
                 </view>
                 <view class="join-user-box">
                   <view class="show-join-user" wx:if="{{ item.join_user_count > 0 }}" data-item="{{item.join_users}}">
-                    <block wx:for="{{ item.join_users }}" wx:key="index" wx:for-item="item2" wx:for-index="idx">
+                    <view class="show-join-user-t">
+                      <block wx:for="{{ item.join_users }}" wx:key="index" wx:for-item="item2" wx:for-index="idx">
+                        <!-- fix -->
+                        <view class="o-user" style="margin-right:-10px;">
+                          <van-image use-loading-slot width="100%" round height="100%"  fit="cover" src="{{item2.img}}">
+                            <van-loading slot="loading" type="spinner" size="20" vertical />
+                          </van-image>
+                        </view>
+                      </block>
+                      <view class="join-users">
+                        <text>{{item.join_user_count}}人加入组队</text>
+                      </view>
+                    </view>
+                    <!-- <block wx:for="{{ item.join_users }}" wx:key="index" wx:for-item="item2" wx:for-index="idx">
                       <view class="o-user" style="margin-right:-10px;">
                         <van-image use-loading-slot width="100%" round height="100%"  fit="cover" src="{{item2.img}}">
                           <van-loading slot="loading" type="spinner" size="20" vertical />
@@ -257,8 +270,9 @@
                     </block>
                     <view class="join-users">
                       <text>{{item.join_user_count}}人加入组队</text>
-                    </view>
-                    <view class="join-users" wx:if="{{isShowAllData}}">
+                    </view> -->
+                    
+                    <view class="join-users join-user-2" wx:if="{{isShowAllData}}">
                       <van-button color="#7c9d34" round type="info" size="mini" data-item="{{item.join_users}}" data-val="{{item}}" custom-style="width:150rpx" bind:tap="showUserImgShape">
                         <text class="group_title">⚡组队详情</text>
                       </van-button>
