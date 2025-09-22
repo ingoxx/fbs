@@ -68,8 +68,6 @@ Page({
     userid: "",
     showEvaBoard: false,
     avatarUrl: "",
-    joinGroup: "⚡加入组局",
-    existsGroup: "⚡退出组局",
     isAdminShow: false,
     sender_id: '',
     user_id: '',
@@ -104,7 +102,6 @@ Page({
     showPublishHistoryPop: false,
     villageInfo: '',
     useNotice: "下拉小程序以获取附近运动场地址",
-    notice: "以帮助更多人了解场地信息，感谢！",
     lat: 0,
     lng: 0,
     inputValue: "",
@@ -338,7 +335,7 @@ Page({
     }
     if (this.data.openid != data.user_id) {
       Toast.loading({
-        message: "正在初始化...",
+        message: "正在接入中...",
         forbidClick: true,
         duration: 0,
       });
@@ -360,7 +357,7 @@ Page({
           cov_data: data,
           showPubRm: true,
         });
-        Toast.success("初始化完成");
+        Toast.success("接入成功, 发送信息吧");
       } catch (error) {
         Toast.fail(`请求失败: ${error}`);
       }
@@ -445,14 +442,12 @@ Page({
       chs = 2000;
     }
     const nc = choose.filter(item => item.type == chs);
-    
     const uc = nc.filter(item => {
       if (item.id == 6 && this.data.openid != app.globalData.admin) {
         return false;
       }
       return true;
     });
-    console.log("diffFilterKeyWork >>> ", nc);
     this.setData({
       filterChooseList: uc,
       isActive: isActive,
@@ -468,7 +463,6 @@ Page({
     if (this.data.openid == app.globalData.admin) { //admin data
       try {
         const resp = await this.adminGetTaskBySportTpApi();
-        console.log("adminGetTaskBySportTpApi >>> ", resp);
         if (resp.code != 1000) {
           Toast.fail(`获取发布数据失败1: ${resp.code}`);
           return;
@@ -477,6 +471,7 @@ Page({
         fd.sort((a, b) => {
           return stringToTimestamp(b.time) - stringToTimestamp(a.time);
         });
+
         this.setData({
           filterSpData: fd,
           spData: fd,
@@ -668,7 +663,9 @@ Page({
     const aid = this.data.isActive;
     if (aid == 4) {
       data = data2.sort((a, b) => {
-        return b - a; 
+        if (a.is_del) return 1;
+        if (b.is_del) return -1;
+        return b.price - a.price; 
       });
     } else if (aid == 5) {
       this.getLatestSpData();
@@ -716,8 +713,6 @@ Page({
     } else if (tid == 4) {
       this.filterSpDetail();
     }
-    
-    
   },
   onFiltering(e) {
     const id = e.currentTarget.dataset.id;
@@ -944,12 +939,15 @@ Page({
       fd.sort((a, b) => {
         return stringToTimestamp(b.time) - stringToTimestamp(a.time);
       });
+      
       this.setData({
         user_list: fd,
         showUserList: true,
         userCount: fd.length,
-        filter_user_list: fd,
+        filter_user_list: fd.slice(0, 10),
       })
+      console.log("filter_user_list >>> ", this.data.filter_user_list);
+      console.log("userCount >>> ", fd.length);
     } catch (error) {
       Toast.fail("获取用户列表失败2");
     }
@@ -1368,7 +1366,6 @@ Page({
   },
   openMapAppDetailed2(e) {
     const data = e.currentTarget.dataset.item;
-    console.log("data >>> ", data);
     wx.openLocation({
       latitude: Number(data.lat),  // 纬度
       longitude: Number(data.lng), // 经度
@@ -1622,8 +1619,8 @@ Page({
     }
     // this.getSiteSelection();
   },
-  // 隐私协议， 1：同意，2：拒绝
   iAacceptPrivacy(e) {
+    // 隐私协议， 1：同意，2：拒绝
     const res = e.currentTarget.dataset.item;
     if (res == 1) {
       if (!this.data.privacyCheckedVal) {
@@ -2040,9 +2037,11 @@ Page({
       inputValue: val,
     });
 
-    const fd = this.data.filterSpData.filter(item => {
+    const fd = data.filter(item => {
       const contentMatch = item.content.includes(val);
-      return contentMatch;
+      const dateMatch = item.date.includes(val);
+      const priceMatch = item.price.includes(val);
+      return contentMatch || dateMatch || priceMatch;
     });
     this.setData({
       filterSpData: fd,
@@ -2345,16 +2344,6 @@ Page({
       console.error('登录失败:', err);
     });
   },
-  // 设置当前页的标题
-  // setNavigatInfo() {
-  //   wx.setNavigationBarColor({
-  //     frontColor: "#ffffff",
-  //     backgroundColor: "#256d64",
-  //   });
-  //   wx.setNavigationBarTitle({
-  //     title: "",
-  //   });
-  // },
 
   /**
    * 生命周期函数--监听页面加载
@@ -2375,7 +2364,6 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-    // this.getOpenid();
   },
   /**
    * 生命周期函数--监听页面隐藏

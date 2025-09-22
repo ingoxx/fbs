@@ -1,7 +1,7 @@
 <view class="box">
   <view class="sidebar" wx:if="{{user_id == cov_data.user_id}}">
     <view class="group-id-search">
-      <input type="text" class="chat-input group-chat-font-size " value="{{ group_id_value }}" bindinput="onFilterGroupId" placeholder="搜索用户"/>
+      <input type="text" class="chat-input group-chat-font-size " value="{{ group_id_value }}" bindinput="onFilterGroupId" placeholder="接入的用户"/>
       <van-icon custom-class="van-icon-0" name="https://ai.anythingai.online/static/profile3/flush-5.svg" bind:tap="refreshOnlineData"/>
     </view>
     <scroll-view 

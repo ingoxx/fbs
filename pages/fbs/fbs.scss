@@ -33,69 +33,89 @@
         font-weight: 600;
       }
     }
-    .venue-tab-o {
-      // margin: 13rpx 0;
-      margin-bottom: 26rpx;
-      margin-left: 14rpx;
-      .venue-container {
-        // margin: 0 32rpx;
-        .tabs {
-          gap: 28rpx;
-          overflow-x: auto;
-          white-space: nowrap;
-          display: flex;
-          align-items: center;
-          // background: #ffffff;
-          padding: 20rpx 16rpx;
-          border-radius: 24rpx;
-          .tab-label {
-            font-size: 30rpx;
-            font-weight: 700;
-            // color: #adadad;
-            color: #ffffff;
-            position: relative;
-            padding: 16rpx 0;
-            transition: color 0.3s;
-          }
-          .tab-label.active {
-            // color: #256d64;
-            font-weight: 600;
-            transform: scale(1.4286);
-          }
-          .tab-label.active::after {
-            content: "";
-            position: absolute;
-            left: 50%;
-            bottom: 0;
-            width: 100%;
-            height: 9rpx;
-            background: #dae2cb;
-            border-radius: 4rpx;
-            transform: translateX(-50%) translateX(0rpx);
-            transition: all 0.3s;
-            margin-bottom: 8rpx;
+    .venue-tab-ot {
+      .venue-tab-o {
+        margin-bottom: 26rpx;
+        margin-left: 14rpx;
+        .venue-container {
+          .tabs {
+            gap: 28rpx;
+            overflow-x: auto;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            padding: 20rpx 16rpx;
+            border-radius: 24rpx;
+            .tab-label {
+              font-size: 30rpx;
+              font-weight: 700;
+              color: #ffffff;
+              position: relative;
+              padding: 16rpx 0;
+              transition: color 0.3s;
+            }
+            .tab-label.active {
+              font-weight: 600;
+              transform: scale(1.4286);
+            }
+            .tab-label.active::after {
+              content: "";
+              position: absolute;
+              left: 50%;
+              bottom: 0;
+              width: 100%;
+              height: 9rpx;
+              background: #dae2cb;
+              border-radius: 4rpx;
+              transform: translateX(-50%) translateX(0rpx);
+              transition: all 0.3s;
+              margin-bottom: 8rpx;
+            }
           }
         }
       }
     }
+    // .venue-tab-o {
+    //   margin-bottom: 26rpx;
+    //   margin-left: 14rpx;
+    //   .venue-container {
+    //     .tabs {
+    //       gap: 28rpx;
+    //       overflow-x: auto;
+    //       white-space: nowrap;
+    //       display: flex;
+    //       align-items: center;
+    //       padding: 20rpx 16rpx;
+    //       border-radius: 24rpx;
+    //       .tab-label {
+    //         font-size: 30rpx;
+    //         font-weight: 700;
+    //         color: #ffffff;
+    //         position: relative;
+    //         padding: 16rpx 0;
+    //         transition: color 0.3s;
+    //       }
+    //       .tab-label.active {
+    //         font-weight: 600;
+    //         transform: scale(1.4286);
+    //       }
+    //       .tab-label.active::after {
+    //         content: "";
+    //         position: absolute;
+    //         left: 50%;
+    //         bottom: 0;
+    //         width: 100%;
+    //         height: 9rpx;
+    //         background: #dae2cb;
+    //         border-radius: 4rpx;
+    //         transform: translateX(-50%) translateX(0rpx);
+    //         transition: all 0.3s;
+    //         margin-bottom: 8rpx;
+    //       }
+    //     }
+    //   }
+    // }
   }
-  // .location {
-  //   display: flex;
-  //   justify-content: flex-start; 
-  //   align-items: center;     
-  //   min-height: 100rpx;
-  //   flex-shrink: 0;
-  //   background: #256d64;
-  //   padding: 0 20rpx;
-  //   .coordinate {
-  //     color: #ffffff;
-  //     font-size: 27rpx;
-  //     line-height: 1.4;
-  //     word-break: break-word;
-  //     white-space: normal;
-  //     font-weight: 600;
-  //   }
-  // }
   .userinfo {
     display: flex;
     height: 80rpx;

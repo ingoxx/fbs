@@ -40,12 +40,12 @@
   font-weight: 600;
 }
 
-.box .program-title .venue-tab-o {
+.box .program-title .venue-tab-ot .venue-tab-o {
   margin-bottom: 26rpx;
   margin-left: 14rpx;
 }
 
-.box .program-title .venue-tab-o .venue-container .tabs {
+.box .program-title .venue-tab-ot .venue-tab-o .venue-container .tabs {
   gap: 28rpx;
   overflow-x: auto;
   white-space: nowrap;
@@ -55,7 +55,7 @@
   border-radius: 24rpx;
 }
 
-.box .program-title .venue-tab-o .venue-container .tabs .tab-label {
+.box .program-title .venue-tab-ot .venue-tab-o .venue-container .tabs .tab-label {
   font-size: 30rpx;
   font-weight: 700;
   color: #ffffff;
@@ -64,12 +64,12 @@
   transition: color 0.3s;
 }
 
-.box .program-title .venue-tab-o .venue-container .tabs .tab-label.active {
+.box .program-title .venue-tab-ot .venue-tab-o .venue-container .tabs .tab-label.active {
   font-weight: 600;
   transform: scale(1.4286);
 }
 
-.box .program-title .venue-tab-o .venue-container .tabs .tab-label.active::after {
+.box .program-title .venue-tab-ot .venue-tab-o .venue-container .tabs .tab-label.active::after {
   content: "";
   position: absolute;
   left: 50%;
