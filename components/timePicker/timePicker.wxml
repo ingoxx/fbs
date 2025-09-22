@@ -8,6 +8,6 @@
   <!-- 这里直接放要显示的视图，不要用slot -->
   <!-- <view class="dt-display">{{displayText}}</view> -->
   <button size="mini" class="dt-display">
-    <text class="pick-date">选择时间</text>
+    <text class="pick-date">如: 2025-09-01 18:00:00</text>
   </button>
 </picker>

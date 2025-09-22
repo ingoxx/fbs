@@ -5,7 +5,7 @@ var QQMapWX = require('../../lib/qqmap-wx-jssdk.js');
 const { WSS_URL } = require('../../utils/http');
 const { BASE_URL } = require('../../utils/http');
 const { IMG_URL } = require('../../utils/http');
-import Notify from '@vant/weapp/notify/notify';
+// import Notify from '@vant/weapp/notify/notify';
 import Toast from '@vant/weapp/toast/toast';
 const { generateUUID, stringToTimestamp, getCurrentTime, storage, isValidDateTime } = require('../../utils/util'); 
 import Dialog from '@vant/weapp/dialog/dialog';
@@ -21,8 +21,6 @@ Page({
     golbal_rid: "",
     pub_btn_text: "",
     titles: [
-      // {id: 3, name: "场地", icon:"https://ai.anythingai.online/static/profile3/venue-7.svg"},
-      // {id: 4, name: "陪练", icon:"https://ai.anythingai.online/static/profile3/sp-11.svg"},
     ],
     mChecked: false,
     fmChecked: false,
@@ -132,6 +130,7 @@ Page({
     selectedTime: "",
     chosen: "",
     pickerVisible: true,
+    pub_control: true,
   },
   formatTimestamp(timestamp, format = "yyyy-MM-dd HH:mm:ss") {
     const date = new Date(Number(timestamp));
@@ -240,6 +239,10 @@ Page({
         },
         fail: function (err) {
           reject(err)
+        },
+        complete: () => {
+          // 无论成功失败，这里都会执行
+          wx.stopPullDownRefresh();
         }
       })
     });
@@ -254,6 +257,10 @@ Page({
         },
         fail: function (err) {
           reject(err)
+        },
+        complete: () => {
+          // 无论成功失败，这里都会执行
+          wx.stopPullDownRefresh();
         }
       })
     });
@@ -283,7 +290,7 @@ Page({
   },
   user_del_sp(e) {
     const data =  e.currentTarget.dataset.item;
-    if (data.is_del) {
+    if (data.is_del || this.data.pub_control) {
       return;
     }
     Dialog.confirm({
@@ -326,7 +333,7 @@ Page({
   },
   async cov_detail_pop(e) {
     const data =  e.currentTarget.dataset.item;
-    if (data.is_del) {
+    if (data.is_del || this.data.pub_control) {
       return;
     }
     if (this.data.openid != data.user_id) {
@@ -349,7 +356,6 @@ Page({
           return;
         }
         data.rid = resp.data.rid;
-        console.log("createRidApi data >>> ", data);
         this.setData({
           cov_data: data,
           showPubRm: true,
@@ -430,15 +436,26 @@ Page({
   diffFilterKeyWork() {
     const choose = this.data.chooseList;
     const tag = this.data.isActiveTitle;
+    var isActive = 1;
     var chs = 0;
     if (tag == 3) {
       chs = 1000;
     } else if (tag == 4) {
+      isActive = 5;
       chs = 2000;
     }
     const nc = choose.filter(item => item.type == chs);
+    
+    const uc = nc.filter(item => {
+      if (item.id == 6 && this.data.openid != app.globalData.admin) {
+        return false;
+      }
+      return true;
+    });
+    console.log("diffFilterKeyWork >>> ", nc);
     this.setData({
-      filterChooseList: nc,
+      filterChooseList: uc,
+      isActive: isActive,
     })
   },
   async getLatestSpData() {
@@ -451,6 +468,7 @@ Page({
     if (this.data.openid == app.globalData.admin) { //admin data
       try {
         const resp = await this.adminGetTaskBySportTpApi();
+        console.log("adminGetTaskBySportTpApi >>> ", resp);
         if (resp.code != 1000) {
           Toast.fail(`获取发布数据失败1: ${resp.code}`);
           return;
@@ -463,12 +481,13 @@ Page({
           filterSpData: fd,
           spData: fd,
           spDataNum: fd.length,
+          pub_control: resp.pub_control,
         });
-        Toast.success("获取完成");
+        Toast.clear();
+        wx.stopPullDownRefresh();
       } catch (error) {
         Toast.fail("获取发布数据失败2");
       }
-      // Toast.clear();
     } else { // user data
       try {
         const resp = await this.userGetTaskByCityAndSportTpApi();
@@ -485,12 +504,13 @@ Page({
           filterSpData: fd,
           spData: fd,
           spDataNum: fd.length,
+          pub_control: resp.pub_control,
         });
-        Toast.success("获取完成");
+        Toast.clear();
+        wx.stopPullDownRefresh();
       } catch (error) {
         Toast.fail("获取发布数据失败4");
       }
-      // Toast.clear();
     }
   },
   async onConfirmSportSelection2(e) {
@@ -1042,9 +1062,17 @@ Page({
     },8000);
   },
   toggleShowVenueImg1(e) {
+    if (!this.data.isShowAllData) {
+      Toast.fail("已是最新场地图片");
+      return;
+    }
     const data = e.currentTarget.dataset.item;
-    const fd = {addr: data.addr+data.title, lng: data.lng, lat: data.lat, title: this.data.city+data.title};
-    console.log(fd);
+    const fd = {
+      addr: data.addr+data.title, 
+      lng: data.lng, 
+      lat: data.lat, 
+      title: this.data.city+data.title
+    };
     this.setData({
       showSpPop: true,
       p_data: fd,
@@ -1063,7 +1091,6 @@ Page({
       fcu.sort((a, b) => {
         return stringToTimestamp(b.time) - stringToTimestamp(a.time);
       });
-      console.log("fcu >>> ", fcu);
       this.setData({
         filter_cbt_users: fcu,
         cbt_users: fcu,
@@ -1554,7 +1581,8 @@ Page({
           baseUrl: BASE_URL,
           user_id: this.data.openid,
           sender_id: md5(this.data.openid),
-        })
+        });
+
         if (this.data.isUse) {
           Toast.loading({
             message: this.data.loadText,
@@ -1566,6 +1594,7 @@ Page({
               isAdminShow: true,
             });
           }
+          // 获取的运动列表
           this.getAllSportsApi().then((resp) => {
             if (resp.code == 1000) {
               this.setData({
@@ -1575,13 +1604,12 @@ Page({
           }).catch((err) => {
             Toast.fail("502")
           });
-          // this.isShowSportList();
-          // Toast.loading({
-          //   message: this.data.loadText,
-          //   forbidClick: true,
-          //   duration: 0,
-          // });
-          this.getAddrDistance();
+
+          if (this.data.isActiveTitle == 3) {
+            this.getAddrDistance();
+          } else if (this.data.isActiveTitle == 4) {
+            this.getLatestSpData();
+          }
         }
       }
     } catch (err) {
@@ -1620,7 +1648,8 @@ Page({
               duration: 0,
             });
             if (this.data.isUse) {
-              this.getAddrDistance();
+              // this.getAddrDistance();
+              this.getOpenid();
             }
           }
           // this.isShowSportList();
@@ -1676,7 +1705,8 @@ Page({
     const data = await this.getCheckListApi();
     if (data.code != 1000) {
       const msg = data.msg ? data.msg : "获取审核列表失败";
-      Notify({ type: 'danger', message: msg, duration: 20000 });
+      // Notify({ type: 'danger', message: msg, duration: 20000 });
+      Toast.fail("加载数据失败5");
       return;
     }
     this.setData({
@@ -1692,14 +1722,16 @@ Page({
             wx.stopPullDownRefresh();
             // wx.hideLoading();
             Toast.clear();
-            Notify({ type: 'danger', message: `加载数据失败：${res.statusCode}`, duration: 30000 });
+            // Notify({ type: 'danger', message: `加载数据失败：${res.statusCode}`, duration: 30000 });
+            Toast.fail("加载数据失败6");
             reject(new Error(`HTTP 状态码异常: ${res.statusCode}`));
             return;
           }
           resolve(res.data);
         },
         fail: function (err) {
-          Notify({ type: 'danger', message: '请求失败', duration: 30000 });
+          // Notify({ type: 'danger', message: '请求失败', duration: 30000 });
+          Toast.fail("请求失败6");
           reject(err)
         }
       })
@@ -1874,7 +1906,8 @@ Page({
 
     const respTx = await this.txMapSearchAddrApi(this.data.villageInfo);
     if (respTx.status != 1000) {
-      Notify({type: 'danger', message: '输入的地址无效', duration: 30000});
+      // Notify({type: 'danger', message: '输入的地址无效', duration: 30000});
+      Toast.fail("输入的地址无效");
       return;
     }
     this.onClose();
@@ -1923,12 +1956,14 @@ Page({
     }
     const resp = await this.userAddAddrReqApi(ad);
     if (resp.code != 1000) {
-      Notify({ type: 'danger', message:  resp.msg ? resp.msg : "添加地址失败, 请联系管理员", duration: 20000 });
-      Toast.clear();
+      // Notify({ type: 'danger', message:  resp.msg ? resp.msg : "添加地址失败, 请联系管理员", duration: 20000 });
+      Toast.fail("添加地址失败, 请联系管理员");
+      // Toast.clear();
       return;
     }
-    Notify({ type: 'success', message: "地址已提交,审核通过会更新到页面上", duration: 10000 });
-    Toast.clear();
+    // Notify({ type: 'success', message: "地址已提交,审核通过会更新到页面上", duration: 10000 });
+    Toast.success("地址已提交,验证地址通过会更新到页面上");
+    // Toast.clear();
   },
   onClose() {
     this.setData({ addVillage: false, 
@@ -2021,7 +2056,6 @@ Page({
     } else {
       this.venvuFliterData(e);
     }
-    
   },
   getVal(e) {
     if (e.detail.value == "") {
@@ -2142,14 +2176,16 @@ Page({
               })
             },
             fail: geoErr => {
-              Notify({ type: 'danger', message: '无法获取定位', duration: 0 });
+              // Notify({ type: 'danger', message: '无法获取定位', duration: 0 });
+              Toast.fail("无法获取定位1");
               console.log('逆地址解析失败：', geoErr)
               reject(geoErr)
             },
           })
         },
         fail: locErr => {
-          Notify({ type: 'danger', message: '无法获取定位', duration: 0 });
+          // Notify({ type: 'danger', message: '无法获取定位', duration: 0 });
+          Toast.fail("无法获取定位2");
           wx.stopPullDownRefresh();
           // wx.hideLoading();
           Toast.clear();
@@ -2214,6 +2250,7 @@ Page({
         const obj = btn_list.find(item => item.id == 1);
         btn_text = obj.name;
       }
+      
       this.setData({
         basketSquareFilterData: processedList,
         isEmpty: false,
@@ -2303,7 +2340,6 @@ Page({
         img_url: IMG_URL,
         admin: app.globalData.admin,
       });
-     
       that.isShowPrivacy();
     }).catch(err => {
       console.error('登录失败:', err);
@@ -2319,11 +2355,11 @@ Page({
   //     title: "",
   //   });
   // },
+
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    // this.setNavigatInfo();
     this.getOpenid();
     this.getSportType();
   },

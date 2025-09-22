@@ -11,10 +11,10 @@
     > 
       <block wx:for="{{ user_list }}" wx:key="index" wx:for-item="item">
         <view class="venue-info">
-          <van-icon name="location" color="{{item.id==group_id ? '#256d64': '#adadad'}}" custom-class="van-icon-1"/>
-          <text class="group-name group-chat-font-size" user-select="true" data-item="{{ item }}" bind:tap="onClickGroupId" style="color:{{item.id==group_id ? '#256d64': ''}}">
+          <van-icon name="location" color="{{item.rid==group_id ? '#256d64': '#adadad'}}" custom-class="van-icon-1"/>
+          <text class="group-name group-chat-font-size" user-select="true" data-item="{{ item }}" bind:tap="onClickGroupId" style="color:{{item.rid==group_id ? '#256d64': ''}}">
             {{ item.nick_name }}
-            <text class="city" style="color:{{item.id==group_id ? '#256d64': '#adadad'}}">{{ item.city }}</text>
+            <text class="city" style="color:{{item.rid==group_id ? '#256d64': '#adadad'}}">{{ item.city }}</text>
           </text>
         </view>
       </block>
@@ -25,7 +25,7 @@
       <text class="sport_team_group">发布者: {{cov_data.nick_name}}</text> 
       <view class="find-baller">
         <text class="find-baller-notic" wx:if="{{user_id == cov_data.user_id}}">点击左侧场接单者昵称进行沟通</text>
-        <text class="find-baller-notic" wx:else>沟通具体陪练内容</text>
+        <text class="find-baller-notic" wx:else>{{cov_data.content}} {{cov_data.price}}元/时</text>
       </view>
     </view>
     <scroll-view 

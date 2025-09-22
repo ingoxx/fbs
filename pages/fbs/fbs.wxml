@@ -1,9 +1,7 @@
 <view class="box">
-  <!-- 顶部 -->
   <view class="program-title">
     <view class="title-name">
     </view>
-    <!-- 定位 -->
     <view class="location">
       <block wx:if="{{ addr == '未获取位置' }}">
         <van-icon name="location" custom-class="van-icon-l"/> <text class="coordinate" >{{ addr }}</text>
@@ -29,35 +27,6 @@
       </view>
     </view> -->
   </view>
-  <!-- 定位 -->
-  <!-- <view class="location">
-    <block wx:if="{{ addr == '未获取位置' }}">
-      <van-icon name="location" custom-class="van-icon-l"/> <text class="coordinate" >{{ addr }}</text>
-    </block>
-    <block wx:else>
-      <van-icon name="location" custom-class="van-icon-l"/> <text class="coordinate" bind:tap="openMapApp">{{ addr }}</text> 
-    </block>
-  </view> -->
-  <!-- tab页 -->
-  <!-- <view class="venue-tab">
-    <view class="venue-container"> 
-      <view class="tabs">
-        <view 
-            class="tab-label active" 
-            bindtap="onConfirmSportSelection1" 
-          >
-          场地
-        </view>
-        <view 
-            class="tab-label active" 
-            bindtap="onConfirmSportSelection1" 
-          >
-          陪练
-        </view>
-      </view>
-    </view>
-  </view> -->
-  <!-- 搜索场地 -->
   <view class="search">
     <view class="s-p">
       <van-search
@@ -73,7 +42,6 @@
       />
     </view>
   </view>
-  <!-- 场地选择 -->
   <view class="venue-tab-t">
     <view class="venue-container"> 
       <view class="tabs">
@@ -90,7 +58,6 @@
       </view>
     </view>
   </view>
-  <!-- 数据统计 -->
   <view class="data-num">
     <view class="num">
       <van-icon 
@@ -101,7 +68,6 @@
       <text class="content" wx:else>目前{{defaultSportSquare}}最多展示{{totalData}}条场地信息</text>
     </view>
   </view>
-  <!-- 练习 -->
   <view class="venue-tab-o" wx:if="{{isShowAllData}}">
     <view class="venue-container"> 
       <block wx:for="{{titles}}" wx:key="index" wx:for-item="item">
@@ -109,7 +75,6 @@
             {{item.name}}
           </van-button>
       </block>
-      <!-- 筛选 -->
       <view class="choose" bind:tap="openChoosePop">
         <view class="container-c" wx:if="{{isShowAllData}}">
           <text>筛选</text><van-icon custom-class="van-icon-9"  name="https://ai.anythingai.online/static/profile3/choose.svg" />
@@ -117,21 +82,17 @@
       </view>
     </view>
   </view>
-  <!-- 展示附近场地 -->
   <view class="card-1">
-    <!-- 场地数据 -->
     <van-transition show="{{!isSwitchData}}" custom-class="block" name="fade-left">
       <block wx:for="{{ basketSquareFilterData }}" wx:key="index" wx:for-item="item">
         <van-transition show="{{ isUse }}" custom-class="block">
           <view class="card-1-1">
             <view class="online-status">
-              <!-- <van-icon color="{{ item.join_user_count > 0 ? '#ff6161': '#909090' }}" name="fire" /> -->
               <view class="venue-hot">
                 <van-icon color="{{ item.join_user_count > 0 ? '#ff6161': '#909090' }}" name="fire" />
               </view>
               <view class="user-tag">
                 <van-tag custom-class="van-tag-1" color="#ffc64a" text-color="#333333">
-                  <!-- <van-icon name="https://ai.anythingai.online/static/profile3/star.svg" /> <text class="sport-key">{{defaultSportSquare}}</text> -->
                   <text class="sport-key">{{defaultSportSquare}}</text>
                 </van-tag>
               </view>
@@ -300,11 +261,6 @@
                         <text class="group_title">⚡组队详情</text>
                       </van-button>
                     </view>
-                    <!-- <view class="join-users">
-                      <van-button round size="mini" custom-style="width:110rpx" data-item="{{ item }}"  bindtap="sendMsg">
-                        <text class="group_title">💬</text>
-                      </van-button>
-                    </view> -->
                   </view>
                 </view>
               </view>
@@ -313,7 +269,6 @@
         </van-transition>
       </block>
     </van-transition>
-    <!-- 练习数据 -->
     <van-transition show="{{isSwitchData}}" custom-class="block" name="fade-left">
       <block wx:for="{{ filterSpData }}" wx:key="index" wx:for-item="item">
         <view class="c-box" wx:if="{{!item.is_del || openid == admin}}">
@@ -364,13 +319,13 @@
               <van-icon size="21rpx" name="like" /><text>快去沟通吧</text>
             </view>
             <view class="control">
-              <van-button type="default" round custom-style="width:180rpx;" disabled="{{item.is_del}}" color="#256d64" size="small" data-item="{{item}}" bind:tap="cov_detail_pop">
+              <van-button type="default" round custom-style="width:180rpx;" disabled="{{item.is_del || pub_control}}" color="#256d64" size="small" data-item="{{item}}" bind:tap="cov_detail_pop">
                 <van-icon size="30rpx" custom-class="van-icon-5 van-icon-8" name="https://ai.anythingai.online/static/profile3/user-con-5.svg" /> <text>{{openid == item.user_id ? '查看消息' : '沟通'}}</text>
               </van-button>
               <view class="user-num-c" wx:if="{{openid == item.user_id || openid == admin}}">
                 <text class="online" >{{item.online_num > 10 ? '10+' : item.online_num}}</text>
               </view>
-              <van-button color="#cc2f2f" round custom-style="width:180rpx;" disabled="{{item.is_del}}" size="small" data-item="{{item}}" wx:if="{{item.user_id == openid || openid == admin}}" bind:tap="user_del_sp">
+              <van-button color="#cc2f2f" round custom-style="width:180rpx;" disabled="{{item.is_del || pub_control}}" size="small" data-item="{{item}}" wx:if="{{item.user_id == openid || openid == admin}}" bind:tap="user_del_sp">
                 <van-icon size="25rpx" custom-class="van-icon-10" name="https://ai.anythingai.online/static/profile3/del.svg" /> <text>删除</text>
               </van-button>
             </view>
@@ -385,7 +340,6 @@
       <van-empty description="{{ isUse ? useNotice: '请先阅读注意事项' }}"></van-empty>
     </block>
   </view>
-  <!-- 客服 -->
   <view class="contact-us">
     <van-transition show="{{ showServiceBtn }}" custom-class="block" name="slide-left" duration="0">
       <view class="tran-1">
@@ -437,7 +391,6 @@
     </van-transition>
   </view>
 </view>
-<!-- 一些第三放组件或者自定义的组件 -->
 <view>
   <van-popup
     show="{{ showNickName }}"
@@ -502,7 +455,6 @@
       class="com-chat-room">
     </group-team>
   </van-popup>
-  <!-- 腾讯api获取场地 -->
   <van-dialog
     use-slot
     title="添加场地"
@@ -627,7 +579,6 @@
         </block>
       </view>
   </van-dialog>
-  <!-- 隐私协议 -->
   <van-action-sheet 
   show="{{ showPrivacy }}" 
   close-on-click-overlay="false"
@@ -645,7 +596,6 @@
       </view>
     </view>
   </van-action-sheet>
-  <!-- 隐私协议内容 -->
   <van-popup
     show="{{ showPrivacyContent }}"
     round
@@ -667,7 +617,6 @@
       <van-button custom-style="width: 190rpx" size="small" type="default" data-item="1" bind:tap="privacyContentRead">已知晓</van-button>
     </view>
   </van-popup>
-  <!-- 用户列表 -->
   <van-dialog
       use-slot
       cancel-button-text="关闭"
@@ -762,7 +711,6 @@
         </block>
       </view>
   </van-dialog>
-  <!-- 发布历史 -->
   <van-dialog
       use-slot
       cancel-button-text="关闭"
@@ -887,7 +835,6 @@
         </block>
       </view>
   </van-dialog>
-  <!-- 筛选 -->
   <van-popup
   show="{{ showChoose }}"
   position="bottom"
@@ -921,7 +868,6 @@
       </view>
     </view>
   </van-popup>
-  <!-- 发布内容 -->
   <van-popup
     show="{{ showSpPop }}"
     round
