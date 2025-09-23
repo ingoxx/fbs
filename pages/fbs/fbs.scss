@@ -464,7 +464,7 @@
           .show-join-user-t {
             display: flex;
             justify-content: flex-start;
-            margin-top: 23rpx;
+            // margin-top: 23rpx;
             .o-user {
               width: 49rpx;
               height: 49rpx;
@@ -999,6 +999,12 @@
   position: relative;
   top: 5rpx;
 }
+.van-icon-12 {
+  top: 8rpx;
+}
+.van-icon-12 {
+  top: 6rpx!important;
+}
 .sports-list-box {
   display: flex;
   flex-direction: inherit;
@@ -1342,6 +1348,8 @@
   font-size: 23rpx;
   color: #c8c9d6;
 }
-.van-field {
-  
+.team-status {
+  display: flex;
+  gap: 20rpx;
+  margin: 13rpx 16rpx;
 }

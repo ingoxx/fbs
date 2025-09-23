@@ -463,7 +463,6 @@
 .box .card-1 .card-1-1 .join-user-c .join-user-box .show-join-user-t {
   display: flex;
   justify-content: flex-start;
-  margin-top: 23rpx;
 }
 
 .box .card-1 .card-1-1 .join-user-c .join-user-box .show-join-user-t .o-user {
@@ -1061,6 +1060,14 @@
   top: 5rpx;
 }
 
+.van-icon-12 {
+  top: 8rpx;
+}
+
+.van-icon-12 {
+  top: 6rpx !important;
+}
+
 .sports-list-box {
   display: flex;
   flex-direction: inherit;
@@ -1448,4 +1455,10 @@
   left: 294rpx;
   font-size: 23rpx;
   color: #c8c9d6;
+}
+
+.team-status {
+  display: flex;
+  gap: 20rpx;
+  margin: 13rpx 16rpx;
 }

@@ -131,7 +131,8 @@
             <view class="distance" data-item="{{ item }}">
               <view class="online-users">
                 <view class="num">
-                  <text>{{ item.join_user_count }}</text>
+                  <!-- <text>{{ item.join_user_count }}</text> -->
+                  <text>18</text>
                 </view>
                 <view class="title">
                   <van-icon name="friends-o" /><text class="title-name">组队人数</text>
@@ -235,7 +236,8 @@
             </block>
             <view class="group-status">
               <van-button wx:if="{{isShowAllData}}" round color="#256d64" size="small" type="{{ item.hasJoined ? 'info' : 'warning' }}" custom-style="width:218rpx" data-item="{{ item }}" bind:tap="joinSportGroup">
-                <van-icon size="30rpx" custom-class="van-icon-5 van-icon-8" name="https://ai.anythingai.online/static/profile3/light.svg" />{{item.hasJoined ? '退出组队' : '加入组队'}}({{item.join_user_count}})
+                <!-- <van-icon size="30rpx" custom-class="van-icon-5 van-icon-8" name="https://ai.anythingai.online/static/profile3/light.svg" />{{item.hasJoined ? '退出组队' : '加入组队'}}({{item.join_user_count}}) -->
+                <van-icon size="30rpx" custom-class="van-icon-5 van-icon-8" name="https://ai.anythingai.online/static/profile3/light.svg" />{{item.hasJoined ? '退出组队' : '加入组队'}}(18)
               </van-button>
               <van-button round color="#256d64" size="small" data-index="{{index}}" custom-style="width:270rpx" data-item="{{ item }}"  bindtap="toggleShowVenueImg1">
                 <van-icon size="30rpx" custom-class="van-icon-5" name="https://ai.anythingai.online/static/profile3/click-3.svg" /><text class="group_title">{{pub_btn_text}}</text>
@@ -244,13 +246,12 @@
             <van-transition show="{{ item.join_user_count > 0  }}" name="fade-right" >
               <view class="join-user-c">
                 <view class="join-user-t">
-                  <van-icon size="33rpx" custom-class="van-icon-5" name="friends" /><text class="title">组队信息</text>
+                  <van-icon size="33rpx" custom-class="van-icon-5" name="https://ai.anythingai.online/static/profile3/hel.svg" /><text class="title">养生局</text>
                 </view>
                 <view class="join-user-box">
                   <view class="show-join-user" wx:if="{{ item.join_user_count > 0 }}" data-item="{{item.join_users}}">
                     <view class="show-join-user-t">
                       <block wx:for="{{ item.join_users }}" wx:key="index" wx:for-item="item2" wx:for-index="idx">
-                        <!-- fix -->
                         <view class="o-user" style="margin-right:-10px;">
                           <van-image use-loading-slot width="100%" round height="100%"  fit="cover" src="{{item2.img}}">
                             <van-loading slot="loading" type="spinner" size="20" vertical />
@@ -261,17 +262,58 @@
                         <text>{{item.join_user_count}}人加入组队</text>
                       </view>
                     </view>
-                    <!-- <block wx:for="{{ item.join_users }}" wx:key="index" wx:for-item="item2" wx:for-index="idx">
-                      <view class="o-user" style="margin-right:-10px;">
-                        <van-image use-loading-slot width="100%" round height="100%"  fit="cover" src="{{item2.img}}">
-                          <van-loading slot="loading" type="spinner" size="20" vertical />
-                        </van-image>
+                    <view class="join-users join-user-2" wx:if="{{isShowAllData}}">
+                      <van-button color="#7c9d34" round type="info" size="mini" data-item="{{item.join_users}}" data-val="{{item}}" custom-style="width:150rpx" bind:tap="showUserImgShape">
+                        <text class="group_title">⚡组队详情</text>
+                      </van-button>
+                    </view>
+                  </view>
+                </view>
+              </view>
+              <view class="join-user-c">
+                <view class="join-user-t">
+                  <van-icon size="33rpx" custom-class="van-icon-5 van-icon-12" name="https://ai.anythingai.online/static/profile3/figh.svg" /><text class="title">强度局</text>
+                </view>
+                <view class="join-user-box">
+                  <view class="show-join-user" wx:if="{{ item.join_user_count > 0 }}" data-item="{{item.join_users}}">
+                    <view class="show-join-user-t">
+                      <block wx:for="{{ test2 }}" wx:key="index" wx:for-item="item2" wx:for-index="idx">
+                        <view class="o-user" style="margin-right:-10px;">
+                          <van-image use-loading-slot width="100%" round height="100%"  fit="cover" src="{{item2.img}}">
+                            <van-loading slot="loading" type="spinner" size="20" vertical />
+                          </van-image>
+                        </view>
+                      </block>
+                      <view class="join-users">
+                        <text>3人加入组队</text>
                       </view>
-                    </block>
-                    <view class="join-users">
-                      <text>{{item.join_user_count}}人加入组队</text>
-                    </view> -->
-                    
+                    </view>
+                    <view class="join-users join-user-2" wx:if="{{isShowAllData}}">
+                      <van-button color="#7c9d34" round type="info" size="mini" data-item="{{item.join_users}}" data-val="{{item}}" custom-style="width:150rpx" bind:tap="showUserImgShape">
+                        <text class="group_title">⚡组队详情</text>
+                      </van-button>
+                    </view>
+                  </view>
+                </view>
+              </view>
+              <view class="join-user-c">
+                <view class="join-user-t">
+                  <van-icon size="33rpx" custom-class="van-icon-5 van-icon-12" name="https://ai.anythingai.online/static/profile3/sports-10.svg" /><text class="title">竞技局</text>
+                </view>
+                <view class="join-user-box">
+                  <view class="show-join-user" wx:if="{{ item.join_user_count > 0 }}" data-item="{{item.join_users}}">
+                    <view class="show-join-user-t">
+                      <block wx:for="{{ test1 }}" wx:key="index" wx:for-item="item2" wx:for-index="idx">
+                        <view class="o-user" style="margin-right:-10px;">
+                          <van-image use-loading-slot width="100%" round height="100%"  fit="cover" src="{{item2.img}}">
+                            <van-loading slot="loading" type="spinner" size="20" vertical />
+                          </van-image>
+                        </view>
+                      </block>
+                      <view class="join-users">
+                        <text>10+人加入组队</text>
+                      </view>
+                    </view>
                     <view class="join-users join-user-2" wx:if="{{isShowAllData}}">
                       <van-button color="#7c9d34" round type="info" size="mini" data-item="{{item.join_users}}" data-val="{{item}}" custom-style="width:150rpx" bind:tap="showUserImgShape">
                         <text class="group_title">⚡组队详情</text>
@@ -389,7 +431,7 @@
         </button>
       </view>
       <view class="tran-1" wx:if="{{isUse && isShowAllData}}">
-        <button size="mini" bind:tap="isShowChatRoom" class="share-btn">
+        <button size="mini" bind:tap="isShowChatRoom" class="share-btn" data-id="1">
           <van-icon size="25rpx" name="https://ai.anythingai.online/static/profile3/mr.svg" /> <text class="b-c">信息</text>
         </button>
         <view class="msg-num">
@@ -691,7 +733,7 @@
           <text >{{bks_name}}</text>
         </view>
         <view  class="title-n">
-          <text>组队详情</text>
+          <text>养生局-组队详情</text>
         </view>
       </view>
       <view class="user-search">
@@ -701,6 +743,23 @@
           placeholder="请输入搜索关键词"
           bindchange="searchJoinUser"
         />
+      </view>
+      <view class="team-status">
+        <view class="join">
+          <van-button color="#256d64" round custom-style="width:100rpx;" size="mini" data-item="{{item}}" bind:tap="user_del_sp">
+            <van-icon size="25rpx" custom-class="van-icon-10 van-icon-12" name="https://ai.anythingai.online/static/profile3/light.svg" /> <text>加入</text>
+          </van-button>
+        </view>
+        <view class="quit">
+          <van-button color="#256d64" round custom-style="width:100rpx;"  size="mini" data-item="{{item}}" bind:tap="user_del_sp">
+            <van-icon size="25rpx" custom-class="van-icon-10 van-icon-12" name="https://ai.anythingai.online/static/profile3/exit-1.svg" /> <text>退出</text>
+          </van-button>
+        </view>
+        <view class="comm">
+          <van-button color="#256d64" round custom-style="width:100rpx;" size="mini" data-item="{{item}}" data-id="2" bind:tap="isShowChatRoom">
+            <van-icon size="25rpx" custom-class="van-icon-10 van-icon-12" name="https://ai.anythingai.online/static/profile3/user-con-5.svg" /> <text>交流</text>
+          </van-button>
+        </view>
       </view>
       <view class="user-num">
         <text>组队人数：{{userCount}}</text>
@@ -784,9 +843,6 @@
                   <text class="check-title">时间: </text><text class="check-content" selectable="true">{{ item.time }}</text>
                 </view>
                 <view class="sport_addr del">
-                  <!-- <van-button color="#cc2f2f" round custom-style="width:130rpx;" size="mini" data-item="{{item}}" bind:tap="publish_data">
-                    <van-icon size="20rpx" custom-class="van-icon-10" name="https://ai.anythingai.online/static/profile3/del.svg" /> <text>再次发布</text>
-                  </van-button> -->
                   <van-button color="#cc2f2f" round custom-style="width:130rpx;" size="mini" data-item="{{item}}" bind:tap="user_del_sp">
                     <van-icon size="20rpx" custom-class="van-icon-10" name="https://ai.anythingai.online/static/profile3/del.svg" /> <text>删除</text>
                   </van-button>
