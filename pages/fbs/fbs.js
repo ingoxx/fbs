@@ -1211,8 +1211,22 @@ Page({
       urls: images,
     });
   },
-  onPreviewImage(e) {
+  async onPreviewImage(e) {
     const src = e.currentTarget.dataset.src;
+    const data = e.currentTarget.dataset.item;
+    try {
+      const pdd = await this.getVenueImgApi(data.id);
+      if (pdd.code == 1000) {
+        this.setData({
+          checkListData: pdd.data,
+        });
+        this.getAddrDistance();
+      }
+      
+    } catch (err) {
+      console.log('取消或失败:', err);
+    }
+
     var images = [src];
     wx.previewImage({
       current: src, // 当前显示的图片

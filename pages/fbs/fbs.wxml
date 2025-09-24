@@ -108,7 +108,7 @@
                 <!-- 没有就用其他代替 -->
                 <block wx:else>
                   <block wx:for="{{ all_sport_list }}" wx:key="index3" wx:for-item="item3" >
-                    <van-image use-loading-slot data-src="{{item3.img}}" custom-class="van-img-1" radius="10" wx:if="{{ defaultSportKey == item3.key }}" fit="cover" src="{{item3.img}}" data-src="{{item3.img}}" bind:click="onPreviewImage"><van-loading slot="loading" type="spinner" size="20" vertical /></van-image>
+                    <van-image use-loading-slot data-src="{{item3.img}}" custom-class="van-img-1" radius="10" wx:if="{{ defaultSportKey == item3.key }}" fit="cover" src="{{item3.img}}" data-src="{{item3.img}}" bind:click="onPreviewImage" data-item="{{item}}"><van-loading slot="loading" type="spinner" size="20" vertical /></van-image>
                   </block>
                 </block>
               </view>
