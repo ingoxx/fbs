@@ -1407,7 +1407,7 @@ Page({
           Toast.fail("请求失败");
         }
       }).catch((err) => { 
-        Toast.fail("内部错误");
+        
       });
     
   },
