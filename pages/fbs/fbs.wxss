@@ -451,7 +451,7 @@
 
 .box .card-1 .card-1-1 .join-user-c .join-user-t .title {
   font-size: 25rpx;
-  font-weight: 700;
+  padding-left: 4rpx;
 }
 
 .box .card-1 .card-1-1 .join-user-c .join-user-box .jut .font-1 {
@@ -509,6 +509,13 @@
 
 .box .card-1 .card-1-1 .join-user-c .join-user-box .show-join-user .join-user-2 {
   align-items: flex-end;
+}
+
+.box .card-1 .card-1-1 .join-user-c .join-user-box .no-user {
+  display: flex;
+  gap: 7rpx;
+  margin: 10rpx 7rpx;
+  font-size: 23rpx;
 }
 
 .box .card-1 .card-1-1 .addr {
@@ -1355,7 +1362,7 @@
 
 .van-dialog-title .title-n {
   font-size: 22rpx;
-  color: #d0d0d0;
+  color: #ababab;
   margin-top: 10rpx;
 }
 
@@ -1403,6 +1410,38 @@
 .pop-box-2 .pop-content-2 {
   display: flex;
   gap: 29rpx;
+}
+
+.pop-box-3 {
+  margin: 15rpx;
+}
+
+.pop-box-3 .title {
+  text-align: center;
+  font-weight: 700;
+}
+
+.pop-box-3 .action {
+  display: flex;
+  justify-content: space-around;
+  margin: 40rpx 0;
+}
+
+.pop-box-3 .action .btn {
+  width: 140rpx;
+  background: #f5f5f5;
+  border-radius: 10rpx;
+  text-align: center;
+  padding: 14rpx;
+}
+
+.pop-box-3 .action .btn .gn {
+  font-size: 27rpx;
+}
+
+.pop-box-3 .confirm {
+  text-align: center;
+  margin: 19rpx 0;
 }
 
 .van-pop-2 {
@@ -1461,4 +1500,8 @@
   display: flex;
   gap: 20rpx;
   margin: 13rpx 16rpx;
+}
+
+.team-status .comm .comm-pl, .team-status .quit .comm-pl {
+  padding-left: 5rpx;
 }

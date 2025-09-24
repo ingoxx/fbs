@@ -69,6 +69,7 @@
 }
 .find-baller-notic{
   font-size: 18rpx;
+  margin: 10rpx 10rpx;
 }
 .chat-content {
   height: 100%;

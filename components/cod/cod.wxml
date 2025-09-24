@@ -24,7 +24,8 @@
     <view class="chat-title group-chat-font-size ">
       <text class="sport_team_group">组队({{count}})</text> 
       <view class="find-baller">
-        <text class="find-baller-notic">可点击左侧场地名然后发送信息寻找组队</text>
+        <text class="find-baller-notic" wx:if="{{select_addr!=''}}">点击左侧{{select_addr}}发送信息</text>
+        <text class="find-baller-notic" wx:else>可点击左侧场地名然后发送信息寻找组队</text>
       </view>
     </view>
     <scroll-view 

@@ -13,6 +13,10 @@ Component({
       type: String,
       value: '',
     },
+    select_addr: {
+      type: String,
+      value: '',
+    },
     baseUrl: {
       type: String,
       value: '',
@@ -74,7 +78,7 @@ Component({
    */
   lifetimes: {
     attached() {
-      const { wssUrl, user_id, sender_id, baseUrl, sport_key, city, nick_name, ava_img, venue_data } = this.properties;
+      const { wssUrl, user_id, sender_id, baseUrl, sport_key, city, nick_name, ava_img, venue_data, select_addr } = this.properties;
       this.setData({
         filter_groups_data: this.data.groups_data,
         wssUrl: wssUrl,
@@ -88,7 +92,9 @@ Component({
         venue_data: venue_data,
         venue_data_filter: venue_data,
         admin: app.globalData.admin,
+        select_addr: select_addr
       });
+      
       // 超级管理员才能获取到各个城市的场地信息
       if (user_id == app.globalData.admin) {
         this.adminGetOnlineDataApi().then((resp) => {
@@ -129,6 +135,16 @@ Component({
           Toast.fail("online err 2: ", err);
           wx.hideLoading();
         })
+      }
+
+      if (select_addr != "") {
+        setTimeout(() => {
+          this.setData({
+            group_id_value: select_addr,
+          }, () => {
+            this.onFilterGroupId({ detail: { value: this.data.group_id_value } })
+          })
+        }, 1000);
       }
     },
     detached() {

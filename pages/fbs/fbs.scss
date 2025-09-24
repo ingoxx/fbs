@@ -450,7 +450,8 @@
           margin-top: 12rpx;
           .title {
             font-size: 25rpx;
-            font-weight: 700;
+            padding-left: 4rpx;
+            // font-weight: 700;
           }
         }
         .join-user-box {
@@ -507,6 +508,12 @@
             .join-user-2 {
               align-items: flex-end;
             }
+          }
+          .no-user {
+            display: flex;
+            gap: 7rpx;
+            margin: 10rpx 7rpx;
+            font-size: 23rpx;
           }
         }
       }
@@ -1264,7 +1271,7 @@
   }
   .title-n {
     font-size: 22rpx;
-    color: #d0d0d0;
+    color: #ababab;
     margin-top: 10rpx;
   }
 }
@@ -1305,7 +1312,37 @@
     gap: 29rpx;
   }
 }
+.pop-box-3 {
+  margin: 15rpx;
+  .title {
+    text-align: center;
+    font-weight: 700;
+  }
+  .action {
+    display: flex;
+    justify-content: space-around;
+    // gap: 25rpx;
+    // flex-wrap: wrap;
+    margin: 40rpx 0;
+    .btn {
+      width: 140rpx;
+      background: #f5f5f5;
+      border-radius: 10rpx;
+      text-align: center;
+      padding: 14rpx;
+      .gn {
+        font-size: 27rpx;
+      }
+    }
+    .isActiv {
 
+    }
+  }
+  .confirm {
+    text-align: center;
+    margin: 19rpx 0;
+  }
+}
 .van-pop-2 {
   background-color: #fdfdfd;
 }
@@ -1352,4 +1389,9 @@
   display: flex;
   gap: 20rpx;
   margin: 13rpx 16rpx;
+  .comm,.quit {
+    .comm-pl {
+      padding-left: 5rpx;
+    }
+  }
 }

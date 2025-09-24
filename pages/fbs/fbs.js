@@ -128,140 +128,22 @@ Page({
     chosen: "",
     pickerVisible: true,
     pub_control: true,
-    test2: [
-      {
-        group_id: "1", 
-        user: "大哥1", 
-        img:"https://ai.anythingai.online/static/profile3/1632.png",
-        style:"",
-        skill:"投篮准",
-        time:"",
-        oi:"",
-        join_user_count: 5,
-      },
-      {
-        group_id: "1", 
-        user: "大哥2", 
-        img:"https://ai.anythingai.online/static/profile3/1633.png",
-        style:"",
-        skill:"全能",
-        time:"",
-        oi:"",
-        join_user_count: 5,
-      },
-      {
-        group_id: "1", 
-        user: "大哥3", 
-        img:"https://ai.anythingai.online/static/profile3/1634.png",
-        style:"",
-        skill:"篮板王",
-        time:"",
-        oi:"",
-        join_user_count: 5,
-      },
-    ],
-    test1: [
-      {
-        group_id: "1", 
-        user: "大哥1", 
-        img:"https://ai.anythingai.online/static/profile3/1680.png",
-        style:"",
-        skill:"投篮准",
-        time:"",
-        oi:"",
-        join_user_count: 5,
-      },
-      {
-        group_id: "1", 
-        user: "大哥2", 
-        img:"https://ai.anythingai.online/static/profile3/1681.png",
-        style:"",
-        skill:"全能",
-        time:"",
-        oi:"",
-        join_user_count: 5,
-      },
-      {
-        group_id: "1", 
-        user: "大哥3", 
-        img:"https://ai.anythingai.online/static/profile3/1682.png",
-        style:"",
-        skill:"篮板王",
-        time:"",
-        oi:"",
-        join_user_count: 5,
-      },
-      {
-        group_id: "1", 
-        user: "大哥4", 
-        img:"https://ai.anythingai.online/static/profile3/1683.png",
-        style:"",
-        skill:"抱大腿",
-        time:"",
-        oi:"",
-        join_user_count: 5,
-      },
-      {
-        group_id: "1", 
-        user: "大哥5", 
-        img:"https://ai.anythingai.online/static/profile3/1684.png",
-        style:"",
-        skill:"抱小腿",
-        time:"",
-        oi:"",
-        join_user_count: 5,
-      },
-      {
-        group_id: "1", 
-        user: "大哥5", 
-        img:"https://ai.anythingai.online/static/profile3/1685.png",
-        style:"",
-        skill:"抱小腿",
-        time:"",
-        oi:"",
-        join_user_count: 5,
-      },
-      {
-        group_id: "1", 
-        user: "大哥5", 
-        img:"https://ai.anythingai.online/static/profile3/1686.png",
-        style:"",
-        skill:"抱小腿",
-        time:"",
-        oi:"",
-        join_user_count: 5,
-      },
-      {
-        group_id: "1", 
-        user: "大哥5", 
-        img:"https://ai.anythingai.online/static/profile3/1687.png",
-        style:"",
-        skill:"抱小腿",
-        time:"",
-        oi:"",
-        join_user_count: 5,
-      },
-      {
-        group_id: "1", 
-        user: "大哥5", 
-        img:"https://ai.anythingai.online/static/profile3/1688.png",
-        style:"",
-        skill:"抱小腿",
-        time:"",
-        oi:"",
-        join_user_count: 5,
-      },
-      {
-        group_id: "1", 
-        user: "大哥5", 
-        img:"https://ai.anythingai.online/static/profile3/1689.png",
-        style:"",
-        skill:"抱小腿",
-        time:"",
-        oi:"",
-        join_user_count: 5,
-      },
-    ],
+    showTeamType: false,
+    selectTeamType: 1,
+    group_type: [],
+    venue_data: {},
+    group_type_name: "",
+    is_in_group: false,
+    select_addr: "",
+    ysz_btn: "",
+    jj_btn: "",
+    qd_btn: "",
+  },
+  selectSportType(e) {
+    const id =  e.currentTarget.dataset.id;
+    this.setData({
+      selectTeamType: id,
+    })
   },
   formatTimestamp(timestamp, format = "yyyy-MM-dd HH:mm:ss") {
     const date = new Date(Number(timestamp));
@@ -999,11 +881,16 @@ Page({
       showGroupList: false,
       showUserUpdateList: false,
       userVal: "",
+      is_in_group: true,
     })
   },
   showUserImgShape(e) {
     const data = e.currentTarget.dataset.item;
-    const title = e.currentTarget.dataset.val.title
+    const allData = e.currentTarget.dataset.val;
+    const title = allData.title
+    const sid = e.currentTarget.dataset.id;
+    const t = this.data.group_type.find(item => item.id == sid)?.name
+    const hasIn = data.some(item => item.user === this.data.openid);
     data.sort((a, b) => {
       return stringToTimestamp(b.time) - stringToTimestamp(a.time);
     });
@@ -1013,6 +900,9 @@ Page({
       user_list: data,
       userCount: data.length,
       bks_name: title,
+      group_type_name: t,
+      is_in_group: !hasIn,
+      venue_data: allData,
     });
   },
   searchJoinUser(e) {
@@ -1461,23 +1351,125 @@ Page({
         },
         fail: function (err) {
           reject({msg: err, code: 402})
+        },
+        complete: () => {
+          this.onClose();
+          this.onCloseGroupList();
         }
       })
     })
   },
-  joinSportGroup(e) {
+  openSelectSportsTypePop(e) {
+    const id = this.data.selectTeamType;
     const data = e.currentTarget.dataset.item;
+    const ju = data.join_users;
+    // const hasIn = arr.some(item => item.user === this.openid); 
+    if (!data.hasJoined) {
+      this.setData({
+        showTeamType: true,
+        venue_data: data,
+      });
+      return;
+    }
+    this.joinSportGroup2(e)
+    
+  },
+  quitSportGroup() {
+    const data = this.data.filter_user_list_two;
+    const gid = data.find(item => item.user == this.data.openid)?.group_id;
+    const gt = data.find(item => item.user === this.data.openid)?.group_type; 
+    
+    Dialog.confirm({
+      title: this.data.bks_name,
+      message: '确定退出吗？',
+    }).then(async () => {
+        const fd = {
+          group_id: gid, 
+          user: this.data.openid, 
+          img: this.data.avatarUrl,
+          nick_name: this.data.nick_name,
+          oi: "1",
+          group_type: gt,
+        };
+        try {
+          const resp = await this.joinSportGroupApi(fd);
+          if (resp.code == 1006) {
+            Toast.fail(resp.msg)
+            return;
+          }
+          if (resp.code != 1000) {
+            Toast.fail(resp.code);
+            return;
+          }
+          this.getAddrDistance();
+          Toast.success('已退出组队');
+        } catch (error) {
+          Toast.fail("请求失败");
+        }
+      }).catch((err) => { 
+        Toast.fail("内部错误");
+      });
+    
+  },
+  joinSportGroup3() {
+    const data = this.data.filter_user_list_two;
+    const allData = this.data.venue_data;
+    const gt = data[0].group_type; 
+    const gid = data[0].group_id;
+    const existsAnywhere = Object.values(allData.groupedUsers).some(group => group.some(user => user.user === this.data.openid));
+    if (existsAnywhere) {
+      Toast.fail("您已经在其他组里，请先退出");
+      return;
+    }
+    Dialog.confirm({
+      title: this.data.bks_name,
+      message: '确定加入吗？',
+    }).then(async () => {
+        const fd = {
+          group_id: gid, 
+          user: this.data.openid, 
+          img: this.data.avatarUrl,
+          nick_name: this.data.nick_name,
+          oi: "2",
+          group_type: gt
+        };
+        console.log("fd >>> ", fd);
+        try {
+          const resp = await this.joinSportGroupApi(fd);
+          console.log("joinSportGroupApi >>> ", resp);
+          if (resp.code == 1006) {
+            Toast.fail(resp.msg)
+            return;
+          }
+          if (resp.code != 1000) {
+            Toast.fail(resp.code);
+            return;
+          }
+          this.getAddrDistance();
+          Toast.success(data.hasJoined ? '已退出组队' : '已加入组队');
+        } catch (error) {
+          Toast.fail("请求失败");
+        }
+      }).catch(() => {
+        Toast.fail("内部错误: 500");
+      });
+  },
+  joinSportGroup2(e) {
+    const data = e.currentTarget.dataset.item;
+    const ju = data.join_users;
+    const gt = ju.find(item => item.user === this.data.openid)?.group_type; 
+  
     Dialog.confirm({
       title: data.tags[0],
       message: data.hasJoined ? '确定退出吗？' : '确定加入吗？',
-    })
-      .then(async () => {
+    }).then(async () => {
         const fd = {
           group_id: data.id, 
           user: this.data.openid, 
           img: this.data.avatarUrl,
           nick_name: this.data.nick_name,
-          oi: data.hasJoined ? "1" : "2"
+          oi: data.hasJoined ? "1" : "2",
+          group_type: gt,
         };
         try {
           const resp = await this.joinSportGroupApi(fd);
@@ -1494,8 +1486,49 @@ Page({
         } catch (error) {
           Toast.fail(error.code);
         }
-      })
-      .catch(() => {
+      }).catch(() => {
+      });
+  },
+  joinSportGroup(e) {
+    const oi = e.currentTarget.dataset.id;
+    const sid = this.data.selectTeamType;
+    const data = this.data.venue_data;
+    const t = this.data.group_type.find(item => item.id == sid)?.name
+    var title = "";
+    if (data.join_user_count == 0) {
+      title = `确定加入${t}吗？`
+    } else if (data.join_user_count > 0) {
+      title = `确定退出${t}吗？`
+    }
+    Dialog.confirm({
+      title: data.tags[0],
+      message: title,
+    }).then(async () => {
+        const fd = {
+          group_id: data.id, 
+          user: this.data.openid, 
+          img: this.data.avatarUrl,
+          nick_name: this.data.nick_name,
+          oi: oi,
+          group_type: this.data.selectTeamType,
+        };
+        try {
+          const resp = await this.joinSportGroupApi(fd);
+          if (resp.code == 1006) {
+            Toast.fail(resp.msg)
+            return;
+          }
+          if (resp.code != 1000) {
+            Toast.fail(resp.code);
+            return;
+          }
+          this.getAddrDistance();
+          Toast.success(data.hasJoined ? '已退出组队' : '已加入组队');
+        } catch (error) {
+          Toast.fail(error.code);
+        }
+      }).catch((err) => {
+        console.log("joinSportGroupApi err >>> ", err);
       });
   },
   openMapAppDetailed2(e) {
@@ -1563,21 +1596,20 @@ Page({
   },
   isShowChatRoom(e) {
     const sd = e.currentTarget.dataset.id;
-    if (sd == 2) {
+    if (sd == 3) {
+      const allData = this.data.venue_data;
+      const addr = allData.title;
       this.setData({
         showGroupList:false,
         showChatRoom: true,
+        select_addr: addr,
       });
       return;
     }
     this.setData({
       showChatRoom: true,
+      select_addr: "",
     });
-    // if (this.data.openid == app.globalData.admin) {
-    //   this.setData({
-    //     showChatRoom: true,
-    //   });
-    // }
   },
   onConfirmSportSelection() {
     if (this.data.isUse) {
@@ -2112,6 +2144,7 @@ Page({
       showSpPop: false,
       showPubRm: false,
       showPublishHistoryPop:false,
+      showTeamType: false,
     });
   },
   onClearInput(e) {
@@ -2339,18 +2372,16 @@ Page({
     const resp = await this.getUserLocation();
     if (resp.latitude !== "" && resp.longitude !== "" && resp.city !== "") {
       const allData = await this.getAllDataApi();
-
       if (allData.code != 1000) {
         Toast.fail(allData.code);
         return;
       }
-
       this.setData({
         basketSquareData: allData.other_data,
         chooseList: allData.filter_data,
         filterChooseList: allData.filter_data,
         venue_count: allData.venues.length,
-        
+        group_type: allData.group_type,
         isActive: 1,
       });
       const newList = this.data.basketSquareData;
@@ -2382,8 +2413,33 @@ Page({
           hasJoined      
         };
       });
+      const pl = processedList.map(v => {
+        const groups = { ysz: [], jj: [], qd: [] } // 1=养生局,2=竞技局,3=强度局
+        const filter_groups = { ysz: [], jj: [], qd: [] } // 1=养生局,2=竞技局,3=强度局
+        var ysz_len = 0;
+        var jj_len = 0;
+        var qd_len = 0;
+        v.join_users.forEach(u => {
+          switch (u.group_type) {
+            case 1: groups.ysz.push(u); break
+            case 2: groups.jj.push(u); break
+            case 3: groups.qd.push(u); break
+          }
+        })
+        filter_groups.ysz = groups.ysz.slice(0, 10);
+        filter_groups.jj  = groups.jj.slice(0, 10);
+        filter_groups.qd  = groups.qd.slice(0, 10);
+        ysz_len = groups.ysz.length;
+        jj_len = groups.jj.length;
+        qd_len = groups.qd.length;
+        return { ...v, filterGroupUsers: filter_groups, groupedUsers: groups, ysz_users: ysz_len, jj_users: jj_len, qd_users: qd_len   }
+      });
+
       const btn_list = allData.btn;
       var btn_text = "";
+      var ysz_btn = this.data.group_type.find(item => item.id == 1)?.name;
+      var jj_btn = this.data.group_type.find(item => item.id == 2)?.name;
+      var qd_btn = this.data.group_type.find(item => item.id == 3)?.name;
       if (allData.data) {
         const obj = btn_list.find(item => item.id == 2);
         btn_text = obj.name;
@@ -2393,16 +2449,19 @@ Page({
       }
       
       this.setData({
-        basketSquareFilterData: processedList,
+        basketSquareFilterData: pl,
         isEmpty: false,
         isInput: false,
-        totalData: processedList.length,
+        totalData: pl.length,
         isShowAllData: allData.data,
         loadText: "获取数据中...",
         isSwitchData: false,
         isActiveTitle: 3,
         titles: allData.btn,
         pub_btn_text: btn_text,
+        ysz_btn:ysz_btn,
+        jj_btn:jj_btn,
+        qd_btn:qd_btn,
       });
       this.showGoodBtn();
       this.getBasketSquareFilter();
