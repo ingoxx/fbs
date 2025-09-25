@@ -243,7 +243,7 @@
                 <van-icon size="30rpx" custom-class="van-icon-5" name="https://ai.anythingai.online/static/profile3/click-3.svg" /><text class="group_title">{{pub_btn_text}}</text>
               </van-button>
             </view>
-            <van-transition show="{{ item.join_user_count > 0  }}" name="fade-right" >
+            <van-transition show="{{ item.join_user_count > 0 && isShowAllData }}" name="fade-right" >
               <!-- ysj -->
               <view class="join-user-c" wx:if="{{ item.ysz_users > 0 }}">
                 <view class="join-user-t" >

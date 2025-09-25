@@ -795,8 +795,8 @@
   height: 39rpx;
   background: #e84b4b;
   border-radius: 20%;
-  left: 110rpx;
-  bottom: 85rpx;
+  left: 135rpx;
+  bottom: 97rpx;
 }
 
 .box .contact-us .tran-1 .msg-num .num, .box .user-list .tran-1 .msg-num .num {
