@@ -1761,7 +1761,7 @@ Page({
         this.setData({
           showPrivacy: false,
           isUse: true,
-          loadText: "获取数据中...",
+          // loadText: "首次加载数据会比较耗时",
           wssUrl: WSS_URL,
           baseUrl: BASE_URL,
           user_id: this.data.openid,
