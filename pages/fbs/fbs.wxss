@@ -1417,7 +1417,10 @@
 }
 
 .pop-box-3 .title {
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4rpx;
   font-weight: 700;
 }
 

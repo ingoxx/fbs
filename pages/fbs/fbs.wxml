@@ -960,7 +960,7 @@
   >
     <view class="pop-box-3">
       <view class="title">
-        <text>组队类型选择</text>
+        <van-icon size="58rpx" color="#256d64" name="https://ai.anythingai.online/static/profile3/lua.svg" /> <text>请选择强度</text>
       </view>
       <view class="content">
         <view class="name"></view>

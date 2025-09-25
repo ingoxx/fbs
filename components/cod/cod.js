@@ -144,7 +144,7 @@ Component({
           }, () => {
             this.onFilterGroupId({ detail: { value: this.data.group_id_value } })
           })
-        }, 1000);
+        }, 1500);
       }
     },
     detached() {

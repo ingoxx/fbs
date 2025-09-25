@@ -1315,7 +1315,11 @@
 .pop-box-3 {
   margin: 15rpx;
   .title {
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4rpx;
+    // text-align: center;
     font-weight: 700;
   }
   .action {
