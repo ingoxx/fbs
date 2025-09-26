@@ -34,6 +34,7 @@ Page({
     venue_count: 0,
     admin: "",
     isLock: false,
+    cus_icon: "🏅",
     isActive: 1,
     chooseList: [],
     filterChooseList: [],
@@ -138,6 +139,54 @@ Page({
     ysz_btn: "",
     jj_btn: "",
     qd_btn: "",
+    showSports: false,
+    sp_venue: "",
+    sp_key: "",
+  },
+  getRandom1to4() {
+    return Math.floor(Math.random() * 4) + 1;
+  },
+  onConfirmNewSp() {
+    if (!this.data.sp_venue) {
+      Toast.fail("请输入运动类型");
+      return;
+    }
+    if (!this.data.sp_key) {
+      Toast.fail("请输入运动key");
+      return;
+    }
+    const all_sports = this.data.all_sport_list;
+    const data = {
+      title: this.data.sp_venue, 
+      name: `${this.data.cus_icon} ${this.data.sp_venue}`, 
+      key: this.data.sp_key, 
+      checked: false, 
+      icon: this.data.cus_icon, 
+      img: "https://ai.anythingai.online/static/profile3/cus_bg.png", 
+      sport_img: `https://ai.anythingai.online/static/profile3/sp${this.getRandom1to4()}.svg`,
+    }
+    Dialog.confirm({
+      title: '',
+      message: "确定添加吗？"
+    }).then(() =>{
+      all_sports.unshift(data);
+      this.setData({
+        all_sport_list: all_sports,
+        isActiveTitle: 3,
+      });
+      wx.setStorageSync('sport_list', all_sports);
+      Toast.success("已添加");
+    }).catch(() => {
+    })
+    
+  },
+  onChangeSpKeyField(e) {
+    const value = e.detail;
+    this.setData({sp_key: value});
+  },
+  onChangeSpVenueField(e) {
+    const value = e.detail;
+    this.setData({sp_venue: value});
   },
   selectSportType(e) {
     const id =  e.currentTarget.dataset.id;
@@ -526,10 +575,23 @@ Page({
   },
   async onConfirmSportSelection2(e) {
     const id = e.currentTarget.dataset.id;
-    if (this.data.isActiveTitle != id) {
+    if (id == 5) {
       this.setData({
         isActiveTitle: id,
-        isSwitchData: !this.data.isSwitchData,
+        showSports: true,
+      });
+      return;
+    }
+    if (this.data.isActiveTitle != id) {
+      var swi = false;
+      if (id == 3) {
+        swi = false
+      } else if (id == 4) {
+        swi = true
+      }
+      this.setData({
+        isActiveTitle: id,
+        isSwitchData: swi,
       });
       this.diffFilterKeyWork();
       if (id == 4) {
@@ -556,6 +618,8 @@ Page({
       sp_required: "",
       sp_players: "",
       sp_time: "",
+      sp_venue: "",
+      sp_key: "",
       mChecked: false,
       fmChecked: false,
     });
@@ -1780,16 +1844,24 @@ Page({
             });
           }
           // 获取的运动列表
-          this.getAllSportsApi().then((resp) => {
-            if (resp.code == 1000) {
-              this.setData({
-                all_sport_list: resp.data,
-              });
-            }
-          }).catch((err) => {
-            Toast.fail("502")
-          });
-
+          const sport_list = wx.getStorageSync('sport_list');
+          if (!sport_list) {
+            this.getAllSportsApi().then((resp) => {
+              if (resp.code == 1000) {
+                this.setData({
+                  all_sport_list: resp.data,
+                });
+                wx.setStorageSync('sport_list', resp.data);
+              }
+            }).catch((err) => {
+              Toast.fail("502")
+            });
+          } else {
+            this.setData({
+              all_sport_list: sport_list,
+            });
+          }
+          
           if (this.data.isActiveTitle == 3) {
             this.getAddrDistance();
           } else if (this.data.isActiveTitle == 4) {
@@ -2159,6 +2231,7 @@ Page({
       showPubRm: false,
       showPublishHistoryPop:false,
       showTeamType: false,
+      showSports: false,
     });
   },
   onClearInput(e) {

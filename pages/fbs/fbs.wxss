@@ -983,6 +983,12 @@
   font-weight: 700;
 }
 
+.privacy-title .notic {
+  font-size: 21rpx;
+  color: #e84b4b;
+  font-weight: 200;
+}
+
 .privacy-center {
   display: flex;
   flex-direction: column;

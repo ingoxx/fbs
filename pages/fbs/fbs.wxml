@@ -89,7 +89,7 @@
       <block wx:for="{{ basketSquareFilterData }}" wx:key="index" wx:for-item="item">
         <van-transition show="{{ isUse }}" custom-class="block">
           <view class="card-1-1">
-            <view class="online-status">
+            <!-- <view class="online-status">
               <view class="venue-hot">
                 <van-icon color="{{ item.join_user_count > 0 ? '#ff6161': '#909090' }}" name="fire" />
               </view>
@@ -98,7 +98,7 @@
                   <text class="sport-key">{{defaultSportSquare}}</text>
                 </van-tag>
               </view>
-            </view>
+            </view> -->
             <view class="addr">
               <view class="sport-icon">
                 <!-- 真实场地图片 -->
@@ -1074,6 +1074,61 @@
       <view class="confirm" bind:tap="onConfirmPublishSp">
         <van-button round custom-style="width:218rpx" >
           <text class="group_title">发布</text>
+        </van-button>
+      </view>
+    </view>
+  </van-popup>
+  <!-- 自由添加运动 -->
+  <van-popup
+    show="{{ showSports }}"
+    round
+    custom-style="width: 80%;"
+    bind:close="onClose"
+    closeable
+  >
+    <view class="privacy-title">
+      <text>添加新的运动</text>
+      <view>
+        <text class="notic">*场地类型一定要描述准确，不然无法搜索到</text>
+      </view>
+    </view>
+    <van-cell-group>
+      <van-field
+        value="{{ sp_venue }}"
+        required
+        clearable
+        autosize
+        type="textarea"
+        label="场地类型"
+        placeholder="如: 公共厕所，健身馆等等"
+        border="{{ true }}"
+        confirm-type="done"
+        bind:change="onChangeSpVenueField"
+      />
+     
+      <van-field
+        value="{{ sp_key }}"
+        required
+        clearable
+        autosize
+        type="textarea"
+        label="场地key"
+        placeholder="如: pwc"
+        border="{{ true }}"
+        confirm-type="done"
+        bind:change="onChangeSpKeyField"
+      />
+    </van-cell-group>
+    <view class="dialog-btn">
+      <view class="cancel">
+        <!-- openPicker,onSet -->
+        <van-button round  data-index="{{index}}" custom-style="width:218rpx" bind:tap="onSet">
+          <text class="group_title">重置</text>
+        </van-button>
+      </view>
+      <view class="confirm" bind:tap="onConfirmNewSp">
+        <van-button round custom-style="width:218rpx" >
+          <text class="group_title">添加</text>
         </van-button>
       </view>
     </view>

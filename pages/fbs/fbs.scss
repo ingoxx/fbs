@@ -933,8 +933,13 @@
 }
 .privacy-title {
   text-align: center;
-    margin: 18rpx 0;
-    font-weight: 700;
+  margin: 18rpx 0;
+  font-weight: 700;
+  .notic {
+    font-size: 21rpx;
+    color: #e84b4b;
+    font-weight: 200;
+  }
 }
 .privacy-center {
   display: flex;
