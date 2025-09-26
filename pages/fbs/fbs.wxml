@@ -1100,7 +1100,7 @@
         autosize
         type="textarea"
         label="场地类型"
-        placeholder="如: 公共厕所，健身馆等等"
+        placeholder="如: 健身房等等"
         border="{{ true }}"
         confirm-type="done"
         bind:change="onChangeSpVenueField"

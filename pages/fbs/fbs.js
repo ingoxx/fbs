@@ -176,6 +176,7 @@ Page({
       });
       wx.setStorageSync('sport_list', all_sports);
       Toast.success("已添加");
+      this.onClose();
     }).catch(() => {
     })
     
