@@ -73,11 +73,11 @@
       <block wx:for="{{ basketSquareFilterData }}" wx:key="index" wx:for-item="item">
         <van-transition show="{{ isUse }}" custom-class="block">
           
-          <!-- 3D 翻转卡片容器 -->
+          <!-- 翻转 -->
           <view class="card-container">
             <view class="card {{ item.isFlipped ? 'flipped' : '' }}">
               
-              <!-- ================= 1. 正面（完全保持原 UI 布局） ================= -->
+              <!-- ================= 1. 正面 ================= -->
               <view class="card-face card-front">
                 <view class="addr">
                   <view class="sport-icon">
@@ -104,12 +104,12 @@
                           </van-tag>
                         </block>
                       </block>
-                      <text class="nav">点击可展示导航路线</text>
+                      <text class="nav">点击可展示导航路线 {{ item.distance }}km</text>
                     </view>
                   </view>
                 </view>
 
-                <view class="distance" data-item="{{ item }}">
+                <view wx:if="{{isShowAllData}}" class="distance" data-item="{{ item }}">
                   <view class="online-users">
                     <view class="num">
                       <text>{{ item.join_user_count }}</text>
@@ -217,16 +217,16 @@
                   </van-transition>
                 </block>
 
-                <!-- 操作按钮区域：加入【微信群】翻转按钮 -->
+                <!-- new add -->
                 <view class="group-status">
                   <van-button wx:if="{{isShowAllData}}" round color="#256d64" size="small" type="{{ item.hasJoined ? 'info' : 'warning' }}" custom-style="width:218rpx" data-item="{{ item }}" bind:tap="openSelectSportsTypePop">
                     <van-icon size="30rpx" custom-class="van-icon-5 van-icon-8" name="https://ai.anythingai.online/static/profile3/light.svg" />{{item.hasJoined ? '退出组队' : '加入组队'}}({{item.join_user_count}})
                   </van-button>
-                  <van-button round color="#256d64" size="small" data-index="{{index}}" custom-style="width:218rpx" data-item="{{ item }}" bindtap="toggleShowVenueImg1">
+                  <van-button  round color="#256d64" size="small" data-index="{{index}}" custom-style="width:240rpx" data-item="{{ item }}" bindtap="toggleShowVenueImg1">
                     <van-icon size="30rpx" custom-class="van-icon-5" name="https://ai.anythingai.online/static/profile3/click-3.svg" /><text class="group_title">{{pub_btn_text}}</text>
                   </van-button>
-                  <!-- 新增：微信群按钮（点击翻转卡片） -->
-                  <van-button round color="#256d64" size="small" custom-style="width:180rpx" data-index="{{index}}" data-id="{{item.id}}" bind:tap="toggleCardFlip">
+                  <!-- 新增：翻转 -->
+                  <van-button wx:if="{{isShowAllData}}" round color="#256d64" size="small" custom-style="width:180rpx" data-index="{{index}}" data-id="{{item.id}}" bind:tap="toggleCardFlip">
                     <van-icon size="30rpx" custom-class="van-icon-5" name="qr-invalid" /><text class="group_title">微信群</text>
                   </van-button>
                 </view>
@@ -313,14 +313,14 @@
                 </van-transition>
               </view>
 
-              <!-- ================= 2. 背面（微信二维码上传与展示区） ================= -->
+              <!-- ================= 2. 背面 ================= -->
               <view class="card-face card-back">
                 <view class="card-back-header">
                   <view class="back-title">
                     <van-icon name="qr-invalid" color="#07c160" />
-                    <text>微信篮球群</text>
+                    <text>微信群二维码</text>
                   </view>
-                  <view class="flip-back-btn" data-index="{{index}}" bind:tap="toggleCardFlip">
+                  <view class="flip-back-btn" data-id="{{item.id}}" data-index="{{index}}" bind:tap="toggleCardFlip">
                     <text>↩ 收起卡片</text>
                   </view>
                 </view>
@@ -331,12 +331,17 @@
                   </van-button>
                 </view>
 
-                <!-- 2列网格列表（一行最多2列） -->
+          
                 <view class="qr-grid-container">
-                  <block wx:if="{{ item.qrList && item.qrList.length > 0 }}">
+                  <block wx:if="{{ (item.qrList && item.qrList.length > 0) || (item.qr_imgs && item.qr_imgs.length > 0) || (item.qr_list && item.qr_list.length > 0) }}">
                     <view class="qr-grid">
-                      <view class="qr-item" wx:for="{{ item.qrList }}" wx:for-item="qr" wx:key="*this" data-src="{{ qr }}" data-imgs="{{ item.qrList }}" bind:tap="previewQrCode">
-                        <image class="qr-img" src="{{ qr }}" mode="aspectFill"></image>
+                      <view class="qr-item" wx:for="{{ item.qrList || item.qr_imgs || item.qr_list }}" wx:for-item="qr" wx:for-index="qrIdx" wx:key="*this">
+                     
+                        <image class="qr-img" src="{{ qr }}" mode="aspectFill" data-src="{{ qr }}" data-imgs="{{ item.qrList || item.qr_imgs || item.qr_list }}" bind:tap="previewQrCode"></image>
+    
+                        <view class="del-qr-btn" data-cardindex="{{index}}" data-qridx="{{qrIdx}}" data-url="{{qr}}" data-item="{{item}}" catch:tap="deleteQrCode">
+                          <van-icon name="cross" color="#ffffff" size="22rpx" />
+                        </view>
                       </view>
                     </view>
                   </block>
@@ -345,7 +350,7 @@
                   </view>
                 </view>
               </view>
-
+              <!-- ================= 2. 背面END ================= -->
             </view>
           </view>
 

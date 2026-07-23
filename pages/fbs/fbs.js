@@ -148,7 +148,7 @@ Page({
    * 3D卡片翻转切换处理函数
    */
   toggleCardFlip(e) {
-    const id =  e.currentTarget.dataset.id;
+    const id = e.currentTarget.dataset.id;
     this.setData({
       current_selected_id: id,
     });
@@ -164,12 +164,17 @@ Page({
   },
 
   /**
-   * 微信二维码上传与持久化展示
+   * 微信二维码上传处理
    */
   async uploadQrCode(e) {
     const index = e.currentTarget.dataset.index;
     const item = this.data.basketSquareFilterData[index];
     if (!item) return;
+
+    // 绑定当前选中的场地ID，保证 uploadFileApi 拼接 URL 参数正确
+    this.setData({
+      current_selected_id: item.id
+    });
 
     try {
       // 1. 选择本地二维码图片
@@ -195,7 +200,7 @@ Page({
       // 生成唯一文件名
       const imgName = `qr_${item.id}_${Date.now()}.png`;
 
-      // 2. 调用已有的 uploadFileApi 接口上传文件到服务器
+      // 2. 调用 uploadFileApi 上传文件，is_user_upload 传 3
       const uploadResp = await this.uploadFileApi({
         file: tempFilePath,
         name: imgName,
@@ -205,24 +210,24 @@ Page({
       const result = typeof uploadResp === 'string' ? JSON.parse(uploadResp) : uploadResp;
 
       if (result.code === 1000) {
-        // 3. 拼接服务器永久图片网络 URL
         const persistentUrl = result.url || `${IMG_URL}/${imgName}`;
 
-        // 4. 获取当前卡片现有二维码列表并追加
-        const currentQrList = item.qrList || [];
+        // 拼接最新图片列表 (应对后端 qr_imgs 为 null 的情况)
+        const currentQrList = Array.isArray(item.qr_imgs) ? item.qr_imgs : (item.qrList || []);
         const updatedQrList = [...currentQrList, persistentUrl];
 
-        // 5. 更新页面 Data 实时渲染
-        const key = `basketSquareFilterData[${index}].qrList`;
+        // 实时更新当前渲染数据
+        const keyQrList = `basketSquareFilterData[${index}].qrList`;
+        const keyQrImgs = `basketSquareFilterData[${index}].qr_imgs`;
         this.setData({
-          [key]: updatedQrList
+          [keyQrList]: updatedQrList,
+          [keyQrImgs]: updatedQrList
         });
 
-        // 6. 持久化存储到本地 Storage (以场地 ID 为 key)
-        const storageKey = `venue_qr_${item.id}`;
-        wx.setStorageSync(storageKey, updatedQrList);
-
         Toast.success('二维码上传成功');
+
+        // 重新拉取接口更新全局数据
+        this.getAddrDistance();
       } else {
         Toast.fail('上传失败: ' + (result.code || '未知错误'));
       }
@@ -230,6 +235,76 @@ Page({
       console.error('上传二维码出错:', err);
       Toast.clear();
     }
+  },
+
+  updateQrApi(data) {
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: `${BASE_URL}/update-venue-qr?uid=${this.data.openid}`,
+        method: 'POST',
+        timeout: 10000,
+        data: data,
+        success: function (res) {
+          resolve(res.data);
+        },
+        fail: function (err) {
+          reject(err)
+        }
+      })
+    })
+  },
+
+  /**
+   * 删除微信群二维码
+   */
+  deleteQrCode(e) {
+    const cardIndex = e.currentTarget.dataset.cardindex;
+    const qrIdx = e.currentTarget.dataset.qridx;
+    const delUrl = e.currentTarget.dataset.url;
+    const item = e.currentTarget.dataset.item;
+
+    Dialog.confirm({
+      title: '删除提示',
+      message: '确定要删除张微信二维码吗？'
+    }).then(async () => {
+      Toast.loading({
+        message: '正在删除...',
+        forbidClick: true
+      });
+
+      // 1. 本地过滤掉被删除的二维码
+      const currentList = Array.isArray(item.qr_imgs) ? item.qr_imgs : (item.qrList || []);
+      const newList = currentList.filter((_, idx) => idx !== qrIdx);
+
+      // 2. 组装请求参数通知后端同步删除
+      const reqData = {
+        id: item.id || item.aid,
+        city: this.data.city,
+        sport_key: this.data.defaultSportKey,
+        del_img: delUrl,
+      };
+
+      try {
+        await this.updateQrApi(reqData);
+      } catch (err) {
+        console.error("后端删除同步异常:", err);
+      }
+
+      // 3. 实时更新前端视图 Data
+      const keyQrList = `basketSquareFilterData[${cardIndex}].qrList`;
+      const keyQrImgs = `basketSquareFilterData[${cardIndex}].qr_imgs`;
+      this.setData({
+        [keyQrList]: newList,
+        [keyQrImgs]: newList
+      });
+
+      Toast.success('已删除');
+
+      // 4. 重新刷新全局数据
+      this.getAddrDistance();
+    }).catch(() => {
+      // 取消删除
+    });
   },
 
   /**
@@ -1463,7 +1538,7 @@ Page({
   uploadFileApi(data) {
     return new Promise((resolve, reject) => {
       wx.uploadFile({
-        url: `${BASE_URL}/wx-upload?uid=${this.data.openid}&filename=${data.name}&user_upload=${data.is_user_upload}&nick_name=${this.data.nick_name}&id=${this.current_selected_id}&city=${this.city}&sport_key=${this.sp_key}`,
+        url: `${BASE_URL}/wx-upload?uid=${this.data.openid}&filename=${data.name}&user_upload=${data.is_user_upload}&nick_name=${this.data.nick_name}&id=${this.data.current_selected_id}&city=${this.data.city}&sport_key=${this.data.defaultSportKey}`,
         timeout: 15000,
         filePath: data.file,
         name: 'file',
@@ -2318,17 +2393,14 @@ Page({
         user.group_id === item.id && user.user === this.data.openid
       );
 
-      // 读取本地持久化二维码列表
-      const storageKey = `venue_qr_${item.id}`;
-      const localQrList = wx.getStorageSync(storageKey) || [];
-      const serverQrList = item.qrList || item.qr_imgs || [];
-      const finalQrList = Array.from(new Set([...serverQrList, ...localQrList]));
+      // 直接使用后端返回的 qr_imgs 字段 (为 null 时自动兜底为 [])
+      const serverQrList = Array.isArray(item.qr_imgs) ? item.qr_imgs : [];
 
       return {
         ...item,
         hasJoined,
         isFlipped: item.isFlipped || false,
-        qrList: finalQrList
+        qrList: serverQrList
       };
     });
 
@@ -2506,6 +2578,7 @@ Page({
     const resp = await this.getUserLocation();
     if (resp.latitude !== "" && resp.longitude !== "" && resp.city !== "") {
       const allData = await this.getAllDataApi();
+      console.log(allData);
       if (allData.code != 1000) {
         Toast.fail(allData.code);
         return;
@@ -2542,17 +2615,14 @@ Page({
           user.group_id === item.id && user.user === this.data.openid
         );
 
-        // 读取本地持久化存储的二维码列表
-        const storageKey = `venue_qr_${item.id}`;
-        const localQrList = wx.getStorageSync(storageKey) || [];
-        const serverQrList = item.qrList || item.qr_imgs || [];
-        const finalQrList = Array.from(new Set([...serverQrList, ...localQrList]));
+        // 处理后端返回的 qr_imgs 列表 (为 null 时转化为 [])
+        const serverQrList = Array.isArray(item.qr_imgs) ? item.qr_imgs : [];
 
         return {
           ...item,       
           hasJoined,
           isFlipped: false, // 初始化 3D 卡片为不翻转状态
-          qrList: finalQrList // 持久化二维码列表
+          qrList: serverQrList
         };
       });
       const pl = processedList.map(v => {
