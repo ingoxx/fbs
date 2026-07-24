@@ -11,7 +11,8 @@
     }
   },
   "requiredPrivateInfos": [
-    "getLocation"
+    "getLocation",
+    "chooseLocation"
   ],
   "window": {
     "navigationBarTextStyle": "black",

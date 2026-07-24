@@ -171,13 +171,11 @@ Page({
     const item = this.data.basketSquareFilterData[index];
     if (!item) return;
 
-    // 绑定当前选中的场地ID，保证 uploadFileApi 拼接 URL 参数正确
     this.setData({
       current_selected_id: item.id
     });
 
     try {
-      // 1. 选择本地二维码图片
       const res = await new Promise((resolve, reject) => {
         wx.chooseMedia({
           count: 1,
@@ -197,10 +195,8 @@ Page({
       });
 
       const tempFilePath = res.tempFiles[0].tempFilePath;
-      // 生成唯一文件名
       const imgName = `qr_${item.id}_${Date.now()}.png`;
 
-      // 2. 调用 uploadFileApi 上传文件，is_user_upload 传 3
       const uploadResp = await this.uploadFileApi({
         file: tempFilePath,
         name: imgName,
@@ -212,11 +208,9 @@ Page({
       if (result.code === 1000) {
         const persistentUrl = result.url || `${IMG_URL}/${imgName}`;
 
-        // 拼接最新图片列表 (应对后端 qr_imgs 为 null 的情况)
         const currentQrList = Array.isArray(item.qr_imgs) ? item.qr_imgs : (item.qrList || []);
         const updatedQrList = [...currentQrList, persistentUrl];
 
-        // 实时更新当前渲染数据
         const keyQrList = `basketSquareFilterData[${index}].qrList`;
         const keyQrImgs = `basketSquareFilterData[${index}].qr_imgs`;
         this.setData({
@@ -226,7 +220,6 @@ Page({
 
         Toast.success('二维码上传成功');
 
-        // 重新拉取接口更新全局数据
         this.getAddrDistance();
       } else {
         Toast.fail('上传失败: ' + (result.code || '未知错误'));
@@ -272,11 +265,9 @@ Page({
         forbidClick: true
       });
 
-      // 1. 本地过滤掉被删除的二维码
       const currentList = Array.isArray(item.qr_imgs) ? item.qr_imgs : (item.qrList || []);
       const newList = currentList.filter((_, idx) => idx !== qrIdx);
 
-      // 2. 组装请求参数通知后端同步删除
       const reqData = {
         id: item.id || item.aid,
         city: this.data.city,
@@ -290,7 +281,6 @@ Page({
         console.error("后端删除同步异常:", err);
       }
 
-      // 3. 实时更新前端视图 Data
       const keyQrList = `basketSquareFilterData[${cardIndex}].qrList`;
       const keyQrImgs = `basketSquareFilterData[${cardIndex}].qr_imgs`;
       this.setData({
@@ -300,7 +290,6 @@ Page({
 
       Toast.success('已删除');
 
-      // 4. 重新刷新全局数据
       this.getAddrDistance();
     }).catch(() => {
       // 取消删除
@@ -1924,20 +1913,73 @@ Page({
     });
     storage("sport", {key: sd.key, name: sd.name});
   },
+
+  /**
+   * 打开微信地图供用户选择位置
+   */
   openMapApp() {
-    wx.openLocation({
-      latitude: Number(this.data.lat),
-      longitude: Number(this.data.lng),
-      address: this.data.addr,
-      scale: 18,
-      success(res) {
-        console.log('打开成功');
+    const qqmapsdk = new QQMapWX({
+      key: 'YSRBZ-GSVY3-3P23L-RNWCE-OQB3V-T6BXG'
+    });
+    const that = this;
+
+    wx.chooseLocation({
+      latitude: Number(this.data.lat) || undefined,
+      longitude: Number(this.data.lng) || undefined,
+      success: (res) => {
+        Toast.loading({
+          message: '正在切换位置...',
+          forbidClick: true,
+          duration: 0,
+        });
+
+        const selectedLat = res.latitude;
+        const selectedLng = res.longitude;
+        const selectedAddr = res.address || res.name;
+
+        // 利用腾讯地图 SDK 根据选中的经纬度逆地址解析获取对应的城市名
+        qqmapsdk.reverseGeocoder({
+          location: {
+            latitude: selectedLat,
+            longitude: selectedLng
+          },
+          success: (geoRes) => {
+            const city = geoRes.result.address_component.city;
+            that.setData({
+              lat: selectedLat,
+              lng: selectedLng,
+              addr: selectedAddr,
+              city: city,
+              markers: [{
+                id: 1,
+                longitude: selectedLng,
+                latitude: selectedLat,
+                title: res.name || selectedAddr
+              }]
+            }, () => {
+              // 第二个参数传 true 表示跳过重新自动获取用户 GPS，直接使用手选的位置和经纬度请求后端接口
+              that.getAddrDistance(true);
+            });
+          },
+          fail: (geoErr) => {
+            console.error('逆地址解析失败：', geoErr);
+            // 降级处理：即使解析城市失败也使用选中坐标更新
+            that.setData({
+              lat: selectedLat,
+              lng: selectedLng,
+              addr: selectedAddr,
+            }, () => {
+              that.getAddrDistance(true);
+            });
+          }
+        });
       },
-      fail(err) {
-        console.log('打开失败', err);
+      fail: (err) => {
+        console.log('选择位置失败或取消：', err);
       }
     });
   },
+
   cusSetStorage(key, data) {
     wx.setStorage({
       key: key,
@@ -2393,7 +2435,6 @@ Page({
         user.group_id === item.id && user.user === this.data.openid
       );
 
-      // 直接使用后端返回的 qr_imgs 字段 (为 null 时自动兜底为 [])
       const serverQrList = Array.isArray(item.qr_imgs) ? item.qr_imgs : [];
 
       return {
@@ -2574,9 +2615,16 @@ Page({
       })
     })
   },
-  async getAddrDistance() {
-    const resp = await this.getUserLocation();
-    if (resp.latitude !== "" && resp.longitude !== "" && resp.city !== "") {
+
+  /**
+   * 拉取场地及距离数据
+   * @param {boolean} skipLocationFetch 是否跳过通过GPS重新定位（手动切换位置后传 true）
+   */
+  async getAddrDistance(skipLocationFetch = false) {
+    if (!skipLocationFetch) {
+      await this.getUserLocation();
+    }
+    if (this.data.lat !== 0 && this.data.lng !== 0 && this.data.city !== "") {
       const allData = await this.getAllDataApi();
       console.log(allData);
       if (allData.code != 1000) {
@@ -2615,13 +2663,12 @@ Page({
           user.group_id === item.id && user.user === this.data.openid
         );
 
-        // 处理后端返回的 qr_imgs 列表 (为 null 时转化为 [])
         const serverQrList = Array.isArray(item.qr_imgs) ? item.qr_imgs : [];
 
         return {
           ...item,       
           hasJoined,
-          isFlipped: false, // 初始化 3D 卡片为不翻转状态
+          isFlipped: false, 
           qrList: serverQrList
         };
       });
