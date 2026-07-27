@@ -13,6 +13,7 @@ const md5 = require('../../utils/md5');
 
 Page({
   data: {
+    isManualLocation: false, // 标记是否是用户手动选择的位置
     current_selected_id: "",
     wxDate: "",
     p_data: {addr: "", lng: "", lat: "", title: ""},
@@ -1950,6 +1951,7 @@ Page({
               lng: selectedLng,
               addr: selectedAddr,
               city: city,
+              isManualLocation: true, // 设置为已手动选择位置
               markers: [{
                 id: 1,
                 longitude: selectedLng,
@@ -1957,19 +1959,19 @@ Page({
                 title: res.name || selectedAddr
               }]
             }, () => {
-              // 第二个参数传 true 表示跳过重新自动获取用户 GPS，直接使用手选的位置和经纬度请求后端接口
-              that.getAddrDistance(true);
+              // 重新请求数据，使用手选的经纬度和城市
+              that.getAddrDistance();
             });
           },
           fail: (geoErr) => {
             console.error('逆地址解析失败：', geoErr);
-            // 降级处理：即使解析城市失败也使用选中坐标更新
             that.setData({
               lat: selectedLat,
               lng: selectedLng,
               addr: selectedAddr,
+              isManualLocation: true, // 降级也标记为手动设置
             }, () => {
-              that.getAddrDistance(true);
+              that.getAddrDistance();
             });
           }
         });
@@ -2618,10 +2620,10 @@ Page({
 
   /**
    * 拉取场地及距离数据
-   * @param {boolean} skipLocationFetch 是否跳过通过GPS重新定位（手动切换位置后传 true）
    */
-  async getAddrDistance(skipLocationFetch = false) {
-    if (!skipLocationFetch) {
+  async getAddrDistance() {
+    // 只有在【不是手动选择位置】的情况下，才去重新定位系统真实 GPS
+    if (!this.data.isManualLocation) {
       await this.getUserLocation();
     }
     if (this.data.lat !== 0 && this.data.lng !== 0 && this.data.city !== "") {
